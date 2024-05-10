@@ -1,0 +1,6 @@
+#! /bin/bash
+$ISABELLE_PDFLATEX root.tex
+$ISABELLE_PDFLATEX root.tex
+$ISABELLE_PDFLATEX root.tex
+$ISABELLE_PDFLATEX root.tex
+

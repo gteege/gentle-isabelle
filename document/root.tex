@@ -22,6 +22,18 @@
   %for \<onequarter>, \<onehalf>, \<threequarters>, \<degree>, \<cent>,
   %\<currency>
 
+% required for [mode=Rule]:
+\usepackage{mathpartir}
+
+% TG: added for title page modification
+\usepackage{titling}
+
+% TG: added for changebars
+\usepackage{changebar}
+% this requires to use pdflatex, specified by option document_build in ROOT
+% with pdflatex font encoding T1 is required instead of OT1 (the default) to print \guilsinglleft and others
+\usepackage[T1]{fontenc}
+
 % this should be the last package used
 \usepackage{pdfsetup}
 
@@ -39,14 +51,12 @@
 % for uniform font size
 %\renewcommand{\isastyle}{\isastyleminor}
 
-% required for [mode=Rule]:
-\usepackage{mathpartir}
-
 \begin{document}
 
 \title{A Gentle Introduction to Isabelle and Isabelle HOL}
 \author{Gunnar Teege}
-\date{March 24, 2024}
+\date{May 10, 2024}
+\postdate{\par\vskip 1cm Changebars mark changes relative to the version of March, 24, 2024\end{center}}
 \maketitle
 
 \tableofcontents

@@ -8,7 +8,7 @@ text_raw\<open>\label{holtdefs}\<close>
 text \<open>
 This chapter introduces mechanisms defined by HOL which are used to populate HOL with many of its
 mathematical objects and functions and which can also be used to extend HOL to additional kinds of
-objects. Basically these mechanisms support the definition of new types.
+objects. Basically these mechanisms support the definition of new types \cbstart in outer syntax\cbend.
 \<close>
 
 section "Algebraic Types"
@@ -57,11 +57,11 @@ An example for a recursive datatype definition with two constructor specificatio
 | Tree nat tree tree\<close>}
 Its value set is equivalent to the set of all binary trees with a natural number in every node.
 
-Like declared types algebraic types may be parameterized (see Section~\ref{basic-theory-types}):
+Like declared types algebraic types may be parameterized (see Section~\ref{basic-theory-terms}):
 @{theory_text[display]
 \<open>datatype ('name\<^sub>1,\<dots>,'name\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n\<close>}
 where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type specifications \<open>type\<^sub>i\<^sub>j\<close>, i.e.,
-the \<open>type\<^sub>i\<^sub>j\<close> may be polymorphic (see Section~\ref{basic-theory-types}). As usual, the parentheses
+the \<open>type\<^sub>i\<^sub>j\<close> may be polymorphic (see Section~\ref{basic-theory-terms}). As usual, the parentheses
 may be omitted if there is only one type parameter.
 
 An example for a parameterized datatype definition with one type parameter is
@@ -898,7 +898,7 @@ be referred by the qualified field names \<open>recrd.num\<close> and \<open>rec
 subsubsection "Parameterized Record Types"
 
 text \<open>
-Like declared types record types may be parameterized (see Section~\ref{basic-theory-types}):
+Like declared types record types may be parameterized (see Section~\ref{basic-theory-terms}):
 @{theory_text[display]
 \<open>record ('name\<^sub>1,\<dots>,'name\<^sub>n) rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots>
                                     fname\<^sub>n :: "ftype\<^sub>n"\<close>}
@@ -1249,7 +1249,7 @@ Alternative names may be specified for the morphisms in the form
 \<open>typedef t = "term" morphisms rname aname \<proof>\<close>}
 where \<open>rname\<close> replaces \<open>Rep_t\<close> and \<open>aname\<close> replaces \<open>Abs_t\<close>.
 
-Like declared types subtypes may be parameterized (see Section~\ref{basic-theory-types}):
+Like declared types subtypes may be parameterized (see Section~\ref{basic-theory-terms}):
 @{theory_text[display]
 \<open>typedef ('name\<^sub>1,\<dots>,'name\<^sub>n) name = "term" \<proof>\<close>}
 where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type of the \<open>term\<close>, i.e., the 

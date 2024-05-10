@@ -185,11 +185,11 @@ Section~\ref{system-invoke-theory}).
 The lattice operations and constants are polymorphic but are not available for arbitrary types.
 They are overloaded only for those types which have a corresponding structure. For example, type
 \<open>nat\<close> has the \<open>bot\<close> value (which is equal to \<open>0\<close>), but no \<open>top\<close> value. If a lattice operation or
-constant is applied to an operator for which it is not available an error message of the form
+constant is \cbstart used for a type \cbend for which it is not available an error message of the form
 ``No type arity ...'' is signaled.
 
 Like for equality and ordering relations, because the lattice operations and constants are
-overloaded it is not possible to derive the type for valid operands. Again, there are operands and
+overloaded it is not possible to derive the type for valid operands. Again, there are \cbstart operations \cbend and
 constants with more specific operand types, such as \<open>(\<inter>)\<close> for \<open>(\<sqinter>)\<close> on sets where HOL automatically
 derives the operand types.
 \<close>
@@ -200,8 +200,8 @@ text_raw\<open>\label{holbasic-descr}\<close>
 text\<open>
 A description operator selects a value from all values which satisfy a given unary predicate.
 
-Description operators use ``binder syntax'' of the form \<open>OP x. term\<close>. Like a lambda term (see
-Section~\ref{basic-theory-terms}) it locally binds a variable \<open>x\<close> which may occur in \<open>term\<close>.
+Description operators use \cbstart the binder syntax of the form \<open>OP x. term\<close> (see
+Section~\ref{basic-theory-terms})\cbend. Like a lambda term it locally binds a variable \<open>x\<close> which may occur in \<open>term\<close>.
 \<close>
 
 subsection "The Choice Operator"
@@ -293,6 +293,13 @@ terms \<open>term\<^sub>j\<close> with \<open>i<j\<close> and the \<open>term\<c
 its second occurrence shadows the binding of the first and ends the scope of the first occurrence.
 
 Let terms are useful to introduce local variables as abbreviations for sub-terms.
+
+\cbstart Don't confuse the \<open>let\<close> term with the \<^theory_text>\<open>let\<close> statement described in
+Section~\ref{basic-proof-let}. Although they are used for a similar purpose there are several
+differences: A \<open>let\<close> term belongs to the inner syntax of the object logic HOL, the \<^theory_text>\<open>let\<close>
+statement belongs to the meta-level of the outer syntax. Moreover, the \<^theory_text>\<open>let\<close> statement uses
+unification to bind sub-terms to unknowns in a term pattern, a \<open>let\<close> term only binds explicitly
+specified terms to single variables.\cbend
 
 The let term specified above is an alternative syntax for the nested let terms
 @{text[display]
@@ -898,7 +905,55 @@ where this does not work and a different measure function is required.
 Note that the concept of \<open>size\<close> and \<open>measure\<close> actually depends on the specific HOL type \<open>nat\<close>, which
 is introduced in Section~\ref{holtypes-nat}.
 \<close>
+text_raw\<open>\cbstart\<close>
+section \<open>The Proof Method {\sl atomize\_elim}\<close>
+text_raw\<open>\label{holbasic-atomize}\<close>
 
+text\<open>
+As a useful method for proving elimination rules (see Section~\ref{basic-case-elim}) including the
+more specific case rules (see Section~\ref{basic-case-reasoning}) and the goals of \<^theory_text>\<open>obtain\<close>
+statements (see Section~\ref{basic-proof-obtain}) HOL introduces the proof method
+@{theory_text[display]
+\<open>atomize_elim\<close>}
+It only affects the first goal. Assume that this goal has the form of an elimination rule
+@{theory_text[display]
+\<open>theorem "\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>m; P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> P" \<proof>\<close>}
+where every \<open>P\<^sub>i\<close> is a rule of the form
+@{text[display]
+\<open>\<And>x\<^sub>i\<^sub>1\<dots>x\<^sub>i\<^sub>p\<^sub>i. \<lbrakk>Q\<^sub>i\<^sub>1;\<dots>;Q\<^sub>i\<^sub>q\<^sub>i\<rbrakk> \<Longrightarrow> P\<close>}
+(see Section~\ref{basic-case-elim}). The method converts the goal to the form
+@{theory_text[display]
+\<open>\<lbrakk>RA\<^sub>1; \<dots>; RA\<^sub>m\<rbrakk> \<Longrightarrow> D\<^sub>1 \<or> \<dots> \<or> D\<^sub>p\<close>}
+where every \<open>D\<^sub>i\<close> has the form \<open>\<exists>x\<^sub>i\<^sub>1\<dots>x\<^sub>i\<^sub>p\<^sub>i. Q\<^sub>i\<^sub>1 \<and> \<dots> \<and> Q\<^sub>i\<^sub>q\<^sub>i\<close>. For the quantifier \<open>\<exists>\<close> and the boolean
+operators \<open>\<or>\<close> and \<open>\<and>\<close> see Section~\ref{holtypes-bool-funcs}. Because the converted goal does not
+contain the technical variable \<open>P\<close> any more and uses the boolean operators it is sometimes easier
+to prove it.
+
+If the method is applied to the initial goal of the example elimination rule theorem
+@{theory_text[display]
+\<open>theorem elimexmp: "\<lbrakk>(x::nat) \<le> c; x < c \<Longrightarrow> P; x = c \<Longrightarrow> P\<rbrakk> \<Longrightarrow> P"\<close>}
+in Section~\ref{basic-case-elim} it converts the goal to
+@{text[display]
+\<open>x \<le> c \<Longrightarrow> x < c \<or> x = c\<close>}
+which can be solved by method \<open>auto\<close>.
+
+If \<open>atomize_elim\<close> is applied to the initial goal of the example case rule theorem
+@{theory_text[display]
+\<open>theorem mycaserule: "\<lbrakk>n = 0 \<Longrightarrow> P; n \<noteq> 0 \<Longrightarrow> P\<rbrakk> \<Longrightarrow> P"\<close>}
+in Section~\ref{basic-case-reasoning} it converts the goal to
+@{text[display]
+\<open>n = 0 \<or> n \<noteq> 0\<close>}
+which can be solved by method \<open>simp\<close>.
+
+If \<open>atomize_elim\<close> is applied to the initial goal of the example \<^theory_text>\<open>obtain\<close> statement
+@{theory_text[display]
+\<open>obtain y z where "x = y - 3" and "y + z = 2*x +8"\<close>}
+in Section~\ref{basic-proof-obtain} it converts the goal to
+@{text[display]
+\<open>\<exists>y z. x = y - 3 \<and> y + z = 2 * x + 8\<close>}
+which can be solved by method \<open>arith\<close> (see Section~\ref{basic-methods-auto}).
+\<close>
+text_raw\<open>\cbend\<close>
 section "Recursive Functions"
 text_raw\<open>\label{holbasic-recursive}\<close>
 
@@ -1046,38 +1101,41 @@ more compact like that.
 Note that the goal does not mention the defined function \<open>name\<close> at all. It is only about the
 groups of the argument terms in the equations.
 
-For the faculty function defined as above the goal is
+For the faculty function defined as above the goal is\cbstart
 @{text[display]
-\<open>\<And>P x. \<lbrakk>x = 0 \<Longrightarrow> P; \<And>n. \<lbrakk>0 < n; x = n\<rbrakk> \<Longrightarrow> P\<rbrakk> \<Longrightarrow> P\<close>}
+\<open>\<And>P (x::nat). \<lbrakk>x = 0 \<Longrightarrow> P; \<And>n. \<lbrakk>0 < n; x = n\<rbrakk> \<Longrightarrow> P\<rbrakk> \<Longrightarrow> P\<close>}\cbend
 It can be proved by method \<open>auto\<close> (see Section~\ref{basic-methods-auto}).
-\<close>
 
-subsubsection "The Proof Method \<open>atomize_elim\<close>"
-
-text\<open>
-HOL provides the proof method
-@{theory_text[display]
-\<open>atomize_elim\<close>}
-which can be useful for the proof of such goals. It converts the goal to the form
-@{text[display]
-\<open>\<And>x.
-    (\<exists> x\<^sub>1\<^sub>1 \<dots> x\<^sub>1\<^sub>p\<^sub>1. Q\<^sub>1\<^sub>1 \<and> \<dots> \<and> Q\<^sub>1\<^sub>q\<^sub>1 \<and> x = (term\<^sub>1\<^sub>1, \<dots>, term\<^sub>1\<^sub>k)
-  \<or> \<dots> 
-  \<or> (\<exists> x\<^sub>n\<^sub>1 \<dots> x\<^sub>n\<^sub>p\<^sub>n. Q\<^sub>n\<^sub>1 \<and> \<dots> \<and> Q\<^sub>n\<^sub>q\<^sub>n \<and> x = (term\<^sub>n\<^sub>1, \<dots>, term\<^sub>n\<^sub>k)\<close>}
-which directly expresses that the cases together cover all possibilities. It does not contain the 
-technical variable \<open>P\<close> any more and uses the boolean operations and quantifiers introduced by HOL
-for the type \<open>bool\<close> (see Section~\ref{holtypes-bool-funcs}). Of course this method can also be used
-in the proof of other case rules. In many simple cases of recursive function definitions, however,
-the method is not necessary and the goal can be proved by an automatic method like \<open>auto\<close> or \<open>blast\<close>
-(see Section~\ref{basic-methods-auto}).
-
-After the proof of the recursive function definition the goal is available as a case rule
+\cbstart After the proof of the recursive function definition the goal is available as a case rule
 named \<open>name.cases\<close>. If applied by the proof method \<open>cases\<close> (see Section~\ref{basic-case-reasoning})
 it splits a goal and introduces named cases (named by numbers starting at 1) according to the
 argument regions in the defining equations of function \<open>name\<close>.
 
 If the function \<open>name\<close> has only one argument \<open>name.cases\<close> is a usual case rule for the argument
-type, otherwise it is a case rule for the type of the argument tuples.
+type, otherwise it is a case rule for the type of the argument tuples.\cbend
+\<close>
+text_raw\<open>\cbstart\<close>
+subsubsection "Using Proof Method \<open>atomize_elim\<close>"
+text_raw\<open>\cbend\<close>
+
+text\<open>
+\cbstart Since the goal has the form of a case rule the method \<open>atomize_elim\<close> (see
+Section~\ref{holbasic-atomize}) can be applied to it. It converts the general form of the goal
+to the form\cbend
+@{text[display]
+\<open>\<And>x.
+    (\<exists> x\<^sub>1\<^sub>1 \<dots> x\<^sub>1\<^sub>p\<^sub>1. Q\<^sub>1\<^sub>1 \<and> \<dots> \<and> Q\<^sub>1\<^sub>q\<^sub>1 \<and> x = (term\<^sub>1\<^sub>1, \<dots>, term\<^sub>1\<^sub>k)
+  \<or> \<dots> 
+  \<or> (\<exists> x\<^sub>n\<^sub>1 \<dots> x\<^sub>n\<^sub>p\<^sub>n. Q\<^sub>n\<^sub>1 \<and> \<dots> \<and> Q\<^sub>n\<^sub>q\<^sub>n \<and> x = (term\<^sub>n\<^sub>1, \<dots>, term\<^sub>n\<^sub>k)\<close>}
+which directly expresses that the cases together cover all possibilities \cbstart and may be easier to prove. \cbend
+In many simple cases of recursive function definitions, however, the method is not necessary and
+the goal can be proved by an automatic method like \<open>auto\<close> or \<open>blast\<close> (see
+Section~\ref{basic-methods-auto}).
+
+\cbstart For the faculty function defined as above the converted goal is
+@{text[display]
+\<open>\<And>x::nat. x = 0 \<or> (\<exists>n. n > 0 \<and> x = n)\<close>}
+which can also be proved by method \<open>auto\<close>, so the method \<open>atomize_elim\<close> is not necessary here.\cbend
 \<close>
 
 subsubsection "Recursive Definitions vs. Inductive Definitions"
@@ -1137,7 +1195,8 @@ For the faculty function defined as above these are the three goals
 @{text[display]
 \<open>0 = 0 \<Longrightarrow> 1 = 1
 \<And>n. \<lbrakk>0 < n; 0 = n\<rbrakk> \<Longrightarrow> 1 = n * fac_sumC (n - 1)
-\<And>n na. \<lbrakk>0 < n; 0 < na; n = na\<rbrakk> \<Longrightarrow> n * fac_sumC (n - 1) = na * fac_sumC (na - 1)\<close>}
+\<And>n na. \<lbrakk>0 < n; 0 < na; n = na\<rbrakk>
+   \<Longrightarrow> n * fac_sumC (n - 1) = na * fac_sumC (na - 1)\<close>}
 where the first and third are trivial and the second is valid because the two assumptions are a
 contradiction (because the argument spaces are disjoint). All three goals are solved together by
 a single application of method \<open>auto\<close> (see Section~\ref{basic-methods-auto}).
@@ -1277,8 +1336,8 @@ possible argument (tuple)s. HOL provides specific support for proving this prope
 The corresponding theorem for a recursively defined function \<open>name :: t\<^sub>1 \<Rightarrow> \<dots> \<Rightarrow> t\<^sub>k \<Rightarrow> type\<close> is
 @{theory_text[display]
 \<open>theorem "\<forall>x :: (t\<^sub>1 \<times> \<dots> \<times> t\<^sub>k). name_dom x" \<proof>\<close>}
-(for the quantifier \<open>\<forall>\<close> see Section~\ref{holtypes-bool-funcs}). 
-HOL provides the equivalent abbreviated form
+\cbstart stating that all possible argument tuples satisfy the domain predicate \<open>name_dom\<close> \cbend (for the
+quantifier \<open>\<forall>\<close> see Section~\ref{holtypes-bool-funcs}). HOL provides the equivalent abbreviated form
 @{theory_text[display]
 \<open>termination name \<proof>\<close>}
 which is called a ``termination proof'' for the recursive function \<open>name\<close>. If \<open>name\<close> is omitted

@@ -17,40 +17,52 @@ text \<open>
 A theory is the content of an Isabelle theory file.
 \<close>
 
-subsection "Theory Structure"
-text_raw\<open>\label{basic-theory-structure}\<close>
+text_raw\<open>\cbstart\<close>
+subsection "Theory Notation"
+text_raw\<open>\label{basic-theory-notation}\<close>
+
+text\<open>
+Theories are written using a notation which follows strict syntax rules, similar to a programming
+language. The interactive editor helps using correct notation by immediately signaling syntax
+errors upon input. However, it is crucial to also understand the \<^emph>\<open>meaning\<close> of the written text.
+This introduction describes both in a systematic stepwise manner.
+\<close>
+
+subsubsection "Languages for Theory Content"
 
 text \<open>
-The content of a theory file has the structure
-@{theory_text[display]
-\<open>theory name
-imports name\<^sub>1 \<dots> name\<^sub>n
-begin
-  \<dots>
-end\<close>}
-where \<^theory_text>\<open>name\<close> is the theory name and \<^theory_text>\<open>name\<^sub>1 \<dots> name\<^sub>n\<close> are the names of the imported theories.
-The theory name \<^theory_text>\<open>name\<close> must be the same which is used for the theory file, i.e., the file name 
-must be \<^verbatim>\<open>name.thy\<close>.
+Isabelle aims at two main goals: Supporting interactive work with mathematical formulas
+and proofs, and supporting their presentation together with explanations as nicely typeset text in
+the form of an article or a book. For this purpose Isabelle combines three different languages for
+writing theory content:
 
-The theory structure is a part of the Isabelle ``outer syntax'' which is mainly fixed and independent
-from the specific theories. Other kind of syntax is embedded into the outer syntax. The main embedded
-syntax is the ``inner syntax'' which is mainly used to denote types and terms. Content in inner
-syntax must always be surrounded by double quotes. The only exception is a single isolated identifier,
-for it the quotes may be omitted.
+ \<^item> a language for mathematics, called the ``inner syntax'',
+ \<^item> a language for textual content, which is an extended form of \LaTeX\ source code,
+ \<^item> a language for organizing fragments of the first two languages in a theory, called the ``outer
+syntax''.
 
-This introduction describes only a selected part of the outer syntax. The full outer syntax is described
-in the Isabelle/Isar Reference Manual and other documentation.
+For the inner syntax Isabelle tries to be as close as possible to the form how mathematical content
+is traditionally presented in books. It supports formulas such as \<open>\<forall>x\<le>100 . x\<in>{y\<^sup>2 | y. y\<le>10}\<close> both
+in the interactive editor and the textual presentation. It does not support larger two-dimensional
+constructs like matrices or fractions.
+
+The outer syntax resembles a programming language. It uses keywords to construct larger entities
+like definitions and proofs. These entities usually contain mathematical formulas written in inner
+syntax. To clearly separate both languages, \cbend content in inner syntax must always be surrounded
+by double quotes \cbstart \<open>"\<dots>"\<close> or by the ``cartouche delimiters'' \<open>\<open>\<dots>\<close>\<close> available in the editor's
+Symbols panel in tab ``Punctuation''. \cbend The only exception is a single isolated identifier, for it the
+quotes \cbstart or delimiters \cbend may be omitted.
+
+This introduction describes only a selected part of the outer and \cbstart inner syntax. The full
+notation used by Isabelle \cbend is described in the Isabelle/Isar Reference Manual and other
+documentation.
 
 Additionally, text written in \LaTeX\ syntax can be embedded into the outer syntax using the form
 \<^theory_text>\<open>text\<open> \<dots> \<close>\<close>
 and \LaTeX\ sections can be created using
 \<^theory_text>\<open>chapter\<open> \<dots> \<close>\<close>, \<^theory_text>\<open>section\<open> \<dots> \<close>\<close>, \<^theory_text>\<open>subsection\<open> \<dots> \<close>\<close>, \<^theory_text>\<open>subsubsection\<open> \<dots> \<close>\<close>, \<^theory_text>\<open>paragraph\<open> \<dots> \<close>\<close>,
 \<^theory_text>\<open>subparagraph\<open> \<dots> \<close>\<close>.
-Note that the delimiters used here are not the ``lower'' and ``greater'' symbols, but the ``cartouche
-delimiters'' available in the editor's Symbols panel in tab ``Punctuation''.
-
-Embedded \LaTeX\ text is intended for additional explanations of the formal theory content. It is
-displayed in the session document together with the formal theory content.
+\cbdelete 
 
 It is also possible to embed inner and outer syntax in the \LaTeX\ syntax (see Chapter 4 in the 
 Isabelle/Isar Reference Manual).
@@ -66,18 +78,75 @@ Line breaks are ignored as part of the outer and inner syntax and have the same 
 a space.
 \<close>
 
-subsection "Types"
-text_raw\<open>\label{basic-theory-types}\<close>
+text_raw\<open>\cbstart\<close>
+subsubsection "Meta Level and Object Level"
 
 text \<open>
+Isabelle consists of a small fixed kernel which is called ``meta-logic''. It is implemented in the
+session \<^verbatim>\<open>Pure/Pure\<close> (see Section~\ref{system-invoke-theory}) which is the ancestor of all other
+sessions. To be useful the meta-logic must be extended by an ``object logic''. It may consist of one
+or more sessions, all sessions other than \<^verbatim>\<open>Pure/Pure\<close> are parts of an object logic. There are many
+object logics available for Isabelle, the most versatile is HOL. Although called a ``logic'' it is
+a full extensible representation of mathematics.
+
+This introduction first describes the Isabelle kernel features, followed by a
+description of the object logic HOL in Chapters~\ref{holbasic} and subsequent chapters.
+
+Both outer and inner syntax consist of a part for the kernel (the ``meta-level'' of the languages)
+and a part introduced by and specific for the object logic (the ``object-level'' of the languages).
+While the meta-level of the inner syntax is extremely small, mainly consisting of only four logical
+operators, the meta-level of the outer syntax supports a large set of constructs for specifying
+entities like axioms, definitions, proofs, and, finally, whole theories.
+
+This introduction describes the meta-level of the inner syntax mainly in
+Sections~\ref{basic-theory-terms} and~\ref{basic-theory-prop}. The rest of the sections about the
+Isabelle kernel describe the meta-level of the outer syntax. Chapter~\ref{holbasic} describes basic
+parts of the object level of the inner and outer syntax for HOL. Chapter~\ref{holtdefs} describes
+a major part of the outer syntax for HOL, whereas Chapter~\ref{holtypes} describes an important part
+of the inner syntax for HOL.
+\<close>
+text_raw\<open>\cbend\<close>
+
+subsubsection "Theory Structure"
+
+text \<open>
+The content of a theory file has the \cbstart outer syntax \cbend structure
+@{theory_text[display]
+\<open>theory name
+imports name\<^sub>1 \<dots> name\<^sub>n
+begin
+  \<dots>
+end\<close>}
+where \<^theory_text>\<open>name\<close> is the theory name and \<^theory_text>\<open>name\<^sub>1 \<dots> name\<^sub>n\<close> are the names of the imported theories.
+The theory name \<^theory_text>\<open>name\<close> must be the same which is used for the theory file, i.e., the file name 
+must be \<^verbatim>\<open>name.thy\<close>.
+\cbdelete
+\<close>
+text_raw\<open>\cbstart\<close>
+subsection "Terms and Types"
+text_raw\<open>\label{basic-theory-terms}\<close>
+
+text \<open>
+The two main constituents of the inner syntax are terms and types. \cbend
 As usual in formal logics, the basic building blocks of propositions are terms. Terms denote arbitrary
 objects like numbers, sets, functions, or boolean values. Isabelle is strongly typed, so every term 
-must have a type. However, in most situations Isabelle can derive the type of a term automatically,
-so that it needs not be specified explicitly. Terms and types are always denoted using the inner syntax.
+must have a type \cbstart which names the type of values denoted by the term. \cbend
+However, in most situations Isabelle can derive the type of a term automatically,
+so that it needs not be specified explicitly.\cbdelete
+\<close>
 
+subsubsection "Types"
+
+text \<open>
 Types are usually specified by type names. In Isabelle HOL (see Chapter~\ref{holbasic}) there are 
-predefined types such as \<open>nat\<close> and \<open>bool\<close>
-for natural numbers and boolean values. New types can be defined in the form
+predefined types such as \<open>nat\<close> and \<open>bool\<close> for natural numbers and boolean values. \cbstart With the
+exception of function types, types like these with a mathematical meaning always belong to an object
+logic. Chapter~\ref{holtypes} gives a detailed description of several important types of HOL. Due
+to the lack of adequate types in the meta-logic this introduction uses a small set of HOL types for
+examples to illustrate concepts on the meta-level, assuming an intuitive understanding of the
+associated operations and terms.\cbend
+
+New types can be defined \cbstart using the outer syntax construct\cbend
 @{theory_text[display]
 \<open>typedecl name\<close>}
 which introduces the \<^theory_text>\<open>name\<close> for a new type for which the values are different from the values of 
@@ -86,7 +155,7 @@ given, that must be done separately. See Chapter~\ref{holtdefs} for ways of defi
 specifying more information about their values.
 
 Types can be parameterized, then the type arguments are denoted \<^emph>\<open>before\<close> the type name, such as in
-\<open>nat set\<close> which is the type of sets of natural numbers. A type name with \<open>n\<close> parameters is declared
+\<open>nat set\<close> which is the \cbstart HOL \cbend type of sets of natural numbers. A type name with \<open>n\<close> parameters is declared
 in the form
 @{theory_text[display]
 \<open>typedecl ('name\<^sub>1,\<dots>,'name\<^sub>n) name\<close>}
@@ -105,42 +174,41 @@ variables are replaced by actual types.
 Alternatively a type name can be introduced as a synonym for an existing type in the form
 @{theory_text[display]
 \<open>type_synonym name = type\<close>}
-such as in \<^theory_text>\<open>type_synonym natset = nat set\<close>. Type synonyms can also be parameterized as in
+such as in \cbstart \<^theory_text>\<open>type_synonym natset = "nat set"\<close>\cbend. Type synonyms can also be parameterized as in
 @{theory_text[display]
 \<open>type_synonym ('name\<^sub>1,\<dots>,'name\<^sub>n) name = type\<close>}
 where \<open>type\<close> may be a polymorphic type which contains atmost the type variables \<open>'name\<^sub>1,\<dots>,'name\<^sub>n\<close>.
 \<close>
-
-subsection "Terms"
-text_raw\<open>\label{basic-theory-terms}\<close>
 
 subsubsection "Constants and Variables"
 
 text \<open>
 Terms are mainly built as syntactical structures based on constants and variables. Constants are usually
 denoted by names, using the same namespace as type names. Whether a name denotes a constant or a 
-type depends on its position in a term. Predefined constant names of type \<open>bool\<close> are \<open>True\<close> and 
-\<open>False\<close>.
+type depends on its position in a term. \cbstart In HOL \cbend predefined constant names of type
+\<open>bool\<close> are \<open>True\<close> and \<open>False\<close>.
 
 Constants of number types, such as \<open>nat\<close>, may be denoted by number literals, such as \<open>6\<close>
 or \<open>42\<close>.
 
-A constant can be defined by specifying its type. The definition
+A constant can be defined by specifying its type. The \cbstart outer syntax construct\cbend
 @{theory_text[display]
 \<open>consts name\<^sub>1 :: type\<^sub>1 \<dots> name\<^sub>n :: type\<^sub>n\<close>}
 introduces \<open>n\<close> constants with their names and types. No information is specified about the 
 constant's values, in this respect the constants are ``underspecified''. The information about the
 values must be specified separately.
 
-If the constant's type is polymorphic (see Section~\ref{basic-theory-types}) the constant is 
+If the constant's type is polymorphic (see the previous subsection) the constant is 
 also called polymorphic. Thus the declaration
 @{theory_text[display]
 \<open>consts myset :: "'a set"\<close>}
 declares the polymorphic constant \<open>myset\<close> which may be a set of elements of arbitrary type.
+\cbstart Note the use of quotes because the type is specified in inner syntax and is not a single
+type name.\cbend
 
 A (term) variable has the same form as a constant name, but it has not been introduced as a 
 constant. Whenever a variable is used in a term it has a specific type which is either derived 
-from its context or is explicitly specified in the form \<open>varname :: type\<close>.
+from its context or is explicitly specified in \cbstart inner syntax in \cbend the form \<open>varname :: type\<close>.
 
 Nested terms are generally written by using parentheses \<open>(\<dots>)\<close>. There are many priority rules how 
 to nest terms automatically, but if in doubt, it is always safe to use parentheses.
@@ -151,13 +219,14 @@ subsubsection "Functions"
 text \<open>
 A constant name denotes an object, which, according to its type, may also be a function of 
 arbitrary order. Functions basically have a single argument. The type of a function is written 
-as \<open>argtype \<Rightarrow> restype\<close>. 
+\cbstart in inner syntax \cbend as \<open>argtype \<Rightarrow> restype\<close>. \cbstart This way of denoting function
+types belongs to the meta-level of the inner syntax and is thus available in all object logics.\cbend
 
 Functions in Isabelle are always total, i.e., they map every value of type \<open>argtype\<close> to some value
 of type \<open>restype\<close>. However, a function may be ``underspecified'' so that no information is (yet)
-available about the result value for some or all argument values. A function defined by
+available about the result value for some or all argument values. A function defined by\cbstart
 @{theory_text[display]
-\<open>consts mystery :: nat \<Rightarrow> nat\<close>}
+\<open>consts mystery :: "nat \<Rightarrow> nat"\<close>}\cbend
 is completely underspecified: although it maps every natural number to a unique other natural number
 no information about these numbers is available. Functions may also be partially specified by 
 describing the result value only for some argument values. This does not mean that the function is
@@ -174,7 +243,8 @@ to represent functions with more than one argument. Function types are right ass
 type \<open>argtype\<^sub>1 \<Rightarrow> argtype\<^sub>2 \<Rightarrow> \<cdots> \<Rightarrow> argtype\<^sub>n \<Rightarrow> restype\<close> describes functions which can be applied 
 to \<open>n\<close> arguments. 
 
-Function application terms for a function \<open>f\<close> and an argument \<open>a\<close> are denoted by
+Function application terms for a function \<open>f\<close> and an argument \<open>a\<close> are denoted \cbstart in inner
+syntax \cbend by
 \<open>f a\<close>, no parentheses are required around the argument. Function application terms are left 
 associative, thus a function application to \<open>n\<close> arguments is written \<open>f a\<^sub>1 \<dots> a\<^sub>n\<close>. Note that an
 application \<open>f a\<^sub>1 \<dots> a\<^sub>m\<close> where \<open>m < n\<close> (a ``partial application'') is a correct term and denotes a
@@ -182,26 +252,36 @@ function taking the remaining \<open>n-m\<close> arguments.
 
 For every constant alternative syntax forms may be defined for application terms. This is often used
 for binary functions to represent application terms in infix notation with an operator symbol.
-As an example, the name for the addition function is \<open>plus\<close>, so an application term is denoted
+As an example, the name for the addition function \cbstart in HOL \cbend is \<open>plus\<close>, so an application term is denoted
 in the form \<open>plus 3 5\<close>. For \<open>plus\<close> the alternative name \<open>(+)\<close> is defined (the parentheses are part
 of the name). For functions with such ``operator names'' an application term \<open>(+) 3 5\<close> can also be
-denoted in infix form \<open>3 + 5\<close>. Infix notation is supported for many basic functions and predicates,
+denoted in infix form \<open>3 + 5\<close>. Infix notation is supported for many basic functions and predicates
+\cbstart in HOL \cbend,
 having operator names such as \<open>(-)\<close>, \<open>(**)\<close>, \<open>(=)\<close>, \<open>(\<noteq>)\<close>, \<open>(\<le>)\<close>, or \<open>(\<in>)\<close>. 
 \<close>
 
 subsubsection "Lambda-Terms"
 
 text\<open>
-Functions can be denoted by lambda terms of the form \<open>\<lambda>x. term\<close> where \<open>x\<close> is a variable
+Functions can be denoted \cbstart in inner syntax \cbend by lambda terms of the form \<open>\<lambda>x. term\<close> where \<open>x\<close> is a variable
 which may occur in the \<open>term\<close>. The space between the dot and the \<open>term\<close> is often required to
 separate both. A function to be applied to \<open>n\<close> arguments can be denoted by the
-lambda term \<open>\<lambda>x\<^sub>1 \<dots> x\<^sub>n. term\<close> where \<open>x\<^sub>1 \<dots> x\<^sub>n\<close> are distinct variables. As usual, types may be
+lambda term \<open>\<lambda>x\<^sub>1 \<dots> x\<^sub>n. term\<close> where \cbstart \<open>x\<^sub>1, \<dots>, x\<^sub>n\<close> \cbend are distinct variables. As usual, types may be
 specified for (some of) the variables in the form \<open>\<lambda>(x\<^sub>1::t\<^sub>1) \<dots> (x\<^sub>n::t\<^sub>n). term\<close>. The parentheses
-may be omitted if there is only one argument variable. 
+may be omitted if there is only one argument variable.
+
+\cbstart If a variable from the \<open>x\<^sub>1, \<dots>, x\<^sub>n\<close> occurs in the \<open>term\<close> of \<open>\<lambda>x\<^sub>1 \<dots> x\<^sub>n. term\<close> it is called a
+``bound'' occurrence and denotes the corresponding function argument. If an occurrence of a variable
+\<open>x\<close> is not a part of a lambda term \<open>\<lambda>\<dots> x \<dots> . term\<close> the occurrence is called ``free''.\cbend
 
 A constant function has a value which does not depend on the argument, thus the variable \<open>x\<close>
 does not occur in the \<open>term\<close>. Then its name is irrelevant and it may be replaced by the ``wildcard''
 \<open>_\<close> (an underscore) as in \<open>\<lambda>_. term\<close>.
+
+\cbstart A lambda term is a case of ``binder syntax''. It consists of a ``binder'' (here \<open>\<lambda>\<close>)
+followed by one or more variables with optional type specifications, followed by a dot and a term.
+Terms of the inner syntax nearly always have either the form of a function application, possibly
+in infix notation, or the form of a binder syntax.\cbend
 \<close>
 
 subsubsection "Searching Constants"
@@ -240,41 +320,47 @@ text_raw\<open>\label{basic-theory-definition}\<close>
 
 text \<open>
 A constant name may be introduced together with information about its associated value by specifying 
-a term for the value. There are two forms for introducing constant names in this way, definitions and abbreviations.
+a term for the value. There are two forms for introducing constant names in this way, definitions
+and abbreviations. \cbstart Both are constructs of the outer syntax.\cbend
 \<close>
 
 subsubsection "Definitions"
 
 text\<open>
 A definition defines a new constant together with its type and value.
-It is denoted in the form
+It is denoted in the form\cbstart
 @{theory_text[display]
-\<open>definition name :: type
-where "name \<equiv> term"\<close>}
-Note that the ``defining equation'' \<open>name \<equiv> term\<close> is specified in inner syntax and, like \<open>type\<close> 
-must be delimited by quotes. The \<open>name\<close> may not occur in the \<open>term\<close>, i.e., this form of definition
-does not support recursion.
+\<open>definition name where "name \<equiv> term"\<close>}
+Note that the ``defining equation'' \<open>name \<equiv> term\<close> is specified in inner syntax and must be
+delimited by quotes. \cbstart The operator \<open>\<equiv>\<close> is the equality operator of the meta-logic (see
+Section~\ref{basic-theory-notation})\cbend. The \<open>name\<close> may not occur in the \<open>term\<close>, i.e., this form
+of definition
+does not support recursion. Also, no free variables may occur in the \<open>term\<close>. In the object logic HOL
+(see Chapter~\ref{holbasic}) also the normal equality operator \<open>=\<close> may be used instead of \<open>\<equiv>\<close>.
 
-If the type of the defined name is a function type, the \<open>term\<close> may be a lambda term. Alternatively,
-the definition for a function applicable to \<open>n\<close> arguments can be written in the form
+The type of the defined constant is the same as that of the \<open>term\<close>. If that type is polymorphic
+(see Section~\ref{basic-theory-terms}) a more specific type may be specified explicitly in the form
 @{theory_text[display]
-\<open>definition name :: type
-where "name x\<^sub>1 \<dots> x\<^sub>n \<equiv> term"\<close>}
+\<open>definition name :: type where "name \<equiv> term"\<close>}
+As usual the type is specified in inner syntax and must be quoted if it is not a single type name.
+
+If the type of the defined constant is a function type, the \<open>term\<close> may be a lambda term.
+Alternatively, the definition for a function applicable to \<open>n\<close> arguments can be written in the form
+@{theory_text[display]
+\<open>definition name where "name x\<^sub>1 \<dots> x\<^sub>n \<equiv> term"\<close>}
 with variable names \<open>x\<^sub>1 \<dots> x\<^sub>n\<close> which may occur in the \<open>term\<close>. This form is mainly equivalent to
 @{theory_text[display]
-\<open>definition name :: type
-where "name \<equiv> \<lambda>x\<^sub>1 \<dots> x\<^sub>n. term"\<close>}
+\<open>definition name where "name \<equiv> \<lambda>x\<^sub>1 \<dots> x\<^sub>n. term"\<close>}\cbend
 
 A short form of a definition is
 @{theory_text[display]
-\<open>definition "name \<equiv> term"\<close>}
-Here, the type of the new constant is derived as the type of the \<open>term\<close>.
+\<open>definition "name \<equiv> term"\<close>}\cbdelete
 
 Usually, a constant defined in this way is fully specified, i.e., all information about its value
 is available. However, if the term does not provide this information, the constant is still 
-underspecified. Consider the definition
+underspecified. Consider the definition\cbstart
 @{theory_text[display]
-\<open>definition "mystery2 \<equiv> mystery"\<close>}
+\<open>definition mystery2 where "mystery2 \<equiv> mystery"\<close>}\cbend
 where \<open>mystery\<close> is defined as above. Then it is only known that \<open>mystery2\<close> has type \<open>nat \<Rightarrow> nat\<close> and
 is the same total function as \<open>mystery\<close>, but nothing is known about its values.
 \<close>
@@ -285,17 +371,16 @@ text\<open>
 An abbreviation definition does not define a constant, it only introduces the name 
 as a synonym for a term. Upon input the name is automatically expanded, and upon output it is used 
 whenever a term matches its specification and the term is not too complex. 
-An abbreviation definition is denoted in a similar form as a definition:
+An abbreviation definition is denoted in a similar form as a definition:\cbstart
 @{theory_text[display]
-\<open>abbreviation name :: type
-where "name \<equiv> term"\<close>}
-As for definitions, recursion is not supported, the \<open>name\<close> may not occur in the \<open>term\<close>. The short
-form is also available as for definitions.
+\<open>abbreviation name where "name \<equiv> term"\<close>}
+As for definitions, recursion is not supported, the \<open>name\<close> may not occur in the \<open>term\<close> and also
+no free variables. An explicit type may be specified for \<open>name\<close> and the short form is also available
+as for definitions.\cbend
 
-The alternative form for functions is also available. The abbreviation definition
+The alternative form for functions is also available. The abbreviation definition\cbstart
 @{theory_text[display]
-\<open>abbreviation name :: type
-where "name x\<^sub>1 \<dots> x\<^sub>n \<equiv> term"\<close>}
+\<open>abbreviation name where "name x\<^sub>1 \<dots> x\<^sub>n \<equiv> term"\<close>}\cbend
 introduces a ``parameterized'' abbreviation. An application term \<open>name term\<^sub>1 \<dots> term\<^sub>n\<close> is replaced
 upon input by \<open>term\<close> where all occurrences of \<open>x\<^sub>i\<close> have been substituted by \<open>term\<^sub>i\<close>. Upon output
 terms are matched with the structure of \<open>term\<close> and if successful a corresponding application term
@@ -373,10 +458,15 @@ are hence written in inner syntax and must be enclosed in quotes.
 subsubsection "Formulas"
 
 text \<open>
-In its simplest form a proposition is a single term of type \<open>bool\<close>, such as
+\cbstart A simple form of \cbend a proposition is a single term of type \<open>bool\<close>, such as
 @{text[display]
 \<open>6 * 7 = 42\<close>}
-Terms of type \<open>bool\<close> are also called ``formulas''.
+\cbstart The \<open>*\<close> is the infix operator for multiplication, it may not be omitted in arithmetic
+terms.\cbend
+
+Terms of type \<open>bool\<close> are also called ``formulas''. \cbstart Since \<open>bool\<close> belongs to the object
+logic HOL, formulas are also specific for HOL or another object logic, there are no formulas in
+the meta-logic. The simplest form of a proposition on meta-level is a single variable.\cbend
 
 A proposition may contain free variables as in
 @{text[display]
@@ -389,20 +479,21 @@ for the free variables.
 subsubsection "Derivation Rules"
 
 text \<open>
-More complex propositions can express, ``derivation rules'' used to derive propositions
-from other propositions. Derivation rules are denoted using a ``metalogic language''. It is
-still written in inner syntax but uses a small set of ``metalogic operators''. 
+More complex propositions \cbstart on the meta-level \cbend can express ``derivation rules'' used to derive propositions
+from other propositions. Derivation rules are denoted using \cbstart the meta-logic operator \<open>\<Longrightarrow>\<close>
+and can thus be expressed independent of an object logic.\cbend
 
-Derivation rules consist of assumptions and a conclusion. They can be written using the metalogic
-operator \<open>\<Longrightarrow>\<close> in the form
+Derivation rules consist of assumptions and a conclusion. They \cbstart are written in the form\cbend
 @{text[display]
 \<open>A\<^sub>1 \<Longrightarrow> \<cdots> \<Longrightarrow> A\<^sub>n \<Longrightarrow> C\<close>}
-where the \<open>A\<^sub>1 \<dots> A\<^sub>n\<close> are the assumptions and \<open>C\<close> is the conclusion. The conclusion must be a formula. 
-The assumptions may be arbitrary propositions. If an assumption contains metalogic operators 
-parentheses can be used to delimit them from the rest of the derivation rule.
+where the \<open>A\<^sub>1 \<dots> A\<^sub>n\<close> are the assumptions and \<open>C\<close> is the conclusion. \cbstart Since \<open>\<Longrightarrow>\<close> is right-associative
+the conclusion can be assumed to be a single variable or a formula. \cbend
+The assumptions may be arbitrary propositions. If an
+assumption contains meta-logic operators parentheses can be used to delimit them from the rest of the
+derivation rule.
 
 A derivation rule states that if the assumptions are valid, the conclusion can be derived
-as also being valid. So it can be viewed as a ``meta implication'' with a similar meaning as a 
+as also being valid. \cbstart So  \<open>\<Longrightarrow>\<close> \cbend can be viewed as a ``meta implication'' with a similar meaning as a
 boolean implication, but with a different use.
 
 An example for a rule with a single assumption is
@@ -417,7 +508,7 @@ An example for a rule with two assumptions is
 @{text[display]
 \<open>(x::nat) < c \<Longrightarrow> n > 0 \<Longrightarrow> n*x < n*c\<close>}
 
-In most cases the assumptions are also formulae, as in the example. However, they may also
+In most cases the assumptions are also formulas, as in the example. However, they may also
 be again derivation rules. Then the rule is a ``meta rule'' which derives a proposition from other 
 rules.
 \<close>
@@ -425,35 +516,51 @@ rules.
 subsubsection "Binding Free Variables"
 
 text \<open>
-A proposition may contain universally bound variables, using the metalogic quantifier \<open>\<And>\<close> in the
+A proposition may contain universally bound variables, using the meta-logic quantifier \<open>\<And>\<close> in the
 form
 @{text[display]
 \<open>\<And> x\<^sub>1 \<dots> x\<^sub>n. P\<close>}
-where the \<open>x\<^sub>1 \<dots> x\<^sub>n\<close> may occur free in the proposition \<open>P\<close>. As usual, types may be
+where the \<open>x\<^sub>1 \<dots> x\<^sub>n\<close> may occur free in the proposition \<open>P\<close>. \cbstart This is another case of binder
+syntax (see Section~\ref{basic-theory-terms})\cbend. As usual, types may be
 specified for (some of) the variables in the form \<open>\<And> (x\<^sub>1::t\<^sub>1) \<dots> (x\<^sub>n::t\<^sub>n). P\<close>. An example for
 a valid derivation rule with bound variables is
 @{text[display]
 \<open>\<And> (x::nat) c n . x < c \<Longrightarrow> n*x \<le> n*c\<close>}
+\cbdelete\<close>
+text_raw\<open>\cbstart\<close>
+subsubsection "Rules with Multiple Conclusions"
 
-If a standalone proposition in a theory contains free variables they are implicitly universally
-bound. Thus the example derivation rule above is equivalent to the single-assumption example rule in
-the previous section. Explicit binding of variables is only required to avoid name clashes with 
-constants of the same name. In the proposition
+text \<open>
+A derivation rule may specify several propositions to be derivable from the same assumptions using
+the meta-logic operator \<open>&&&\<close> in the form
 @{text[display]
-\<open>\<And> (True::nat). True < c \<Longrightarrow> n*True \<le> n*c\<close>}
-the name \<open>True\<close> is used locally as a variable of type \<open>nat\<close> instead of the predefined constant
-of type \<open>bool\<close>. Of course, using well known constant names as variables is confusing and should
-be avoided.
-\<close>
+\<open>A\<^sub>1 \<Longrightarrow> \<cdots> \<Longrightarrow> A\<^sub>n \<Longrightarrow> C\<^sub>1 &&& \<dots> &&& C\<^sub>h\<close>}
+Here the \<open>C\<^sub>i\<close> may be arbitrary propositions, like the assumptions. If they contain meta-logic
+operators they must be enclosed in parentheses because \<open>&&&\<close> binds stronger than the other
+meta-logic operators.
 
+The rule is equivalent to the set of rules deriving each \<open>C\<^sub>i\<close> separately:
+@{text[display]
+\<open>A\<^sub>1 \<Longrightarrow> \<cdots> \<Longrightarrow> A\<^sub>n \<Longrightarrow> C\<^sub>1
+  \<dots> 
+A\<^sub>1 \<Longrightarrow> \<cdots> \<Longrightarrow> A\<^sub>n \<Longrightarrow> C\<^sub>h\<close>}
+
+The rule states that if the assumptions are valid then all conclusions are valid. So  \<open>&&&\<close> can be
+viewed as a ``meta conjunction'' with a similar meaning as a boolean conjunction, but with a
+different use.
+
+An example for a rule with two conclusions is
+@{text[display]
+\<open>(x::nat) < c \<Longrightarrow> n*x \<le> n*c &&& n+x < n+c\<close>}\<close>
+text_raw\<open>\cbend\<close>
 subsubsection "Alternative Rule Syntax"
 
 text \<open>
-An alternative, Isabelle specific syntax for derivation rules is
+An alternative, Isabelle specific syntax for derivation rules \cbstart with possibly multiple conclusions is
 @{text[display]
-\<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<close>}
+\<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<^sub>1 &&& \<dots> &&& C\<^sub>h\<close>}\cbend
 which is often considered as more readable, because it better separates the assumptions from the
-conclusion. In the interactive editor to switch to this form it may be necessary to set 
+\cbstart conclusions\cbend. In the interactive editor to switch to this form it may be necessary to set 
 \<^verbatim>\<open>Print Mode\<close> to \<^verbatim>\<open>brackets\<close> in \<^verbatim>\<open>Plugin Options\<close> for \<^verbatim>\<open>Isabelle General\<close>. The fat brackets are
 available for input in the editor's Symbols panel in tab ``Punctuation''.
 
@@ -471,47 +578,116 @@ Note that in the literature a derivation rule @{thm conjI[no_vars]} is often den
 subsubsection "Structured Rule Syntax"
 
 text\<open>
-Isabelle supports another alternative syntax for derivation rules. It is called ``structured'' form,
-since the rule is not specified by a single proposition but by several separate propositions
-for the parts of the rule:
+Isabelle supports another alternative syntax for derivation rules \cbstart with possibly multiple
+conclusions\cbend. It is called ``structured'' form, since the rule is not specified by a single
+proposition but by several separate propositions for the parts of the rule:\cbstart
 @{theory_text[display]
-\<open>"C" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m\<close>}
-Here the assumptions and the variables may be grouped or separated for better readability by the
-keyword \<^theory_text>\<open>and\<close>. For every group of variables (but not for single variables in a group) a type may
-be specified in the form \<open>x\<^sub>1 \<dots> x\<^sub>m :: "type"\<close>, it applies to all variables in the group.
+\<open>"C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m\<close>}
+Here the conclusions, \cbend assumptions and the variables may be grouped or separated for better
+readability by the keyword \<^theory_text>\<open>and\<close>. For every group of variables (but not for single variables in a
+group) a type may be specified in the form \<open>x\<^sub>1 \<dots> x\<^sub>m :: "type"\<close>, it applies to all variables in the
+group.\cbend
 
 The keywords \<^theory_text>\<open>if\<close>, \<^theory_text>\<open>and\<close>, \<^theory_text>\<open>for\<close> belong to the outer syntax. Thus, a rule in structured form
 cannot occur nested in another proposition, such as an assumption in another rule. Moreover, the
 original rule must be quoted as a whole, whereas in the structured form only the sub-propositions
-\<open>C, A\<^sub>1, \<dots>, A\<^sub>n\<close> must be individually quoted. The \<open>x\<^sub>1, \<dots>, x\<^sub>m\<close> need not be quoted, but if a
+\cbstart \<open>C\<^sub>1 \<dots> C\<^sub>h, A\<^sub>1, \<dots>, A\<^sub>n\<close> \cbend must be individually quoted. The \<open>x\<^sub>1, \<dots>, x\<^sub>m\<close> need not be quoted, but if a
 type is specified for a variable group the type must be quoted, if it is not a single type name.
 
 If written in this form, the two-assumption example rule from the previous section may become
 @{theory_text[display]
-\<open>"n*x < n*c" if "x < c" and "n > 0" for x::nat and n c\<close>}
-
+\<open>"n*x < n*c" if "x < c" and "n > 0" for x::nat and n c\<close>}\cbstart
+and the rule with two conclusions depicted earlier may become
+@{theory_text[display]
+\<open>"n*x \<le> n*c" and "n+x < n+c" if "x < c" for x::nat and n c\<close>}\cbend
 The assumptions and the conclusion in a rule in structured form may be arbitrary propositions, in
-particular, they may be derivation rules (in unstructured form). If the conclusion is a derivation
-rule its assumptions are prepended to the assumptions which are already present in the rule.
+particular, they may be derivation rules (in unstructured form). \cbstart If a conclusion is a derivation
+rule the assumptions \<open>A\<^sub>1, \<dots>, A\<^sub>n\<close> are added to the assumptions present in the conclusion.\cbend
 \<close>
+text_raw\<open>\cbstart\<close>
+subsubsection "Conditional Definitions"
 
+text\<open>
+A definition, as described in Section~\ref{basic-theory-definition} may be conditional, then its
+defining equation has the form of a derivation rule
+@{theory_text[display]
+\<open>definition name where "\<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> name \<equiv> term"\<close>}
+or in structured form:
+@{theory_text[display]
+\<open>definition name where "name \<equiv> term" if "A\<^sub>1" \<dots> "A\<^sub>n"\<close>}
+Since no free variables are allowed in \<open>term\<close> it is not possible to bind variables using \<open>\<And>\<close>.
+The meaning of a conditional definition is that the value of \<open>name\<close> is only defined by the \<open>term\<close>
+if all assumptions are valid. Otherwise it is underspecified.
+
+For the rule conclusion also the form \<open>name x\<^sub>1 \<dots> x\<^sub>n \<equiv> term\<close> can be used if \<open>name\<close> has a function
+type. Then the \<open>x\<^sub>1 \<dots> x\<^sub>n\<close> may occur in the \<open>A\<^sub>1, \<dots>, A\<^sub>n\<close> and restrict the specification of function
+values to specific function arguments.
+
+As for normal definitions a type may be specified for \<open>name\<close> and the short form may be used where
+only the defining rule is given. For the abbreviations described in
+Section~\ref{basic-theory-definition} a conditional form is not available.
+\<close>
+text_raw\<open>\cbend\<close>
 subsection "Theorems"
 text_raw\<open>\label{basic-theory-theorem}\<close>
 
 text \<open>
 A theorem specifies a proposition together with a proof, that the proposition is valid. Thus it
-adds a fact to the enclosing theory. A simple form of a theorem is
+adds a fact to the enclosing theory.\cbstart\<close>
+
+subsubsection "Specifying Theorems"
+
+text\<open>\cbend
+A simple form of a theorem is
 @{theory_text[display]
 \<open>theorem "prop" \<proof>\<close>}
 where \<open>prop\<close> is a proposition in inner syntax and \<^theory_text>\<open>\<proof>\<close> is a proof as described in 
 Section \ref{basic-proof}. The keyword \<^theory_text>\<open>theorem\<close> can be replaced by one of the keywords
-\<^theory_text>\<open>lemma\<close>, \<^theory_text>\<open>corollary\<close>, \<^theory_text>\<open>proposition\<close> to give a hint about the use of the statement to
+\<^theory_text>\<open>lemma\<close>, \<^theory_text>\<open>corollary\<close>, \<^theory_text>\<open>proposition\<close> to give a hint about the use of the \cbstart theorem \cbend to
 the reader.
 
-If the proposition in a theorem is a derivation rule it may also be specified in structured form
-(see Section~\ref{basic-theory-prop}):
+\cbstart The example rule from the previous sections can be stated as a fact by the theorem
 @{theory_text[display]
-\<open>theorem "C" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
+\<open>theorem "\<And> (x::nat) c n . x < c \<Longrightarrow> n*x \<le> n*c" \<proof>\<close>}
+
+If the proposition in a theorem contains free variables they are implicitly universally
+bound. Thus the previous example theorem is equivalent to the theorem
+@{theory_text[display]
+\<open>theorem "(x::nat) < c \<Longrightarrow> n*x \<le> n*c" \<proof>\<close>}
+Explicit binding of variables is only required to avoid name clashes with 
+constants of the same name. In the theorem
+@{theory_text[display]
+\<open>theorem "\<And> (True::nat). True < c \<Longrightarrow> n*True \<le> n*c" \<proof>\<close>}
+the name \<open>True\<close> is used locally as a variable of type \<open>nat\<close> instead of the predefined constant
+of type \<open>bool\<close>. Of course, using well known constant names as variables is confusing and should
+be avoided.\cbend
+
+If the proposition in a theorem is a derivation rule \cbstart with possibly multiple conclusions \cbend it may also
+be specified in structured form (see Section~\ref{basic-theory-prop}):\cbstart
+@{theory_text[display]
+\<open>theorem "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
+with optional grouping of all components by \<^theory_text>\<open>and\<close>. Remember that the \<open>C\<^sub>i\<close> may be arbitrary
+propositions, therefore a theorem in this form may specify several derivation rules with additional
+common assumptions and common bound variables.
+
+A theorem with multiple conclusions adds a separate fact for every conclusion to the enclosing
+theory (copying all assumptions to every such fact), as if there had been a separate theorem for
+every conclusion.
+
+In particular, if no variables are explicitly bound and no common assumptions are present this
+form allows to specify several propositions in a common theorem of the form
+@{theory_text[display]
+\<open>theorem "C\<^sub>1" \<dots> "C\<^sub>h" \<proof>\<close>}
+where all propositions can be proved together in a single proof.
+
+The example rules from the previous sections can be stated as facts by a common theorem in the form
+@{theory_text[display]
+\<open>theorem "(x::nat) < c \<Longrightarrow> n*x \<le> n*c"
+    and "(x::nat) \<le> c \<Longrightarrow> x + m \<le> c + m"
+\<proof>\<close>}
+Although the resulting facts are completely independent of each other, the variables are common
+to both propositions. This means that it suffices to specify the type \<open>nat\<close> for \<open>x\<close> in one of them.
+If different types are specified for \<open>x\<close> in the two propositions an error is signaled.\cbend
 \<close>
 
 subsubsection "Unknowns"
@@ -526,7 +702,7 @@ The result of such a substitution is always a special case of the fact and there
 a fact. In this way a fact with unknowns gives rise to a (usually infinite) number of facts
 which are constructed by substituting unknowns by terms.
 
-When turned to a fact, the example rule from the previous sections becomes
+\cbstart When turned to a fact, the rule used in the example theorems becomes\cbend
 @{text[display]
 \<open>?x < ?c \<Longrightarrow> ?n*?x \<le> ?n*?c\<close>}
 with type \<open>nat\<close> associated to all unknowns.
@@ -566,7 +742,23 @@ a named collection can be introduced by
 @{theory_text[display]
 \<open>lemmas examples = example1 example2\<close>}
 
-Alternatively a ``dynamic fact set'' can be declared by
+\cbstart If a theorem with multiple conclusions is named in the form
+@{theory_text[display]
+\<open>theorem name: "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
+it introduces the name for the collection of all resulting facts. Moreover, if the conclusions are
+grouped by \<^theory_text>\<open>and\<close>, (some of) the groups may be named separately in the form
+@{theory_text[display]
+\<open>theorem name\<^sub>1: "C\<^sub>1\<^sub>1" \<dots> "C\<^sub>1\<^sub>g\<^sub>1" and \<dots> and name\<^sub>h: "C\<^sub>h\<^sub>1" \<dots> "C\<^sub>h\<^sub>g\<^sub>h"
+  if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
+which introduces the names for the corresponding collections of facts according to the groups.
+
+In this way the two example facts may be specified and named by the common theorem
+@{theory_text[display]
+\<open>theorem example1: "(x::nat) < c \<Longrightarrow> n*x \<le> n*c"
+    and example2: "(x::nat) \<le> c \<Longrightarrow> x + m \<le> c + m"
+\<proof>\<close>}
+
+As an alternative to introducing fact names in theorems \cbend  a ``dynamic fact set'' can be declared by
 @{theory_text[display]
 \<open>named_theorems name\<close>}
 It can be used as a ``bucket'' where facts can be added afterwards by specifying the bucket
@@ -586,18 +778,18 @@ Section~\ref{basic-methods-simp}).
 subsubsection "Alternative Theorem Syntax"
 
 text \<open>
-If the proposition of a theorem is a derivation rule Isabelle supports an alternative structured
-form for it:
+If the proposition of a theorem is a derivation rule \cbstart with possibly multiple conclusions \cbend Isabelle
+supports an alternative structured form for it:\cbstart
 @{theory_text[display]
-\<open>theorem 
+\<open>theorem
   fixes x\<^sub>1 \<dots> x\<^sub>m
   assumes "A\<^sub>1" \<dots> "A\<^sub>n"
-  shows "C"
-  \<proof>\<close>}
-Like for the general structured form (see Section~\ref{basic-theory-prop}) the variables and
-assumptions may be grouped by \<^theory_text>\<open>and\<close>, a type may be specified for each variable group, the keywords
-belong to the outer syntax and the \<open>C, A\<^sub>1, \<dots>, A\<^sub>n\<close> must be individually quoted. Note that this
-structured form may only be used if a proposition is specified in a theorem.
+  shows "C\<^sub>1" \<dots> "C\<^sub>h"
+  \<proof>\<close>}\cbend
+Like for the general structured form (see Section~\ref{basic-theory-prop}) the variables,
+\cbstart assumptions, and conclusions \cbend may be grouped by \<^theory_text>\<open>and\<close>, a type may be specified for each variable
+group, the keywords belong to the outer syntax and the \cbstart \<open>C\<^sub>i\<close> and \<open>A\<^sub>i\<close> \cbend must be individually quoted.
+Note that this structured form may only be used if a \cbstart derivation rule \cbend is specified in a theorem.
 
 Using this syntax the two-assumption example rule from Section~\ref{basic-theory-prop} can be
 written as
@@ -608,25 +800,23 @@ written as
   shows "n*x < n*c"
   \<proof>\<close>}
 
-Note that a name specified for the conclusion as
-@{theory_text[display]
-\<open>shows name: "C"\<close>}
-becomes the name for the whole fact introduced by the theorem, not only for the conclusion.
-Alternatively the name for the fact can be specified in the usual way after the \<^theory_text>\<open>theorem\<close> keyword:
+\cbstart Like for the general structured form of a theorem (some of) the conclusion groups may be named
+individually which introduces the names for the corresponding fact collections. A possibly
+additional name specified after the \<^theory_text>\<open>theorem\<close> keyword names the collection of the resulting facts
+from all groups together:
 @{theory_text[display]
 \<open>theorem name:
   fixes x\<^sub>1 \<dots> x\<^sub>m
   assumes "A\<^sub>1" \<dots> "A\<^sub>n"
-  shows "C"
-  \<proof>\<close>}\<close>
+  shows name\<^sub>1: "C\<^sub>1\<^sub>1" \<dots> "C\<^sub>1\<^sub>g\<^sub>1" and \<dots> and name\<^sub>h: "C\<^sub>h\<^sub>1" \<dots> "C\<^sub>h\<^sub>g\<^sub>h"
+  \<proof>\<close>}\cbend\<close>
 
 subsubsection "Definitions as Facts"
 
 text \<open>
 The definitions described in Section~\ref{basic-theory-definition} also introduce facts in
 the enclosing theory. Every definition introduces a new constant and specifies a defining
-equation of the form \<open>name \<equiv> term\<close> for it. This equation is a proposition using the ``meta
-equality'' \<open>\<equiv>\<close> which is another metalogic operator. It is the initial information given for
+equation of the form \<open>name \<equiv> term\<close> for it. This equation is a proposition\cbdelete. It is the initial information given for
 the new constant, thus it is valid ``by definition'' and is a fact in the theory.
 
 These facts are automatically named. If \<open>name\<close> is the name of the defined constant, the 
@@ -746,11 +936,11 @@ the outer proof until the inner proof is complete.
 subsubsection "Initial Proof State"
 
 text \<open>
-The initial proof state in a theorem of the form
+The initial proof state in a theorem of the form\cbstart
 @{theory_text[display]
-\<open>theorem "\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C" \<proof>\<close>}
-has the proposition \<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<close> as the only goal in the goal state and an empty
-proof context.
+\<open>theorem "\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<^sub>1 &&& \<dots> &&& C\<^sub>h" \<proof>\<close>}
+has the proposition \<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<^sub>1 &&& \<dots> &&& C\<^sub>h\<close> \cbend as the only goal in the goal
+state and an empty proof context.
 
 If the proposition of a theorem is specified in structured form
 @{theory_text[display]
@@ -762,6 +952,13 @@ or
 the initial goal state only contains the conclusion \<open>C\<close>, whereas the initial proof context contains
 the assumptions \<open>A\<^sub>1, \<dots>, A\<^sub>n\<close> as (assumed) facts and the variables \<open>x\<^sub>1 \<dots> x\<^sub>m\<close> as fixed variables.
 
+\cbstart If the theorem has multiple conclusions such as
+@{theory_text[display]
+\<open>theorem "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
+the initial goal state contains the single conclusion \<open>C\<^sub>1 &&& \<dots> &&& C\<^sub>h\<close>, i.e., the ``meta
+conjunction'' of the separate conclusions. This will be split into separate goals for the individual
+conclusions upon the first application of a proof method (see Section~\ref{basic-methods}).\cbend
+
 Both structured forms support naming the assumptions in the proof context.
 Every assumption group separated by \<^theory_text>\<open>and\<close> may be given a name, i.e., the assumptions
 may be specified in the form
@@ -769,8 +966,10 @@ may be specified in the form
 \<open>if name\<^sub>1: "A\<^sub>1\<^sub>1" \<dots> "A\<^sub>1\<^sub>m\<^sub>1" and \<dots> and name\<^sub>n: "A\<^sub>n\<^sub>1" \<dots> "A\<^sub>n\<^sub>m\<^sub>n"\<close>}
 or
 @{theory_text[display]
-\<open>assumes name\<^sub>1: "A\<^sub>1\<^sub>1" \<dots> "A\<^sub>1\<^sub>m\<^sub>1" and \<dots> and name\<^sub>n: "A\<^sub>n\<^sub>1" \<dots> "A\<^sub>n\<^sub>m\<^sub>n"\<close>}
-respectively.
+\<open>assumes name\<^sub>1: "A\<^sub>1\<^sub>1" \<dots> "A\<^sub>1\<^sub>m\<^sub>1" and \<dots> and name\<^sub>n: "A\<^sub>n\<^sub>1" \<dots> "A\<^sub>n\<^sub>m\<^sub>n"\<close>}\cbstart
+respectively, in the same way as the conclusion groups may be named. However, the assumption names
+are only valid in the proof context, whereas the conclusion names are only valid outside of the
+proof context after the proof is complete.\cbend
 
 Additionally, Isabelle always automatically names the assumptions in all groups together. For the
 structured form beginning with \<^theory_text>\<open>if\<close> it uses the name \<open>that\<close>, for the structured form beginning
@@ -786,8 +985,8 @@ subsection "Proof Procedure"
 text_raw\<open>\label{basic-proof-proc}\<close>
 
 text \<open>
-Assume you want to prove a derivation rule \<open>A \<Longrightarrow> C\<close> with a single assumption \<open>A\<close> and the 
-conclusion \<open>C\<close>. The basic procedure to build a proof for it is to construct a sequence of the form
+Assume you want to prove a derivation rule \<open>A \<Longrightarrow> C\<close> with a single assumption \<open>A\<close> and \cbstart a single
+\cbend conclusion \<open>C\<close>. The basic procedure to build a proof for it is to construct a sequence of the form
 \<open>F\<^sub>1 \<Longrightarrow> F\<^sub>2, F\<^sub>2 \<Longrightarrow> F\<^sub>3, F\<^sub>3 \<Longrightarrow> \<cdots> \<Longrightarrow> F\<^sub>n\<^sub>-\<^sub>1, F\<^sub>n\<^sub>-\<^sub>1 \<Longrightarrow> F\<^sub>n\<close> from rules \<open>RA\<^sub>i \<Longrightarrow> RC\<^sub>i\<close> for \<open>i=1\<dots>n-1\<close> 
 which are already known to be valid (i.e., facts) where \<open>F\<^sub>1\<close> matches with \<open>A\<close> and \<open>RA\<^sub>1\<close>, 
 \<open>F\<^sub>n\<close> matches with \<open>C\<close> and \<open>RC\<^sub>n\<^sub>-\<^sub>1\<close>, and every other \<open>F\<^sub>i\<close> matches with \<open>RA\<^sub>i\<close> and \<open>RC\<^sub>i\<^sub>-\<^sub>1\<close>.
@@ -822,7 +1021,7 @@ The matching at the beginning and end of the sequence and when joining the used 
 by ``unification''. Two propositions \<open>P\<close> and \<open>Q\<close> are unified by substituting terms 
 for unknowns in \<open>P\<close> and \<open>Q\<close> so that the results become syntactically equal.
 
-Since only the \<open>RA\<^sub>i \<Longrightarrow> RC\<^sub>i\<close> are facts containing unknowns, only they are modified by the
+Since \cbstart usually \cbend only the \<open>RA\<^sub>i \<Longrightarrow> RC\<^sub>i\<close> are facts containing unknowns, only they are modified by the
 unification, \<open>A\<close> and \<open>C\<close> remain unchanged. 
 
 Note that when an unknown is substituted by a term in \<open>RA\<^sub>i\<close>, the same unknown must be substituted 
@@ -1004,7 +1203,8 @@ the statements part and has the form
 \<open>proof `MA\<^sub>1`
   ST\<^sub>1 \<dots> ST\<^sub>m
 qed `MA\<^sub>2`\<close>}
-where \<open>MA\<^sub>2\<close> can also be omitted. Such proofs are called ``structured proofs''.
+where \<open>MA\<^sub>2\<close> can also be omitted. Such proofs are called ``structured proofs'' \cbstart and the syntactic
+elements used to write them are denoted as ``Isar sublanguage'' of the Isabelle outer syntax.\cbend
 
 Since structured proofs consist nearly completely of statements, they are intended to use forward
 reasoning and store all assumptions and intermediate facts in the proof context.
@@ -1016,8 +1216,8 @@ abbreviates the form \<^theory_text>\<open>proof `MA\<^sub>1` qed `MA\<^sub>2`\<
 leads to the form
 @{theory_text[display]
 \<open>by `MA\<^sub>1`\<close>}
-In this form the proof consists of a single method application which directly leads
-from the conclusion \<open>C\<close> to the assumptions and used external facts.
+In this form the proof consists of a single method application which directly leads \cbstart
+from the assumptions and used external facts to the conclusion \<open>C\<close>.\cbend
 
 As described in the previous section, a structured proof is usually easier to read and write
 than a proof script, since in the former case the sequence of the facts \<open>F\<^sub>i\<close> is explicitly
@@ -1027,8 +1227,8 @@ implicitly constructed and the proof text specifies only the methods.
 However, since every statement for a forward reasoning step again requires a proof as its part (a
 ``subproof'' for the stated fact), no proof can be written using statements alone. The main idea of
 writing ``good'' proofs is to use nested structured proofs until every subproof is simple enough
-to be done in a single method application, i.e., the applied method directly goes from the
-conclusion to the assumption of the subproof. Such a simple proof can always be written in
+to be done in a single method application, i.e., the applied method directly goes from the \cbstart
+assumptions to the conclusion of the subproof. \cbend Such a simple proof can always be written in
 the form \<^theory_text>\<open>by `MA`\<close>.
 \<close>
 
@@ -1047,6 +1247,17 @@ A structured proof in statement mode cannot be aborted in this way, however, sub
 can be specified as fake proofs. This makes it possible to interactively develop a structured
 proof in a top-down way, by first stating all required facts for the sequence from the assumptions
 to the goal with fake subproofs and then replacing the fake proofs by actual subproofs.
+
+\cbstart Fake proofs are dangerous. Isabelle blindly registers the proposition as valid, so that it can be
+used for other proofs. If it is not valid, everything can be proved from it. That sounds nicely but
+is not what you really want.
+
+There is a second way to abort a proof script by specifying a proof as
+@{theory_text[display]
+\<open>oops\<close>}
+Other than by using \<open>sorry\<close> Isabelle will \<^emph>\<open>not\<close> turn the proposition to a fact, instead, it
+ignores it. This can be used to document in a theory that you have tried to prove a proposition
+but you did not succeed.\cbend
 \<close>
 
 subsubsection "Nested Proof Contexts"
@@ -1197,11 +1408,12 @@ As for a theorem the fact can be named:
 The scope of the name is the innermost proof context enclosing the statement. In their scope named
 facts can be displayed and searched as described for theorems in Section~\ref{basic-theory-theorem}.
 
-As for a theorem, if the fact is a derivation rule it may also be specified in structured form:
+As for a theorem, if the fact is a derivation rule \cbstart with possibly multiple conclusions \cbend it may also
+be specified in structured form:\cbstart
 @{theory_text[display]
-\<open>have "C" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
-where the assumptions and variables may be grouped by \<^theory_text>\<open>and\<close>, assumption groups may be named, and
-a type may be specified for each variable group.
+\<open>have "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
+where the conclusions, \cbend assumptions and variables may be grouped by \<^theory_text>\<open>and\<close>, \cbstart conclusion and \cbend assumption
+groups may be named, and a type may be specified for each variable group.
  
 Note, however, that the structured form using \<^theory_text>\<open>fixes\<close>, \<^theory_text>\<open>assumes\<close>, and \<^theory_text>\<open>shows\<close> (see 
 Section~\ref{basic-theory-theorem}) is not available for stating facts in a proof.
@@ -1209,10 +1421,10 @@ Section~\ref{basic-theory-theorem}) is not available for stating facts in a proo
 The \<^theory_text>\<open>have\<close> statement is called a ``goal statement'', because it states the
 proposition \<open>prop\<close> as a (local) goal which is then proved by the subproof \<^theory_text>\<open>\<proof>\<close>.
 
-Note that
-the name given to the fact to be proved cannot be used to access it in the subproof, because it is
-only assigned after the proof has been finished, whereas names given to assumption groups can only
-be used in the subproof because their scope is the proof context of the subproof.
+Note that \cbstart the names given to facts by naming conclusion groups cannot be used to access them in the
+subproof, because they \cbend are only assigned after the proof has been finished, whereas names given to
+assumption groups can only be used in the subproof because their scope is the proof context of the
+subproof.
 \<close>
 
 subsubsection "Proving a Goal"
@@ -1255,7 +1467,8 @@ term abbreviation \<open>?thesis\<close> for it in the outermost proof context. 
 step of a structured proof by forward reasoning can be written as
 @{theory_text[display]
 \<open>show ?thesis \<proof>\<close>}
-The abbreviation \<open>?thesis\<close> is a single identifier, therefore it needs not be quoted.
+The abbreviation \<open>?thesis\<close> is a single identifier, therefore it needs not be quoted. \cbstart If the
+proposition has multiple conclusions the abbreviation \<open>?thesis\<close> is not introduced.\cbend
 
 If, however, the application of the initial method \<open>method\<close> in a structured proof \<^theory_text>\<open>proof method \<dots> \<close> 
 modifies the original goal, this modification is not reflected in \<open>?thesis\<close>. So a statement \<^theory_text>\<open>show 
@@ -1268,9 +1481,10 @@ To test whether a proposition refines a goal in the enclosing goal state, a
 \<^theory_text>\<open>show\<close> statement can be specified with a fake proof:
 @{theory_text[display]
 \<open>show "prop" sorry\<close>}
-If that statement is accepted, the proposition refines a goal and removes it.
+If that statement is accepted, the proposition refines a goal and removes it. \cbstart Do not forget to
+replace the fake proof by a genuine proof to make sure that the proposition is actually valid.\cbend
 \<close>
-
+ 
 subsection "Facts as Proof Input"
 text_raw\<open>\label{basic-proof-this}\<close>
 
@@ -1513,34 +1727,30 @@ subsubsection "Introducing Assumed Facts"
 text \<open>
 A proposition is inserted as assumption in the proof context by a statement of the form
 @{theory_text[display]
-\<open>assume "prop"\<close>}
-Several assumptions can be inserted in a single \<^theory_text>\<open>assume\<close> statement of the form
-@{theory_text[display]
-\<open>assume "prop\<^sub>1" \<dots> "prop\<^sub>n"\<close>}
-As usual, the assumptions can be grouped by \<^theory_text>\<open>and\<close> and the groups can be named. In their scope named
-assumptions can be displayed and searched like other named facts (see
-Section~\ref{basic-theory-theorem}).
+\<open>assume "prop"\<close>}\cbdelete
 
-Assumed facts may be derivation rules, then they may be specified directly as proposition or
-in structured form
+Assumed facts may be derivation rules \cbstart with possibly multiple conclusions, \cbend then they may be specified
+directly as proposition or in structured form\cbstart
 @{theory_text[display]
-\<open>assume "C" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m\<close>}
-The rule assumptions \<open>A\<^sub>1, \<dots>, A\<^sub>n\<close> may be grouped by \<^theory_text>\<open>and\<close>, however, the groups cannot be named
+\<open>assume "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m\<close>}
+The conclusions \<open>C\<^sub>1, \<dots>, C\<^sub>h\<close> and the rule assumptions \<open>A\<^sub>1, \<dots>, A\<^sub>n\<close> may be grouped by \<^theory_text>\<open>and\<close>,
+however, names may only be specified for the conclusion groups in the usual way to name the
+assumed facts resulting from the statement. The rule assumptions cannot be named \cbend
 since there is no subproof where the names could be used. Note that variables occurring in the
-propositions \<open>C, A\<^sub>1, \<dots>, A\<^sub>n\<close> are only turned to unknowns if the are explicitly bound in the \<^theory_text>\<open>for\<close>
-part, otherwise they refer to variables bound in an enclosing proof context or remain free in the
-assumed rule (which is usually an error).
+propositions \cbstart \<open>C\<^sub>1, \<dots> C\<^sub>h, A\<^sub>1, \<dots>, A\<^sub>n\<close> \cbend are only turned to unknowns if they are explicitly bound in
+the \<^theory_text>\<open>for\<close> part, otherwise they refer to variables bound in an enclosing proof context or remain
+free in the assumed rule (which is usually an error).
 
-If several rules are specified in the same statement there is only one \<^theory_text>\<open>if\<close> and \<^theory_text>\<open>for\<close> part
-common for all rules. Every rule gets a copy of the assumptions from the \<^theory_text>\<open>if\<close> part. 
+\cbstart In their scope named facts introduced by an \<^theory_text>\<open>assume\<close> statement can be displayed and searched like
+other named facts (see Section~\ref{basic-theory-theorem}).\cbend
 
 Like goal statements an \<^theory_text>\<open>assume\<close> statement makes the assumed facts current, i.e. it updates
 the set \<open>this\<close> to contain the specified propositions as facts, so that they can be chained
-to a following goal statement:
+to a following goal statement:\cbstart
 @{theory_text[display]
-\<open>assume "A"
+\<open>assume "C"
 then have "prop" \<proof>
-\<dots>\<close>}\<close>
+\<dots>\<close>}\cbend\<close>
 
 subsubsection "Exporting Facts with Assumptions"
 
@@ -1586,8 +1796,8 @@ somewhere in the middle of the fact tree, works by forward reasoning, and when
 it reaches the conclusion the assumed fact remains to be proved. The statement
 @{theory_text[display]
 \<open>presume "prop"\<close>}
-inserts such a presumed fact into the proof context. Like for \<^theory_text>\<open>assume\<close> several assumptions may be
-specified and the structured form with \<^theory_text>\<open>if\<close> and \<^theory_text>\<open>for\<close> is supported.
+inserts such a presumed fact into the proof context. Like for \<^theory_text>\<open>assume\<close> \cbstart the structured form with
+\<^theory_text>\<open>if\<close> and \<^theory_text>\<open>for\<close> is supported.\cbend
 
 When a fact is exported from a context with presumed facts, they do not become a part of
 the exported rule. Instead, at the end of the context for each presumed fact \<open>F\<^sub>p\<close> a new goal
@@ -1653,7 +1863,7 @@ every fact, as for toplevel theorems. Hence in
 \<open>fix x::nat
 assume a: "x < 3"
 have "x < 5" \<proof>\<close>}
-the \<^theory_text>\<open>\<proof>\<close> may refer to fact \<open>a\<close> because the \<open>x\<close> is the same variable in both facts.
+the \<^theory_text>\<open>\<proof>\<close> may refer to fact \<open>a\<close> because the \<open>x\<close> is the same variable in both \cbstart propositions.\cbend
 \<close>
 
 subsubsection "Exporting Facts with Local Variables"
@@ -1669,8 +1879,7 @@ The proposition \<open>x < 3 \<Longrightarrow> x < 5\<close> can be proved by th
 @{theory_text[display]
 \<open>fix y::nat
 assume "y < 3"
-then show "y < 5" \<proof>
-\<close>}
+then show "y < 5" \<proof>\<close>}
 because when the fact \<open>y < 5\<close> is exported, the assumption is added (as described in 
 Section~\ref{basic-proof-assume}) and then variable \<open>y\<close> is replaced by the unknown \<open>?y\<close>
 because \<open>y\<close> has been locally fixed. The result is the rule \<open>?y<3 \<Longrightarrow> ?y<5\<close> which unifies
@@ -1679,8 +1888,7 @@ with the proposition.
 If, instead, \<open>y\<close> is not fixed, the sequence
 @{theory_text[display]
 \<open>assume "(y::nat) < 3"
-then have "y < 5" \<proof>
-\<close>}
+then have "y < 5" \<proof>\<close>}
 still works and the local fact \<open>y < 5\<close> can be proved, but it cannot be used with the \<^theory_text>\<open>show\<close>
 statement to prove the proposition \<open>x < 3 \<Longrightarrow> x < 5\<close>, because the exported rule is now 
 \<open>y<3 \<Longrightarrow> y<5\<close> which does not unify with the proposition, it contains a different variable
@@ -1694,56 +1902,107 @@ proof for the proposition \<open>\<And>x::nat. x < 3 \<Longrightarrow> x < 5\<cl
 @{theory_text[display]
 \<open>fix y::nat
 assume "y < 3"
-then show "y < 5" \<proof>
-\<close>}\<close>
+then show "y < 5" \<proof>\<close>}\<close>
+
+text_raw\<open>\cbstart\<close>
+
+subsection "Defining Variables"
+text_raw\<open>\label{basic-proof-define}\<close>
+
+text \<open>
+Local variables may also be introduced together with specifying a value for them. This is done
+using a statement of the form
+@{theory_text[display]
+\<open>define x\<^sub>1 \<dots> x\<^sub>m where "x\<^sub>1\<equiv>term\<^sub>1" \<dots> "x\<^sub>m\<equiv>term\<^sub>m"\<close>}
+which specifies a defining equation for every defined variable.
+As usual, the variables and equations may be grouped by \<^theory_text>\<open>and\<close>, equation groups may be named, and
+types may be specified for (some of) the variable groups. In the object logic HOL
+(see Chapter~\ref{holbasic}) also the normal equality operator \<open>=\<close> may be used instead of \<open>\<equiv>\<close>.
+
+The variable \<open>x\<^sub>i\<close> may not occur free in \<open>term\<^sub>i\<close>, otherwise an error is signaled. However, the other
+variables are allowed in \<open>term\<^sub>i\<close>. This may lead to cyclic definitions which is not checked by
+Isabelle, but then the definition cannot be used to determine the defined value for the
+corresponding variables, it is underspecified.
+\<close>
+
+subsubsection "Defining Equations as Local Facts"
+
+text \<open>
+If there is already a previous definition for an \<open>x\<^sub>i\<close> in the same proof context the former \<open>x\<^sub>i\<close> is
+shadowed and becomes inaccessible and a new local variable \<open>x\<^sub>i\<close> is introduced.
+
+Thus a defining equation can never contradict any existing fact in the proof context and Isabelle
+safely adds all defining equations as facts to the proof context enclosing the \<^theory_text>\<open>define\<close> statement.
+The collection of all these facts is automatically named \<open>x\<^sub>1_\<dots>_x\<^sub>m_def\<close>, replacing this name if it
+already exists in the local proof context. Explicit names specified for equation groups are used
+to name the corresponding facts.
+\<close>
+
+subsubsection "Exporting Facts after Defining Variables"
+
+text\<open>
+Unlike facts assumed by an \<^theory_text>\<open>assume\<close> statement (see Section~\ref{basic-proof-assume}) the 
+facts created by a \<^theory_text>\<open>define\<close> statement are \<^emph>\<open>not\<close> added as assumptions when a fact \<open>F\<close> is 
+exported from the local context. Instead, if a locally defined variable \<open>x\<^sub>i\<close> occurs in \<open>F\<close> it
+is replaced by the \<open>term\<^sub>i\<close> according to its defining equation.
+
+If the definition of \<open>x\<^sub>i\<close> is cyclic the occurrences of \<open>x\<^sub>i\<close> in \<open>F\<close> are not replaced and become
+an unknown during export, however, then the fact \<open>F\<close> usually is invalid and cannot be proved.
+\<close>
+text_raw\<open>\cbend\<close>
 
 subsection "Obtaining Variables"
 text_raw\<open>\label{basic-proof-obtain}\<close>
 
 text \<open>
-Local variables may also be introduced together with a fact which allows to specify additional
-information about their value. This is done using a statement of the form
+Local variables may also be introduced together with \cbstart an arbitrary proposition which allows to
+specify additional information about their values. \cbend This is done using a statement of the form
 @{theory_text[display]
 \<open>obtain x\<^sub>1 \<dots> x\<^sub>m where "prop" \<proof>\<close>}
 where \<open>prop\<close> is a proposition in inner syntax which contains the variables \<open>x\<^sub>1 \<dots> x\<^sub>m\<close>. 
-Like for variables introduced by \<^theory_text>\<open>fix\<close> the variables can be grouped by \<^theory_text>\<open>and\<close> and types can be 
-specified for (some of) the groups. 
+Like for variables introduced by \<^theory_text>\<open>fix\<close> \cbstart or \<^theory_text>\<open>define\<close> \cbend the variables may be grouped by \<^theory_text>\<open>and\<close> and
+types may be specified for (some of) the groups.
 
-The proposition usually relates the values of the new variables to values of existing variables 
-(which may be local or come from enclosing contexts). In the simplest case the proposition directly 
-specifies terms for the new variables, such as in
+\cbstart If the proposition \<open>prop\<close> is a derivation rule with possibly multiple conclusions it may be
+specified in structured form (see Section~\ref{basic-theory-prop}) using several separate
+ propositions:
+@{theory_text[display]
+\<open>obtain x\<^sub>1 \<dots> x\<^sub>m where "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for y\<^sub>1 \<dots> y\<^sub>p \<proof>\<close>}
+As usual, the conclusions, assumptions, and bound variables may be grouped by \<^theory_text>\<open>and\<close>, the assumption
+and conclusion groups may be named and types may be specified for (some of) the groups of bound
+variables.
+
+The proposition(s) usually relate the values of the new variables to values of existing variables 
+(which may be local or come from enclosing contexts). In the simplest case the proposition(s) directly 
+specify terms for the new variables, like a \<^theory_text>\<open>define\<close> statement (see
+Section~\ref{basic-proof-define}) such as in
 @{theory_text[display]
 \<open>fix x::nat
-obtain y z where "y = x + 3 \<and> z = x + 5" \<proof>\<close>}
-But it is also possible to specify the values indirectly:
+obtain y z where "y = x + 3" and "z = x + 5" \<proof>\<close>}\cbend
+But it is also possible to specify the values indirectly:\cbstart
 @{theory_text[display]
 \<open>fix x::nat
-obtain y z where "x = y - 3 \<and> y + z = 2*x +8" \<proof>\<close>}
-Here the proposition may be considered to be an additional assumption which is added to the proof
-context.
+obtain y z where "x = y - 3" and "y + z = 2*x +8" \<proof>\<close>}
+Here the propositions may be considered to be additional facts which are added to the
+proof context.\cbend
 \<close>
 
 subsubsection "Proving \<open>obtain\<close> Statements"
 
 text\<open>
-Actually, several propositions may be specified in an \<^theory_text>\<open>obtain\<close> statement:
-@{theory_text[display]
-\<open>obtain x\<^sub>1 \<dots> x\<^sub>m where "prop\<^sub>1" \<dots> "prop\<^sub>n" \<proof>\<close>}
-The propositions may be grouped by \<^theory_text>\<open>and\<close> and the groups can be named as usual.
-This \<^theory_text>\<open>obtain\<close> statement has a similar meaning as the statements
+\cbstart An \<^theory_text>\<open>obtain\<close> statement has a similar meaning as the statements
 @{theory_text[display]
 \<open>fix x\<^sub>1 \<dots> x\<^sub>m 
-assume "prop\<^sub>1" \<dots> "prop\<^sub>n"\<close>}
-but there is one important difference: the propositions in an \<^theory_text>\<open>obtain\<close> statement must be redundant
+assume "prop"\<close>}
+but there is one important difference: the proposition \cbend in an \<^theory_text>\<open>obtain\<close> statement must be redundant
 in the local proof context.
 
 That is the reason why an \<^theory_text>\<open>obtain\<close> statement is a goal statement and includes a proof. The proof 
-must prove the redundancy
-of the propositions, which may be stated in the following way: if any other proposition can be 
-derived from them in the local proof context it must be possible to also derive it without the
-propositions. This can be stated formally as 
+must prove the redundancy of the \cbstart proposition, which may be stated in the following way: if any other
+proposition can be derived from it \cbend in the local proof context it must be possible to also derive it
+without the proposition. This can be stated formally as\cbstart
 @{text[display]
-\<open>(\<And>x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>prop\<^sub>1; \<dots>; prop\<^sub>n\<rbrakk> \<Longrightarrow> P) \<Longrightarrow> P\<close>}
+\<open>(\<And>x\<^sub>1 \<dots> x\<^sub>m. prop \<Longrightarrow> P) \<Longrightarrow> P\<close>}\cbend
 which is exactly the goal to be proved for the \<^theory_text>\<open>obtain\<close> statement.
 
 Consider the statements
@@ -1753,8 +2012,13 @@ obtain y where "x = 2*y" \<proof>\<close>}
 This proposition is not redundant, because it implies that \<open>x\<close> must be even. Therefore no proof
 exists.
 
-Note that after a successful proof of an \<^theory_text>\<open>obtain\<close> statement the current facts are the propositions
-specified in the statement, not the proved redundancy statement. Input facts may be passed to 
+Note that after a successful proof of an \<^theory_text>\<open>obtain\<close> statement the current \cbstart fact is the proposition
+specified in the statement, not the proved redundancy goal. If the proposition is specified in
+structured form with multiple conclusions the current facts are the collection of facts
+corresponding to the conclusions and if names are specified for conclusion groups they are used
+to name the resulting facts.\cbend
+
+Input facts may be passed to
 \<^theory_text>\<open>obtain\<close> statements. Like for the other goal statements, they are input to the \<open>\<proof>\<close>.
 \<close>
 
@@ -1764,11 +2028,13 @@ text\<open>
 Unlike facts assumed by an \<^theory_text>\<open>assume\<close> statement (see Section~\ref{basic-proof-assume}) the 
 propositions in an \<^theory_text>\<open>obtain\<close> statement are \<^emph>\<open>not\<close> added as assumptions when a fact \<open>F\<close> is 
 exported from the local context. This is correct, since they have been proved to be redundant,
-therefore they can be omitted.
+therefore they can be omitted. \cbstart Also, unlike variables introduced by a \<^theory_text>\<open>define\<close> statement (see
+Section~\ref{basic-proof-define}) occurrences of obtained variables in \<open>F\<close> are not replaced
+by defining terms, since such terms are not available in the general case.
 
-However, that implies that an exported fact \<open>F\<close> may not refer to variables introduced by an
-\<^theory_text>\<open>obtain\<close> statement, because the information provided by the propositions about them gets
-lost during the export.
+That implies that an exported fact \<open>F\<close> may not refer to variables introduced by an
+\<^theory_text>\<open>obtain\<close> statement, because the information provided by the proposition about them gets
+lost during the export. Otherwise an error is signaled.\cbend
 \<close>
 
 subsection "Term Abbreviations"
@@ -1837,7 +2103,7 @@ binds both unknowns to the lambda term \<open>\<lambda>a. 2 * a + 3\<close>. Thu
 in the term \<open>2 * 7 + 3\<close>. 
 
 The \<open>term\<close> may contain unknowns which are already bound. They are substituted 
-by their bound terms before the pattern matching is performed. Thus the term
+by their bound terms before the pattern matching is performed. Thus the \<open>term\<close>
 can be constructed with the help of abbreviation which have been defined previously. A useful
 example is matching a pattern with \<open>?thesis\<close>:
 @{theory_text[display]
@@ -1906,10 +2172,10 @@ proposition as a syntactic term of type \<open>bool\<close>, it can be used to c
 in \<open>?a1 \<and> ?a2\<close> which is equivalent to the term \<open>x < c \<and> n > 0\<close>.
 
 Casual term abbreviations may also be defined for propositions used in goal statements (see
-Sections~\ref{basic-proof-statefact} and~\ref{basic-proof-obtain}) and in \<^theory_text>\<open>assume\<close> and \<^theory_text>\<open>presume\<close>
-statements (see Section~\ref{basic-proof-assume}). Then the unknowns will be bound as term
-abbreviations in the \<^emph>\<open>enclosing\<close> proof context, so that they are available after the statement
-(and also in the nested subproof of the goal statements). 
+Sections~\ref{basic-proof-statefact} and~\ref{basic-proof-obtain}) and in \<^theory_text>\<open>assume\<close>, \cbstart \<^theory_text>\<open>presume\<close>,
+and \<^theory_text>\<open>define\<close> statements (see Sections~\ref{basic-proof-assume} and~\ref{basic-proof-define}). \cbend Then
+the unknowns will be bound as term abbreviations in the \<^emph>\<open>enclosing\<close> proof context, so that they
+are available after the statement (and also in the nested subproof of the goal statements). 
 \<close>
 
 subsection "Accumulating Facts"
@@ -1929,13 +2195,12 @@ and afterwards it is extended by several statements
 \<open>note calculation = calculation this\<close>}
 After the last extension the facts in the set are chained to the next proof:
 @{theory_text[display]
-\<open>note calculation = calculation this then have \<dots>\<close>}
-\<close>
+\<open>note calculation = calculation this then have \<dots>\<close>}\<close>
 
 subsubsection "Support for Fact Accumulation"
 
 text\<open>
-Isabelle supports this management of \<open>calculation\<close> with two statements. The statement 
+Isabelle supports this management of \<open>calculation\<close> with two \cbstart specific \cbend statements. The statement 
 @{theory_text[display]
 \<open>moreover\<close>}
 is equivalent to \<^theory_text>\<open>note calculation = this\<close> when it occurs the first time in a context, 
@@ -2098,7 +2363,9 @@ text\<open>
 The empty method is denoted by a single minus sign
 @{theory_text[display]
 \<open>-\<close>}
-If no input facts are passed to it, it does nothing, it does not alter the goal state.
+If no input facts are passed to it, it does nothing, it does not alter the goal state. \cbstart An exception
+is a goal of the form \<open>C\<^sub>1 &&& \<dots> &&& C\<^sub>h\<close> which is always split to separate goals \<open>C\<^sub>i\<close> whenever a
+method is applied (see section~\ref{basic-proof-state}).\cbend
 
 The empty method is useful at the beginning of a structured proof of the form
 @{theory_text[display]
@@ -2109,7 +2376,7 @@ empty method must be specified for \<open>method\<close>, thus the structured pr
 \<open>proof - ST\<^sub>1 \<dots> ST\<^sub>n qed\<close>}
 
 Note that it is possible to syntactically omit the \<open>method\<close> completely, but then it defaults to the 
-method named \<open>standard\<close> which alters the goal state (see below).
+method named \<open>standard\<close> which alters the goal state \cbstart (see Section~\ref{basic-methods-rule}).\cbend
 
 If input facts are passed to the empty method, it affects all goals by inserting the input facts as 
 assumptions after the existing assumptions. If the input facts are \<open>F\<^sub>1,\<dots>,F\<^sub>m\<close> a goal of the form 
@@ -2199,7 +2466,7 @@ Note that if facts are stored as rule assumptions in the goal state (see
 Section~\ref{basic-proof-proc}) an application of method \<^theory_text>\<open>rule\<close> preserves these facts and copies
 them to every new goal.
 
-If an assumption \<open>RA\<^sub>j\<close> is again a rule (i.e., the applied rule is a meta-rule) and has the form
+If an assumption \<open>RA\<^sub>j\<close> is again a rule (i.e., the applied rule is a meta rule) and has the form
 \<open>\<lbrakk>B\<^sub>1;\<dots>;B\<^sub>k\<rbrakk> \<Longrightarrow> B\<close> the \<open>j\<close>th new goal becomes \<open>\<lbrakk>A\<^sub>1;\<dots>;A\<^sub>n\<rbrakk> \<Longrightarrow> (\<lbrakk>B\<^sub>1';\<dots>;B\<^sub>k'\<rbrakk> \<Longrightarrow> B')\<close> which by
 definition of the \<open>\<lbrakk>\<dots>;\<dots> \<rbrakk>\<close> syntax (see Section~\ref{basic-theory-prop}) is equivalent to
 \<open>\<lbrakk>A\<^sub>1;\<dots>;A\<^sub>n;B\<^sub>1';\<dots>;B\<^sub>k'\<rbrakk> \<Longrightarrow> B')\<close>. In this way the rule can introduce additional assumptions in the
@@ -3231,7 +3498,7 @@ completed separately.
 subsubsection "Case Rules"
 
 text\<open>
-This splitting of a goal into goals for different cases can be done by applying a single meta-rule
+This splitting of a goal into goals for different cases can be done by applying a single meta rule
 of the specific form
 @{text[display]
 \<open>\<lbrakk>Q\<^sub>1 \<Longrightarrow> ?P; \<dots>; Q\<^sub>k \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close>}
@@ -3271,7 +3538,7 @@ the term \<open>n = 0\<close> for \<open>?Q\<close> the rule is prepared to be a
 
 Case rules may even be more general than shown above. Instead of a single proposition \<open>Q\<^sub>i\<close> every 
 case may have locally bound variables and an arbitrary number of assumptions, resulting in a
-meta-rule of the form
+meta rule of the form
 @{text[display]
 \<open>\<lbrakk>P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> ?P\<close>}
 where every \<open>P\<^sub>i\<close> is a rule of the form
@@ -3281,6 +3548,11 @@ That means, the \<open>P\<^sub>i\<close> may be arbitrary rules but they must al
 which is also the conclusion of the overall case rule. When such a case rule is applied to a goal
 it splits the goal into \<open>k\<close> cases and adds the variables \<open>x\<^sub>i\<^sub>1 \<dots> x\<^sub>i\<^sub>p\<^sub>i\<close> and the assumptions
 \<open>Q\<^sub>i\<^sub>1 \<dots> Q\<^sub>i\<^sub>q\<^sub>i\<close> to the \<open>i\<close>th case.
+
+\cbstart Note that the goal which must be proved for an \<^theory_text>\<open>obtain\<close> statement (see
+Section~\ref{basic-proof-obtain}) has the form of a case rule with only one case of the form
+\<open>\<And>x\<^sub>1 \<dots> x\<^sub>m. prop \<Longrightarrow> P\<close>. Thus a proof for this goal shows that \<open>prop\<close> covers all cases, i.e., it
+is redundant.\cbend
 
 Remember that to write your own case rule you have to specify a theorem which uses variables in
 place of the unknowns, such as
@@ -3533,6 +3805,15 @@ assumptions the resulting goals have either the same conclusion as the original 
 unrelated to it. Therefore such an application of an elimination rule can be seen as a forward
 reasoning step, possibly with case splitting.
 
+\cbstart Since the order of the assumptions after the major premise is irrelevant for the rule application
+the general form of an elimination rule can be considered to be
+@{theory_text[display]
+\<open>theorem "\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>m; P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> P" \<proof>\<close>}
+where every \<open>P\<^sub>i\<close> is a rule of the form
+@{text[display]
+\<open>\<And>x\<^sub>i\<^sub>1\<dots>x\<^sub>i\<^sub>p\<^sub>i. \<lbrakk>Q\<^sub>i\<^sub>1;\<dots>;Q\<^sub>i\<^sub>q\<^sub>i\<rbrakk> \<Longrightarrow> P\<close>}
+and the variable \<open>P\<close> does not occur in the \<open>RA\<^sub>1 \<dots> RA\<^sub>m\<close>.\cbend
+
 As an example consider the elimination rule specified as
 @{theory_text[display]
 \<open>theorem elimexmp: "\<lbrakk>(x::nat) \<le> c; x < c \<Longrightarrow> P; x = c \<Longrightarrow> P\<rbrakk> \<Longrightarrow> P"\<close>}
@@ -3567,29 +3848,19 @@ as possible with the given rules. Note that the method does not use the \<open>e
 Every destruction rule \<open>\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>n\<rbrakk> \<Longrightarrow> C\<close> can be re-stated as the elimination rule
 \<open>\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>n;C\<Longrightarrow>?P\<rbrakk> \<Longrightarrow> ?P\<close>. If that is applied by \<^theory_text>\<open>erule\<close> it has the same effect as if the
 original rule is applied by method \<^theory_text>\<open>drule\<close>.
-
-Every case rule \<open>\<lbrakk>Q\<^sub>1 \<Longrightarrow> ?P;\<dots>;Q\<^sub>k \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close> can be re-stated as the elimination rule
-\<open>\<lbrakk>Q; \<lbrakk>Q;Q\<^sub>1\<rbrakk> \<Longrightarrow> ?P;\<dots>;\<lbrakk>Q;Q\<^sub>k\<rbrakk> \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close>. If that is applied by \<^theory_text>\<open>erule\<close> to a goal with at least one
-assumption it has (except for assumption reordering) the same effect as if the original rule is
-applied by method \<^theory_text>\<open>cases\<close>.
-
-Note, however, that \<^theory_text>\<open>erule\<close> does not create named contexts for the resulting cases.
-\<close>
+\cbdelete\<close>
 
 subsubsection "Alternative Syntax for Elimination Rules"
 
 text\<open>
 The alternative syntax available for case rules described in Section~\ref{basic-case-reasoning} can
-be extended for elimination rules. This requires that all assumptions which do not contain the
-unknown for the conclusion (this is at least the major premise) are grouped together at the
-beginning of all assumptions. Then an elimination rule specified as
+be extended for elimination rules. \cbstart An elimination rule\cbend
 @{theory_text[display]
 \<open>theorem "\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>m; P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> P" \<proof>\<close>}
 where every \<open>P\<^sub>i\<close> is a rule of the form
 @{text[display]
 \<open>\<And>x\<^sub>i\<^sub>1\<dots>x\<^sub>i\<^sub>p\<^sub>i. \<lbrakk>Q\<^sub>i\<^sub>1;\<dots>;Q\<^sub>i\<^sub>q\<^sub>i\<rbrakk> \<Longrightarrow> P\<close>}
-and the variable \<open>P\<close> does not occur in the \<open>RA\<^sub>1 \<dots> RA\<^sub>m\<close> can be specified using the alternative
-syntax
+\cbstart can be specified using the alternative syntax\cbend
 @{theory_text[display]
 \<open>theorem
 assumes "RA\<^sub>1" \<dots> "RA\<^sub>m"
@@ -3678,7 +3949,7 @@ subsubsection "Induction Rules"
 
 text\<open>
 Like for case based reasoning (see Section~\ref{basic-case-reasoning}) a goal is split into these
-cases by applying a meta-rule. For induction the splitting can be done by a meta-rule of the form
+cases by applying a meta rule. For induction the splitting can be done by a meta rule of the form
 @{text[display]
 \<open>\<lbrakk>P\<^sub>1 ; ...; P\<^sub>n \<rbrakk> \<Longrightarrow> ?P ?a\<close>}
 where every \<open>P\<^sub>i\<close> is a rule of the form
@@ -3689,7 +3960,7 @@ where the assumptions \<open>Q\<^sub>i\<^sub>j\<close> may contain the unknown \
 \<open>Q\<^sub>i\<^sub>j\<close>, at least the \<open>Q\<^sub>i\<^sub>j\<close> do not contain \<open>?P\<close>. The remaining rules mostly have only a single
 assumption \<open>Q\<^sub>i\<^sub>j\<close> which contains \<open>?P\<close>.
 
-Note that the unknown \<open>?a\<close> only occurs once in the conclusion of the meta-rule and nowhere else. Like
+Note that the unknown \<open>?a\<close> only occurs once in the conclusion of the meta rule and nowhere else. Like
 the case rules induction rules must be ``prepared'' for use, this is done by replacing \<open>?a\<close>
 by a specific term \<open>term\<close>. This is the term for which all possible cases shall be processed
 in the goal. It must have the same type as all \<open>term\<^sub>i\<close> in the \<open>P\<^sub>i\<close>.
