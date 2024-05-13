@@ -8,7 +8,7 @@ text_raw\<open>\label{holtdefs}\<close>
 text \<open>
 This chapter introduces mechanisms defined by HOL which are used to populate HOL with many of its
 mathematical objects and functions and which can also be used to extend HOL to additional kinds of
-objects. Basically these mechanisms support the definition of new types \cbstart in outer syntax\cbend.
+objects. Basically these mechanisms support the definition of new types in outer syntax.
 \<close>
 
 section "Algebraic Types"

@@ -13,7 +13,7 @@ defined differently for technical reasons, they are configured afterwards to beh
 have been defined as algebraic types. Therefore they are described here using the corresponding
 datatype definition.
 
-\cbstart A type basically provides the type name or type constructor, if the type is parametric.
+A type basically provides the type name or type constructor, if the type is parametric.
 Together with a type, HOL introduces functions on the values of the type, either implicitly by
 using type definition mechanisms described in Section~\ref{holtdefs}, or explicitly by using 
 definitions (see Sections~\ref{basic-theory-definition}, \ref{holbasic-inductive},
@@ -21,7 +21,7 @@ and~\ref{holbasic-recursive}). In this way HOL populates the object level of the
 a rich language for expressing mathematical content. Additionally, HOL provides facts (usually 
 derivation rules) about these functions which can be used in proofs. For every type this
 introduction describes its mathematical meaning, it gives a short description of (most of) the
-defined functions, and it lists some exemplary rules with explanations.\cbend
+defined functions, and it lists some exemplary rules with explanations.
 
 If applicable, the functions described for a type include the specific forms of ordering relations
 and lattice operations (see Section~\ref{holbasic-equal}) and functions for binder syntax (see
@@ -42,7 +42,7 @@ of the enumeration type (see Section~\ref{holtdefs-data-constr})
 \<open>datatype bool = True | False\<close>}
 
 The type \<open>bool\<close> plays a special role in HOL since it is the type of all terms which are used 
-as \cbstart formulas \cbend (see Section~\ref{basic-theory-prop}) in Isabelle. Every object logic
+as formulas (see Section~\ref{basic-theory-prop}) in Isabelle. Every object logic
 used in Isabelle must define a type which plays this role.
 \<close>
 
@@ -79,8 +79,8 @@ text_raw\<open>\label{holtypes-bool-funcs}\<close>
 text\<open>
 The usual logical functions are defined for type \<open>bool\<close>: \<open>conj, disj, implies, iff\<close>
 of type \<open>bool \<Rightarrow> bool \<Rightarrow> bool\<close> with operator names \<open>(\<and>), (\<or>), (\<longrightarrow>), (\<longleftrightarrow>)\<close> and the unary negation
-\<open>Not\<close> of type \<open>bool \<Rightarrow> bool\<close> and operator name \<open>(\<not>)\<close>. \cbstart The function \<open>(\<longleftrightarrow>)\<close> is the specific
-instance of \<open>(=)\<close> for type \<open>bool\<close> (see Section~\ref{holbasic-equal-eq}).\cbend
+\<open>Not\<close> of type \<open>bool \<Rightarrow> bool\<close> and operator name \<open>(\<not>)\<close>. The function \<open>(\<longleftrightarrow>)\<close> is the specific
+instance of \<open>(=)\<close> for type \<open>bool\<close> (see Section~\ref{holbasic-equal-eq}).
 \<close>
 
 subsubsection "Functions for Orderings and Lattices"
@@ -120,7 +120,7 @@ form \<open>\<forall> x\<^sub>1 \<dots> x\<^sub>n. bterm\<close> for all quantif
 Section~\ref{basic-theory-terms}) types may be specified for (some of) the variables as in
 \<open>\<forall> (x\<^sub>1 :: type\<^sub>1) \<dots> (x\<^sub>n :: type\<^sub>n). bterm\<close>.
 
-\cbstart HOL also provides several functions which support binder syntax where a single bound variable is
+HOL also provides several functions which support binder syntax where a single bound variable is
 restricted (``bounded'') by an ordering (see Section~\ref{holbasic-equal-order}) or inequality
 (see Section~\ref{holbasic-equal-eq}) relation to some value.
 
@@ -135,7 +135,7 @@ HOL provides functions similar to \<open>All\<close> and \<open>Ex\<close> to su
 \<forall>x\<ge>y. bterm \<equiv> \<forall>x. x \<ge> y \<longrightarrow> bterm
 \<exists>x\<ge>y. bterm \<equiv> \<exists>x. x \<ge> y \<and> bterm
 \<forall>x\<noteq>y. bterm \<equiv> \<forall>x. x \<noteq> y \<longrightarrow> bterm
-\<exists>x\<noteq>y. bterm \<equiv> \<exists>x. x \<noteq> y \<and> bterm\<close>}\cbend\<close>
+\<exists>x\<noteq>y. bterm \<equiv> \<exists>x. x \<noteq> y \<and> bterm\<close>}\<close>
 
 subsection "Rules"
 text_raw\<open>\label{holtypes-bool-rules}\<close>
@@ -246,7 +246,7 @@ theorem "\<forall> x y. (A \<and> B) \<longrightarrow> C \<and> D"
   apply (simp only: atomize_conjL) apply(simp only: atomize_imp) apply(simp only: atomize_all)
 *)
 text\<open>
-\cbstart Using these rules together with the rules about the meta-logic operators
+Using these rules together with the rules about the meta-logic operators
 
 @{text\<open>atomize_all:\<close>} @{thm atomize_all}\\
 @{text\<open>atomize_imp:\<close>} @{thm atomize_imp}\\
@@ -261,11 +261,11 @@ can be converted to the boolean term
 @{text[display]
 \<open>\<forall> x\<^sub>1 \<dots> x\<^sub>m. (A\<^sub>1' \<and> \<dots> \<and> A\<^sub>n') \<longrightarrow> C\<^sub>1' \<and> \<dots> \<and> C\<^sub>h'\<close>}
 (where each \<open>A\<^sub>i'\<close> and \<open>C\<^sub>i'\<close> is converted in the same way if it is again a derivation rule), and
-vice versa.\cbend
+vice versa.
 
 In principle every theorem may be specified in either of both forms. However, its application by
 proof methods in other proofs is usually only possible if it is specified in derivation rule form.
-Therefore it is usually preferable to specify theorems in this form.\cbdelete
+Therefore it is usually preferable to specify theorems in this form.
 \<close>
 
 section "The Unit Type"
@@ -557,13 +557,13 @@ of binder syntax)
 @{text[display]
 \<open>{x. bterm}\<close>}
 
-\cbstart HOL also provides two standard abbreviations:
+HOL also provides two standard abbreviations:
  \<^item> \<open>{}\<close> for the empty set, which is written \<open>{x. False}\<close> in comprehension syntax, and 
  \<^item> \<open>UNIV\<close> for the universal set \<open>{x. True}\<close>.
 
 Both abbreviations are available for arbitrary types \<open>'a set\<close>. The universal set is the set of all
 values of the type \<open>'a\<close>. Examples are \<open>UNIV :: bool set\<close> which is the set \<open>{True, False}\<close> and
-\<open>UNIV :: nat set\<close> which is the set of all natural numbers.\cbend
+\<open>UNIV :: nat set\<close> which is the set of all natural numbers.
 
 The lattice constants \<open>top\<close> and \<open>bot\<close> (see Section~\ref{holbasic-equal-lattice}) are available for
 sets and denote the universal set \<open>UNIV\<close> and the empty set \<open>{}\<close>, respectively.
@@ -622,7 +622,7 @@ with operator names \<open>(\<Inter>)\<close> and \<open>(\<Union>)\<close> for 
 HOL also provides the function
 @{text[display]
 \<open>insert :: 'a \<Rightarrow> 'a set \<Rightarrow> 'a set \<equiv> \<lambda>a B. {x. x = a \<or> x \<in> B}\<close>}
-which inserts a value into a set. \cbstart HOL uses it to introduce the set enumeration notation\cbend
+which inserts a value into a set. HOL uses it to introduce the set enumeration notation
 @{text[display]
 \<open>{x\<^sub>1, \<dots>, x\<^sub>n}\<close>}
 as abbreviation for \<open>insert x\<^sub>1 (\<dots> (insert x\<^sub>n {}) \<dots>)\<close>.
@@ -734,8 +734,8 @@ For iterating through the elements of a finite set HOL introduces the function
 \<open>Finite_Set.fold :: ('a \<Rightarrow> 'b \<Rightarrow> 'b) \<Rightarrow> 'b \<Rightarrow> 'a set \<Rightarrow> 'b\<close>}
 where \<open>fold f z {x\<^sub>1, \<dots>, x\<^sub>n} = f x\<^sub>1 (\<dots> (f x\<^sub>n z)\<dots>)\<close> if the resulting value is independent of the
 order of the \<open>x\<^sub>i\<close>, i.e., the function \<open>f\<close> must be ``left-commutative'' on the values in the set. If
-it is not, its result is underspecified. \cbstart If the set is not finite the result is always the starting
-value \<open>z\<close>.\cbend
+it is not, its result is underspecified. If the set is not finite the result is always the starting
+value \<open>z\<close>.
 
 The function \<open>Finite_Set.fold\<close> is not intended for direct use, it is used by HOL to provide other
 functions. The most basic is
@@ -1059,11 +1059,11 @@ term may also be specified as
 \<open>case term of (x\<^sub>1, x\<^sub>2) \<Rightarrow> term\<^sub>1\<close>}
 Such \<open>case\<close> terms can be used to ``take apart'' a \<open>term\<close> for a pair where the components are not
 explicitly specified, such as in the application of a function which returns a pair. The components
-are bound to the variables \<open>x\<^sub>1, x\<^sub>2\<close> and can be used separately in \<open>term\<^sub>1\<close>. \cbstart An example is
+are bound to the variables \<open>x\<^sub>1, x\<^sub>2\<close> and can be used separately in \<open>term\<^sub>1\<close>. An example is
 the case term
 @{text[display]
 \<open>case coordinate of (x, y) \<Rightarrow> x + y\<close>}
-where \<open>coordinate\<close> is a single variable of type \<open>nat \<times> nat\<close>.\cbend
+where \<open>coordinate\<close> is a single variable of type \<open>nat \<times> nat\<close>.
 
 As usual, this also works for tuples with more than two components. The general form of a \<open>case\<close>
 term for an n-tuple is
