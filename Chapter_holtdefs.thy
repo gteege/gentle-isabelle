@@ -29,15 +29,15 @@ Basically, an algebraic type is defined\index{definition!algebraic type $\sim$}\
 @{theory_text[display]
 \<open>datatype name = alt\<^sub>1 | \<dots> | alt\<^sub>n\<close>}\index{datatype (keyword)}\index{/bar@\<open>|\<close> (keyword)}
 where \<open>name\<close> is the name of the new algebraic type and every alternative \<open>alt\<^sub>i\<close> is a ``constructor
-specification''\index{constructor!specification} of the form\cbstart
+specification''\index{constructor!specification} of the form
 @{theory_text[display]
 \<open>cname\<^sub>i "type\<^sub>i\<^sub>,\<^sub>1" \<dots> "type\<^latex>\<open>$_{i,k_i}$\<close>"\<close>}
-The \<open>cname\<^sub>i\<close> are names and the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>\cbend are types.
+The \<open>cname\<^sub>i\<close> are names and the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> are types.
 The types are specified in inner syntax and must be quoted, if they are not a single type name. All 
 other parts belong to the outer syntax. 
 
 Recursion\index{recursion} is supported for the types, i.e., the name \<open>name\<close> of the defined type may occur in the 
-type specifications \cbstart \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>\cbend. However, there must be atleast one constructor specification which
+type specifications \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>. However, there must be atleast one constructor specification which
 is not recursive, otherwise the definition does not ``terminate''. Isabelle checks this condition
 and signals an error if it is not satisfied.
 
@@ -60,8 +60,8 @@ Its value set is equivalent to the set of all binary trees with a natural number
 Like declared types algebraic types may be parameterized (see Section~\ref{theory-terms-types}):
 @{theory_text[display]
 \<open>datatype ('name\<^sub>1,\<dots>,'name\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n\<close>}
-where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type specifications \cbstart \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>, i.e.,
-the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>\cbend may be polymorphic (see Section~\ref{theory-terms-types}). As usual, the parentheses
+where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type specifications \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>, i.e.,
+the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> may be polymorphic (see Section~\ref{theory-terms-types}). As usual, the parentheses
 may be omitted if there is only one type parameter.
 
 An example for a parameterized datatype definition with one type parameter is
@@ -79,9 +79,9 @@ text_raw\<open>\label{holtdefs-data-constr}\<close>
 
 text\<open>
 Every \<open>cname\<^sub>i\<close> is used by the definition to introduce a ``(value) constructor function''\index{constructor}\index{constructor!function}\index{function!constructor $\sim$},
-i.e., a constant\cbstart
+i.e., a constant
 @{text[display]
-\<open>cname\<^sub>i :: "type\<^sub>i\<^sub>,\<^sub>1 \<Rightarrow> \<dots> \<Rightarrow> type\<^latex>\<open>$_{i,k_i}$\<close> \<Rightarrow> name"\<close>}\cbend
+\<open>cname\<^sub>i :: "type\<^sub>i\<^sub>,\<^sub>1 \<Rightarrow> \<dots> \<Rightarrow> type\<^latex>\<open>$_{i,k_i}$\<close> \<Rightarrow> name"\<close>}
 which is a function with \<open>k\<^sub>i\<close> arguments mapping their arguments to values of the new type \<open>name\<close>.
 
 Every datatype definition constitutes a separate namespace for the functions it introduces. Therefore
@@ -100,7 +100,7 @@ subsubsection "Constructing Values"
 text\<open>
 These constructor functions are assumed to be injective, thus their result values differ if atleast
 one argument value differs. This implies that the set of all values of the constructor function
-\<open>cname\<^sub>i\<close> is equivalent to the tuples\index{tuple} of the value sets of \cbstart \<open>type\<^sub>i\<^sub>,\<^sub>1 \<dots> type\<^latex>\<open>$_{i,k_i}$\<close>\<close>\cbend: for every
+\<open>cname\<^sub>i\<close> is equivalent to the tuples\index{tuple} of the value sets of \<open>type\<^sub>i\<^sub>,\<^sub>1 \<dots> type\<^latex>\<open>$_{i,k_i}$\<close>\<close>: for every
 tuple of arguments there is a constructed value and vice versa. Note, however, that as usual the
 values of the new type are distinct from the values of all other types, in particular, they are
 distinct from the argument tuples.
@@ -108,10 +108,10 @@ distinct from the argument tuples.
 Moreover the result values of different constructor functions are also assumed to be different.
 Together the set of all values of the defined type is equivalent to the (disjoint) union of the
 cartesian products of all constructor argument types. Moreover, every value of the type may be 
-denoted by a term\cbstart
+denoted by a term
 @{text[display]
 \<open>cname\<^sub>i term\<^sub>1 \<dots> term\<^latex>\<open>$_{k_i}$\<close>\<close>}
-where each \<open>term\<^sub>j\<close> is of type  \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>\cbend and specifies an argument for the constructor function
+where each \<open>term\<^sub>j\<close> is of type  \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> and specifies an argument for the constructor function
 application.
 
 Together, datatypes have what is called ``free constructors''\index{constructor!free $\sim$} in Isabelle: the constructors are
@@ -160,14 +160,14 @@ subsubsection "Selectors"
 
 text\<open>
 The most immediate form of a destructor is a selector function\index{selector}\index{selector function}\index{function!selector $\sim$}. For the constructor argument specified
-by \cbstart \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> the selector function is a function of type \<open>name \<Rightarrow> type\<^sub>i\<^sub>,\<^sub>j\<close>. For every value constructed
-by \<open>cname\<^sub>i term\<^sub>1 \<dots> term\<^latex>\<open>$_{k_i}$\<close>\<close>\cbend it returns the value denoted by \<open>term\<^sub>j\<close>.
+by \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> the selector function is a function of type \<open>name \<Rightarrow> type\<^sub>i\<^sub>,\<^sub>j\<close>. For every value constructed
+by \<open>cname\<^sub>i term\<^sub>1 \<dots> term\<^latex>\<open>$_{k_i}$\<close>\<close> it returns the value denoted by \<open>term\<^sub>j\<close>.
 
 The names of selector functions must be specified explicitly. This is done using the extended form
-of a constructor specification\cbstart
+of a constructor specification
 @{theory_text[display]
 \<open>cname\<^sub>i (sname\<^sub>i\<^sub>,\<^sub>1 : "type\<^sub>i\<^sub>,\<^sub>1") \<dots> (sname\<^latex>\<open>$_{i,k_i}$\<close> : "type\<^latex>\<open>$_{i,k_i}$\<close>")\<close>}
-where the \<open>sname\<^sub>i\<^sub>,\<^sub>j\<close>\cbend are the names used for the corresponding selector functions. Selector names
+where the \<open>sname\<^sub>i\<^sub>,\<^sub>j\<close> are the names used for the corresponding selector functions. Selector names
 may be specified for all or only for some constructor arguments. As for constructors, selector names
 belong to the namespace of the defined type and may be qualified by prefixing the type name.
 
@@ -206,10 +206,10 @@ form of a datatype definition
 @{theory_text[display]
 \<open>datatype name = alt\<^sub>1 | \<dots> | alt\<^sub>n
 where "prop\<^sub>1" | \<dots> | "prop\<^sub>m"\<close>}
-where every \<open>prop\<^sub>p\<close> is a proposition of the form\cbstart
+where every \<open>prop\<^sub>p\<close> is a proposition of the form
 @{text[display]
 \<open>sname\<^sub>i\<^sub>,\<^sub>j (cname\<^sub>q var\<^sub>1 \<dots> var\<^latex>\<open>$_{k_q}$\<close>) = term\<^sub>p\<close>}
-and specifies \<open>term\<^sub>p\<close> as the default value of selector \<open>sname\<^sub>i\<^sub>,\<^sub>j\<close>\cbend for values constructed by \<open>cname\<^sub>q\<close>.
+and specifies \<open>term\<^sub>p\<close> as the default value of selector \<open>sname\<^sub>i\<^sub>,\<^sub>j\<close> for values constructed by \<open>cname\<^sub>q\<close>.
 
 The definition
 @{theory_text[display]
@@ -249,24 +249,24 @@ Additionally to using discriminators and selectors HOL supports \<open>case\<clo
 term specifies depending on a datatype value a separate term variant for every constructor of the
 datatype. In these variants the constructor arguments are available as bound variables. 
 
-A \<open>case\<close> term for a datatype \<open>name\<close> defined as in Section~\ref{holtdefs-data-def} has the form\cbstart
+A \<open>case\<close> term for a datatype \<open>name\<close> defined as in Section~\ref{holtdefs-data-def} has the form
 @{text[display]
 \<open>case term of 
   cname\<^sub>1 var\<^sub>1\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{1,k_1}$\<close> \<Rightarrow> term\<^sub>1 
 | \<dots>
-| cname\<^sub>n var\<^sub>n\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{n,k_n}$\<close> \<Rightarrow> term\<^sub>n\<close>}\cbend\index{case (inner keyword)}\index{of (inner keyword)}
+| cname\<^sub>n var\<^sub>n\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{n,k_n}$\<close> \<Rightarrow> term\<^sub>n\<close>}\index{case (inner keyword)}\index{of (inner keyword)}
 where \<open>term\<close> is of type \<open>name\<close> and the \<open>term\<^sub>i\<close> have an arbitrary but common type which is also the
-type of the \<open>case\<close> term. In the alternative for constructor \<open>cname\<^sub>i\<close> the \cbstart \<open>var\<^sub>1\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{1,k_1}$\<close>\<close> must be 
+type of the \<open>case\<close> term. In the alternative for constructor \<open>cname\<^sub>i\<close> the \<open>var\<^sub>1\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{1,k_1}$\<close>\<close> must be 
 distinct variables, they are bound to the constructor arguments and may be used in \<open>term\<^sub>i\<close> to access
-them. The value of \<open>var\<^sub>i\<^sub>,\<^sub>j\<close> is the same as the value selected by \<open>sname\<^sub>i\<^sub>,\<^sub>j term\<close>\cbend.
+them. The value of \<open>var\<^sub>i\<^sub>,\<^sub>j\<close> is the same as the value selected by \<open>sname\<^sub>i\<^sub>,\<^sub>j term\<close>.
 
-Actually, a \<open>case\<close> term is only an alternative syntax for the function application term\cbstart
+Actually, a \<open>case\<close> term is only an alternative syntax for the function application term
 @{text[display]
 \<open>case_name 
   (\<lambda> var\<^sub>1\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{1,k_1}$\<close>. term\<^sub>1)
   \<dots>
   (\<lambda> var\<^sub>n\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{n,k_n}$\<close>. term\<^sub>n)
-  term\<close>}\cbend
+  term\<close>}
 Here \<open>case_name\<close>\index{case-@case$\_$ (constant name prefix)} is the ``case combinator''\index{case!combinator function} function for the datatype \<open>name\<close>. It takes as arguments
 \<open>n\<close> functions which map the corresponding constructor arguments to the term variant (or the term
 variant itself if the constructor has no arguments) and the \<open>term\<close> of type \<open>name\<close> as final argument.
@@ -451,8 +451,8 @@ Several rules are configured for automatic application, e.g., they are added to 
 automatic application by the simplifier (see Section~\ref{methods-simp-simp}). Other rules must
 be explicitly used by referring them by their name. 
 
-Only some basic rules are described here, for more information refer to\cbstart
-\<^cite>\<open>datatypes\<close>.\cbend
+Only some basic rules are described here, for more information refer to
+\<^cite>\<open>datatypes\<close>.
 \<close>
 
 subsubsection "Simplifier Rules"
@@ -463,15 +463,15 @@ Section~\ref{methods-simp-simp}) support many ways for the simplifier to process
 constructors and destructors.
 
 The rule set \<open>name.inject\<close>\index{inject@.inject (fact name suffix)} states that every non-constant constructor is injective,
-the rules are of the form\cbstart
+the rules are of the form
 @{text[display]
 \<open>((cname\<^sub>i ?x\<^sub>1 \<dots> ?x\<^latex>\<open>$_{k_i}$\<close>) = (cname\<^sub>i ?y\<^sub>1 \<dots> ?y\<^latex>\<open>$_{k_i}$\<close>)) =
-  (?x\<^sub>1 = ?y\<^sub>1 \<and> \<dots> \<and> ?x\<^latex>\<open>$_{k_i}$\<close> = ?y\<^latex>\<open>$_{k_i}$\<close>)\<close>}\cbend
+  (?x\<^sub>1 = ?y\<^sub>1 \<and> \<dots> \<and> ?x\<^latex>\<open>$_{k_i}$\<close> = ?y\<^latex>\<open>$_{k_i}$\<close>)\<close>}
 
 The rule set \<open>name.distinct\<close>\index{distinct@.distinct (fact name suffix)} states that values constructed by different constructors are different,
-the rules are of the form\cbstart
+the rules are of the form
 @{text[display]
-\<open>(cname\<^sub>i ?x\<^sub>1 \<dots> ?x\<^latex>\<open>$_{k_i}$\<close>) \<noteq> (cname\<^sub>j ?y\<^sub>1 \<dots> ?y\<^latex>\<open>$_{k_j}$\<close>)\<close>}\cbend
+\<open>(cname\<^sub>i ?x\<^sub>1 \<dots> ?x\<^latex>\<open>$_{k_i}$\<close>) \<noteq> (cname\<^sub>j ?y\<^sub>1 \<dots> ?y\<^latex>\<open>$_{k_j}$\<close>)\<close>}
 where \<open>i \<noteq> j\<close>.
 
 The rule set \<open>name.sel\<close>\index{sel@.sel (fact name suffix)} provides ``defining equations'' for the selectors of the form
@@ -479,13 +479,13 @@ The rule set \<open>name.sel\<close>\index{sel@.sel (fact name suffix)} provides
 \<open>sname\<^sub>i\<^sub>j (cname\<^sub>i ?x\<^sub>1 \<dots> ?x\<^sub>k\<^sub>i) = ?x\<^sub>j\<close>}
 
 The rule set \<open>name.case\<close>\index{case@.case (fact name suffix)} provides equations for simplifying \<open>case\<close> terms where the discriminating
-term is directly specified by a constructor application. They have the form\cbstart
+term is directly specified by a constructor application. They have the form
 @{text[display]
 \<open>(case (cname\<^sub>i ?x\<^sub>1 \<dots> ?x\<^latex>\<open>$_{k_i}$\<close>) of 
     cname\<^sub>1 var\<^sub>1\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{1,k_1}$\<close> \<Rightarrow> ?f\<^sub>1 var\<^sub>1\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{1,k_1}$\<close>
   | \<dots>
   | cname\<^sub>n var\<^sub>n\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{n,k_n}$\<close> \<Rightarrow> ?f\<^sub>n var\<^sub>n\<^sub>,\<^sub>1 \<dots> var\<^latex>\<open>$_{n,k_n}$\<close>)
-= ?f\<^sub>i ?x\<^sub>1 \<dots> ?x\<^latex>\<open>$_{k_i}$\<close>\<close>}\cbend
+= ?f\<^sub>i ?x\<^sub>1 \<dots> ?x\<^latex>\<open>$_{k_i}$\<close>\<close>}
 Note that each branch is specified as an application of a function \<open>?f\<^sub>i\<close> so that the variables
 bound in the branch can be substituted by the arguments of the constructor application.
 
@@ -501,12 +501,12 @@ subsubsection "Case Rule"
 
 text\<open>
 Every definition for a datatype \<open>name\<close> introduces a rule corresponding to the exhaustiveness of
-the free constructors (see Section~\ref{holtdefs-data-constr}). It has the form\cbstart
+the free constructors (see Section~\ref{holtdefs-data-constr}). It has the form
 @{text[display]
 \<open>name.exhaust:
   \<lbrakk>\<And>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_1}$\<close>. ?y = cname\<^sub>1 x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_1}$\<close> \<Longrightarrow> ?P;
    \<dots> ;
-   \<And>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close>. ?y = cname\<^sub>n x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close> \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close>}\cbend\index{exhaust@.exhaust (fact name suffix)}
+   \<And>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close>. ?y = cname\<^sub>n x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close> \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close>}\index{exhaust@.exhaust (fact name suffix)}
 
 According to Section~\ref{case-reasoning-rules} this rule is a case rule. It is automatically
 associated with the datatype for use by the \<^theory_text>\<open>cases\<close> method. Therefore the application of the method
@@ -517,7 +517,7 @@ a different constructor to construct the \<open>term\<close>.
 
 The names for the named contexts created by the \<^theory_text>\<open>cases\<close> method are simply the constructor names 
 \<open>cname\<^sub>i\<close>. Therefore a structured proof using case based reasoning for a \<open>term\<close> of datatype \<open>name\<close>
-has the form\cbstart
+has the form
 @{theory_text[display]
 \<open>proof (cases "term")
   case (cname\<^sub>1 x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_1}$\<close>) \<dots> show ?thesis \<proof>
@@ -525,9 +525,9 @@ next
 \<dots>
 next
   case (cname\<^sub>n x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close>) \<dots> show ?thesis \<proof>
-qed\<close>}\cbend
+qed\<close>}
 The names \<open>x\<^sub>i\<close> of the locally fixed variables can be freely selected, they denote the constructor
-arguments of the corresponding constructor. Therefore the case specification \cbstart \<open>(cname\<^sub>i x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_i}$\<close>)\<close>\cbend
+arguments of the corresponding constructor. Therefore the case specification \<open>(cname\<^sub>i x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_i}$\<close>)\<close>
 looks like a constructor application to variable arguments, although it is actually a context name
 together with locally fixed variables.
 \<close>
@@ -539,7 +539,7 @@ A \<open>case\<close> term (see Section~\ref{holtdefs-data-destr}) is only proce
 simplifier, if the discriminating term is a constructor application (see the \<open>name.case\<close> rule set
 above). Otherwise it is only processed if a corresponding split rule is configured for it (see
 Section~\ref{methods-simp-config}). Every definition for a datatype \<open>name\<close> introduces such a split
-rule\index{rule!split $\sim$}. It has the form\cbstart
+rule\index{rule!split $\sim$}. It has the form
 @{text[display]
 \<open>name.split:
   ?P(case ?t of 
@@ -548,12 +548,12 @@ rule\index{rule!split $\sim$}. It has the form\cbstart
    | cname\<^sub>n x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,k_n}$\<close> \<Rightarrow> ?t\<^sub>n x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,k_n}$\<close>) = 
   (  (?t = cname\<^sub>1 x\<^sub>1\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{1,k_1}$\<close> \<longrightarrow> ?P(?t\<^sub>1 x\<^sub>1\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{1,k_1}$\<close>))
    \<and> \<dots>
-   \<and> (?t = cname\<^sub>n x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,k_n}$\<close> \<longrightarrow> ?P(?t\<^sub>n x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,k_n}$\<close>)))\<close>}\cbend\index{split@.split (fact name suffix)}
+   \<and> (?t = cname\<^sub>n x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,k_n}$\<close> \<longrightarrow> ?P(?t\<^sub>n x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,k_n}$\<close>)))\<close>}\index{split@.split (fact name suffix)}
 As described in Section~\ref{methods-simp-split} the rule splits a goal with a \<open>case\<close> term for type
 \<open>name\<close> in the conclusion into goals where the \<open>case\<close> term is replaced by the terms in the cases.
 Note that the sub-terms of the \<open>case\<close> term are specified by unknowns, so the rule unifies with
 arbitrary \<open>case\<close> terms for type \<open>name\<close>. Also note, that the \<open>?t\<^sub>i\<close> are specified with arguments, so
-that they will be matched by functions depending on the constructor arguments \cbstart \<open>x\<^sub>i\<^sub>,\<^sub>1,\<dots>,x\<^latex>\<open>$_{i,k_i}$\<close>\<close>\cbend, as
+that they will be matched by functions depending on the constructor arguments \<open>x\<^sub>i\<^sub>,\<^sub>1,\<dots>,x\<^latex>\<open>$_{i,k_i}$\<close>\<close>, as
 described in Section~\ref{holtdefs-data-destr}.
 
 As an example, let \<open>cv\<close> be a variable or constant of type \<open>coord\<close>, as above. Then the goal
@@ -569,18 +569,18 @@ subsubsection "Induction Rule"
 
 text\<open>
 Every definition for a datatype \<open>name\<close> introduces an induction rule\index{induction!rule}\index{rule!induction $\sim$} (see Section~\ref{case-induction-rules})
-of the form\cbstart
+of the form
 @{text[display]
 \<open>name.induct:
   \<lbrakk>\<And>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_1}$\<close>. \<lbrakk>?P x\<^latex>\<open>$_{l_1}$\<close>; \<dots> ?P x\<^latex>\<open>$_{l_{m_1}}$\<close>\<rbrakk> \<Longrightarrow> ?P (cname\<^sub>1 x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_1}$\<close>);
    \<dots> ;
    \<And>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close>. \<lbrakk>?P x\<^latex>\<open>$_{l_n}$\<close>; \<dots> ?P x\<^latex>\<open>$_{l_{m_n}}$\<close>\<rbrakk> \<Longrightarrow> ?P (cname\<^sub>n x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close>)\<rbrakk>
   \<Longrightarrow> ?P ?a\<close>}\index{induct@.induct (fact name suffix)}
-where the \<open>x\<^latex>\<open>$_{l_1}$\<close> \<dots> x\<^latex>\<open>$_{l_{m_i}}$\<close>\<close> are those \<open>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_i}$\<close>\<close>\cbend which have type \<open>name\<close> (i.e., the recursive
+where the \<open>x\<^latex>\<open>$_{l_1}$\<close> \<dots> x\<^latex>\<open>$_{l_{m_i}}$\<close>\<close> are those \<open>x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_i}$\<close>\<close> which have type \<open>name\<close> (i.e., the recursive
 occurrences of the type name). Like the case rule it is valid because the constructor applications 
 cover all possibilities of constructing a value \<open>?a\<close> of the datatype.
 
-If the datatype \<open>name\<close> is not recursive there are no \cbstart \<open>x\<^latex>\<open>$_{l_1}$\<close> \<dots> x\<^latex>\<open>$_{l_{m_i}}$\<close>\<close>\cbend and the assumptions of all
+If the datatype \<open>name\<close> is not recursive there are no \<open>x\<^latex>\<open>$_{l_1}$\<close> \<dots> x\<^latex>\<open>$_{l_{m_i}}$\<close>\<close> and the assumptions of all
 inner rules are empty, then the induction rule is simply a specialization of the case rule and is
 redundant. However, for a recursive datatype \<open>name\<close> induction using rule \<open>name.induct\<close> is the
 standard way of proving a property to hold for all values.
@@ -594,7 +594,7 @@ a different constructor term in the place of \<open>x\<close>.
 
 As for the case rule and the \<^theory_text>\<open>cases\<close> method, the names for the named contexts created by the 
 methods \<^theory_text>\<open>induction\<close> and \<^theory_text>\<open>induct\<close> are simply the constructor names \<open>cname\<^sub>i\<close>. Therefore a structured
-proof using induction for a variable \<open>x\<close> of datatype \<open>name\<close> has the form\cbstart
+proof using induction for a variable \<open>x\<close> of datatype \<open>name\<close> has the form
 @{theory_text[display]
 \<open>proof (induction x)
   case (cname\<^sub>1 x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_1}$\<close>) \<dots> show ?case \<proof>
@@ -604,7 +604,7 @@ next
   case (cname\<^sub>n x\<^sub>1 \<dots> x\<^latex>\<open>$_{k_n}$\<close>) \<dots> show ?case \<proof>
 qed\<close>}
 
-In the rule \<open>name.induct\<close> all inner assumptions are of the form \<open>?P x\<^latex>\<open>$_{l_i}$\<close>\<close>\cbend, i.e., they are induction
+In the rule \<open>name.induct\<close> all inner assumptions are of the form \<open>?P x\<^latex>\<open>$_{l_i}$\<close>\<close>, i.e., they are induction
 hypotheses and are named \<open>"cname\<^sub>i.IH"\<close> by the \<^theory_text>\<open>induction\<close> method, the assumption set \<open>"cname\<^sub>i.hyps"\<close>
 is always empty. The \<^theory_text>\<open>induct\<close> method instead names all inner assumptions by \<open>"cname\<^sub>i.hyps"\<close>.
 
@@ -642,14 +642,14 @@ A constructor pattern is called ``linear''\index{constructor!pattern!linear $\si
 
 HOL provides specific support for recursive definitions\index{definition!recursive $\sim$}\index{recursive definition} (see
 Section~\ref{holbasic-recursive}) of functions \<open>name :: t\<^sub>1 \<Rightarrow> \<dots> \<Rightarrow> t\<^sub>k \<Rightarrow> type\<close> where every
-defining equation \<open>eq\<^sub>i\<close> has the form\cbstart
+defining equation \<open>eq\<^sub>i\<close> has the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k = term\<^sub>i\<close>}
-without assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> and the sequence \<open>term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>\cbend on the left side is a linear
+without assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> and the sequence \<open>term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close> on the left side is a linear
 constructor pattern.
 
 Since the type of a constructor application term is always an algebraic type, an argument type \<open>t\<^sub>j\<close>
-may only be a non-algebraic type if the corresponding \cbstart \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>\cbend is a single variable in all \<open>eq\<^sub>i\<close>.
+may only be a non-algebraic type if the corresponding \<open>term\<^sub>i\<^sub>,\<^sub>j\<close> is a single variable in all \<open>eq\<^sub>i\<close>.
 \<close>
 
 subsubsection "The Proof Method \<open>pat_completeness\<close>"
@@ -734,10 +734,10 @@ subsubsection "Primitive Recursion"
 text\<open>
 A linear constructor pattern consisting of a sequence of terms is called ``primitive''\index{constructor!pattern!primitive linear $\sim$}\index{linear constructor pattern!primitive $\sim$} if exactly
 one term is a constructor application and all constructor arguments in this term are single
-variables. Thus a primitive constructor pattern has the general form\cbstart
+variables. Thus a primitive constructor pattern has the general form
 @{text[display]
 \<open>x\<^sub>1 \<dots> x\<^sub>i\<^sub>-\<^sub>1 (cname x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^sub>i\<^sub>,\<^sub>n) x\<^sub>i\<^sub>+\<^sub>1 \<dots> x\<^sub>k\<close>}
-where all \<open>x\<^sub>i\<close> and \<open>x\<^sub>i\<^sub>,\<^sub>j\<close>\cbend are variables. In particular, if a linear constructor pattern consists of
+where all \<open>x\<^sub>i\<close> and \<open>x\<^sub>i\<^sub>,\<^sub>j\<close> are variables. In particular, if a linear constructor pattern consists of
 a single term it is always primitive.
 
 A recursive function definition
@@ -961,7 +961,7 @@ the same function as \<open>make\<close>.
 subsubsection "Constructing Values"
 
 text\<open>
-\cbstart As \cbend for a datatype every record constructor function is assumed to be injective, thus their result
+As for a datatype every record constructor function is assumed to be injective, thus their result
 values differ if atleast one argument value differs. This implies that the set of all values of the
 constructor function \<open>make\<close> is equivalent to the set of all tuples of values of
 the field types, which is equivalent to the set of all possible values of the record type \<open>rname\<close>.
@@ -1066,8 +1066,8 @@ Several rules are configured for automatic application, e.g., they are added to 
 automatic application by the simplifier (see Section~\ref{methods-simp-simp}). Other rules must
 be explicitly used by referring them by their name. 
 
-Only some basic rules are described here, for more information refer to \cbstart
-\<^cite>\<open>"Section 11.6 on records" in "isar-ref"\<close>.\cbend
+Only some basic rules are described here, for more information refer to 
+\<^cite>\<open>"Section 11.6 on records" in "isar-ref"\<close>.
 \<close>
 
 subsubsection "Simplifier Rules"
@@ -1181,12 +1181,12 @@ proof using induction for a variable \<open>x\<close> of record type \<open>rnam
 qed\<close>}
 
 As an example, the induction rules for the record type \<open>recrd\<close> defined in 
-Section~\ref{holtdefs-record-def} are\cbstart
+Section~\ref{holtdefs-record-def} are
 @{text[display]
 \<open>recrd.induct:
   (\<And>x\<^sub>1 x\<^sub>2 x\<^sub>3. ?P \<lparr>num=x\<^sub>1, nums=x\<^sub>2, nice=x\<^sub>3\<rparr>) \<Longrightarrow> ?P ?a
 recrd.induct_scheme:
-  (\<And>x\<^sub>1 x\<^sub>2 x\<^sub>3 m. ?P \<lparr>num=x\<^sub>1, nums=x\<^sub>2, nice=x\<^sub>3, \<dots>=m\<rparr>) \<Longrightarrow> ?P ?a\<close>}\cbend
+  (\<And>x\<^sub>1 x\<^sub>2 x\<^sub>3 m. ?P \<lparr>num=x\<^sub>1, nums=x\<^sub>2, nice=x\<^sub>3, \<dots>=m\<rparr>) \<Longrightarrow> ?P ?a\<close>}
 By applying the method \<open>(induction x)\<close> the goal \<open>(num x) = y\<close> is replaced by
 the goal \<open>\<And>x\<^sub>1 x\<^sub>2 x\<^sub>3. (num \<lparr>num = x\<^sub>1, nums = x\<^sub>2, nice = x\<^sub>3\<rparr>) = y\<close>.
 
@@ -1369,7 +1369,7 @@ Rep_t_induct:
   \<lbrakk>?a \<in> rset; \<And>x. ?P (Rep_t x)\<rbrakk> \<Longrightarrow> ?P ?a\<close>}\index{induct@$\_$induct (fact name suffix)}
 The former rule is a plain induction rule, the latter is an induction rule with elimination where
 the major premise states that the value \<open>?a\<close> is in \<open>rset\<close>. Both rules only contain a ``base case''
-and no ``induction step'' with a recursive occurrence of values of the defined type \<open>t\<close>. \cbstart As \cbend for
+and no ``induction step'' with a recursive occurrence of values of the defined type \<open>t\<close>. As for
 the case rules they are valid because the morphism applications cover all possibilities of
 constructing values of \<open>t\<close> or values in \<open>rset\<close>, respectively.
 

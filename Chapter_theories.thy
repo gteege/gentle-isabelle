@@ -33,9 +33,7 @@ writing theory content:
  \<^item> a language for organizing fragments of the first two languages in a theory, called the ``outer
 syntax''.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Inner Syntax"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 For the inner syntax\index{syntax!inner $\sim$} Isabelle tries to be as close as possible to the form how mathematical content
@@ -43,9 +41,7 @@ is traditionally presented in books. It supports formulas such as \<open>\<foral
 in the interactive editor and the textual presentation. It does not support larger two-dimensional
 constructs like matrices or fractions.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Outer Syntax"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The outer syntax\index{syntax!outer $\sim$} resembles a programming language. It uses keywords to construct larger entities
@@ -56,12 +52,10 @@ Symbols panel in tab ``Punctuation''. The only exception is a single isolated id
 quotes or delimiters  may be omitted.
 
 This introduction describes only a selected part of the outer and inner syntax. The full
-notation used by Isabelle is described in \cbstart the Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close> with
-some more elusive parts in other documentation \<^cite>\<open>datatypes and corec and eisbach\<close>.\cbend\<close>
+notation used by Isabelle is described in the Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close> with
+some more elusive parts in other documentation \<^cite>\<open>datatypes and corec and eisbach\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection \<open>Embedded \LaTeX\ Code\<close>
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Additionally, text written in \LaTeX\ syntax\index{syntax!LaTeX $\sim$} can be embedded into the outer syntax using the form
@@ -73,9 +67,7 @@ and \LaTeX\ sections\index{sections} can be created using
 It is also possible to embed inner and outer syntax in the \LaTeX\ syntax (see Chapter 4 in the 
 Isabelle/Isar Reference Manual).\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Comments"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Moreover, comments\index{comments} of the form
@@ -157,22 +149,18 @@ to the lack of adequate types in the meta-logic this introduction uses a small s
 examples to illustrate concepts on the meta-level, assuming an intuitive understanding of the
 associated operations and terms.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Type Declarations"
-text_raw\<open>\cbend\<close>
 
 text\<open>
-New \cbstart type names can be introduced \cbend using the outer syntax construct
+New type names can be introduced using the outer syntax construct
 @{theory_text[display]
 \<open>typedecl name\<close>}\index{typedecl (keyword)}
 which introduces the \<^theory_text>\<open>name\<close> for a new type for which the values are different from the values of 
 all existing types and the set of values is not empty. No other information about the values is 
-given, that \cbstart may \cbend be done separately. See Chapter~\ref{holtdefs} for ways of defining types with
+given, that may be done separately. See Chapter~\ref{holtdefs} for ways of defining types with
 specifying more information about their values.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Parameterized Types and Polymorphic Types"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Types can be parameterized\index{type!parameterized $\sim$}, then the type arguments are denoted \<^emph>\<open>before\<close> the type name, such as in
@@ -192,9 +180,7 @@ by a single type variable such as \<open>'a\<close> the type is called ``polymor
 used as a type specification, its meaning is that an arbitrary instance can be used where the type
 variables are replaced by actual types.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Type Synonyms"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Alternatively a type name can be introduced as a synonym\index{type!synonym} for an existing type in the form
@@ -216,21 +202,19 @@ type depends on its position in a term. In HOL predefined constant names of type
 \<open>bool\<close> are \<open>True\<close>\index{True (constant)} and \<open>False\<close>\index{False (constant)}.
 
 Constants of number types, such as \<open>nat\<close>, may be denoted by number literals\index{number literal}, such as \<open>6\<close>
-or \<open>42\<close>. \cbstart Nested terms are generally written by using parentheses\index{parentheses} \<open>(\<dots>)\<close>. There are many priority
-rules how to nest terms automatically, but if in doubt, it is always safe to use parentheses.\cbend
+or \<open>42\<close>. Nested terms are generally written by using parentheses\index{parentheses} \<open>(\<dots>)\<close>. There are many priority
+rules how to nest terms automatically, but if in doubt, it is always safe to use parentheses.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Constants Declarations"
-text_raw\<open>\cbend\<close>
 
 text\<open>
-A \cbstart new constant name can be introduced \cbend by specifying its type. The outer syntax construct
+A new constant name can be introduced by specifying its type. The outer syntax construct
 @{theory_text[display]
 \<open>consts name\<^sub>1 :: type\<^sub>1 \<dots> name\<^sub>n :: type\<^sub>n\<close>}\index{consts (keyword)}
 introduces \<open>n\<close> constants with their names and types. No information is specified about the 
 constant's values, in this respect the constants are ``underspecified''\index{constant!underspecified $\sim$}\index{underspecified!constant}. The information about the
-values \cbstart may \cbend be specified separately.
+values may be specified separately.
 
 If the constant's type is polymorphic (see Section~\ref{theory-terms-types}) the constant is 
 also called polymorphic\index{constant!polymorphic $\sim$}\index{polymorphic}. Thus the declaration
@@ -240,9 +224,7 @@ declares the polymorphic constant \<open>myset\<close> which may be a set of ele
 Note the use of quotes because the type is specified in inner syntax and is not a single
 type name.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Variables"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A (term) variable\index{variable}\index{name!for variable} has the same form as a constant name, but it has not been introduced as a 
@@ -280,9 +262,7 @@ to represent functions with more than one argument\index{function!multiple argum
 type \<open>argtype\<^sub>1 \<Rightarrow> argtype\<^sub>2 \<Rightarrow> \<cdots> \<Rightarrow> argtype\<^sub>n \<Rightarrow> restype\<close> describes functions which can be applied 
 to \<open>n\<close> arguments.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Function Application"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Function application\index{function!application} terms for a function \<open>f\<close> and an argument \<open>a\<close> are denoted in inner
@@ -292,9 +272,7 @@ associative, thus a function application to \<open>n\<close> arguments is writte
 application \<open>f a\<^sub>1 \<dots> a\<^sub>m\<close> where \<open>m < n\<close> (a ``partial application'')\index{function!application!partial $\sim$} is a correct term and denotes a
 function taking the remaining \<open>n-m\<close> arguments.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Infix Function Application"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 For every constant alternative syntax forms may be defined for application terms. This is often used
@@ -322,9 +300,7 @@ A constant function\index{function!constant $\sim$} has a value which does not d
 does not occur in the \<open>term\<close>. Then its name is irrelevant and it may be replaced by the ``wildcard''\index{wildcard}
 \<open>_\<close> (an underscore) as in \<open>\<lambda>_. term\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Binding Variables"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If a variable from the \<open>x\<^sub>1, \<dots>, x\<^sub>n\<close> occurs in the \<open>term\<close> of \<open>\<lambda>x\<^sub>1 \<dots> x\<^sub>n. term\<close> it is called a
@@ -353,9 +329,7 @@ type or constant declarations. It finds all named constants which have been intr
 command position. Searches using the Query panel find all named constants which have been introduced
 before the cursor position in the text area.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Searching by Type"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A \<open>criterion\<^sub>i\<close> may be a type, specified in inner syntax and quoted if not a single type name. Then
@@ -369,9 +343,7 @@ corresponding named functions.
 If the specified type is polymorphic the search will also find constants which have an instance
 of it as their type or as a part of the type, respectively.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Searching by Name"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A \<open>criterion\<^sub>i\<close> may also have the form \<open>name: strpat\<close> where \<open>strpat\<close> is a string pattern which may
@@ -421,9 +393,7 @@ underspecified\index{constant!underspecified $\sim$}\index{underspecified!consta
 where \<open>mystery\<close> is defined as above. Then it is only known that \<open>mystery2\<close> has type \<open>nat \<Rightarrow> nat\<close> and
 is the same total function as \<open>mystery\<close>, but nothing is known about its values.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Defining Functions"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the type of the defined constant is a function\index{function!definition}\index{definition!for function} type, the \<open>term\<close> may be a lambda term.
@@ -514,9 +484,9 @@ Although \<open>name\<close> must be the name of an existing constant, only its 
 not affected by the adhoc overloading, however, it becomes inaccessible because its name is now
 used as term abbreviation. 
 
-Several constant names can be overloaded in a common specification:\cbstart
+Several constant names can be overloaded in a common specification:
 @{theory_text[display]
-\<open>adhoc_overloading name\<^sub>1 term\<^sub>1\<^sub>,\<^sub>1 \<dots> term\<^sub>1\<^sub>,\<^sub>n and \<dots> and name\<^sub>k \<dots>\<close>}\cbend
+\<open>adhoc_overloading name\<^sub>1 term\<^sub>1\<^sub>,\<^sub>1 \<dots> term\<^sub>1\<^sub>,\<^sub>n and \<dots> and name\<^sub>k \<dots>\<close>}
 \<close>
 
 section "Propositions"
@@ -732,9 +702,7 @@ The example rule from the previous sections can be stated as a fact by the theor
 @{theory_text[display]
 \<open>theorem "\<And> (x::nat) c n . x < c \<Longrightarrow> n*x \<le> n*c" \<proof>\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Implicit Variable Bindings"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the proposition in a theorem contains free variables\index{free occurrence}\index{variable!free occurrence of $\sim$} they are implicitly universally
@@ -749,14 +717,12 @@ the name \<open>True\<close> is used locally as a variable of type \<open>nat\<c
 of type \<open>bool\<close>. Of course, using well known constant names as variables is confusing and should
 be avoided.
 
-\cbstart Explicit binding of variables can also be useful to specify the variable types at a common place
+Explicit binding of variables can also be useful to specify the variable types at a common place
 in the proposition instead of scattering them over it. Finally, explicit variable binding makes
 a difference for the \<open>\<proof>\<close>: it restricts the variables to the proposition so that they are
-not available in the \<open>\<proof>\<close> (see Sections~\ref{proof-state-initial} and~\ref{proof-fix}).\cbend\<close>
+not available in the \<open>\<proof>\<close> (see Sections~\ref{proof-state-initial} and~\ref{proof-fix}).\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Structured Form"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the proposition in a theorem is a derivation rule with possibly multiple conclusions  it may also
@@ -765,13 +731,11 @@ be specified in structured form (see Section~\ref{theory-prop-struct}):
 \<open>theorem "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
 with optional grouping of all components by \<^theory_text>\<open>and\<close>. Remember that the \<open>C\<^sub>i\<close> may be arbitrary
 propositions, therefore a theorem in this form may specify several derivation rules with additional
-common assumptions and common bound variables. \cbstart As for the unstructured form the explicit
+common assumptions and common bound variables. As for the unstructured form the explicit
 binding of variables\index{variable!binding} in the \<^theory_text>\<open>for\<close> part is optional. If a theorem has free variables in a \<open>C\<^sub>i\<close> or in
-a \<open>A\<^sub>i\<close> a \<^theory_text>\<open>for\<close> part is automatically added for all such variables.\cbend\<close>
+a \<open>A\<^sub>i\<close> a \<^theory_text>\<open>for\<close> part is automatically added for all such variables.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Multiple Conclusions"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A theorem with multiple conclusions adds a separate fact for every conclusion to the enclosing
@@ -835,9 +799,7 @@ The example rule from the previous sections can be turned into a fact named \<op
 @{theory_text[display]
 \<open>theorem example1: "(x::nat) < c \<Longrightarrow> n*x \<le> n*c" \<proof>\<close>}\index{example1 (example fact)}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Named Fact Collections"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 It is also possible to introduce named collections of facts\index{fact!collection}\index{name!for fact collection}. A simple way to introduce
@@ -857,10 +819,10 @@ If a theorem with multiple conclusions is named in the form
 @{theory_text[display]
 \<open>theorem name: "C\<^sub>1" \<dots> "C\<^sub>h" if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
 it introduces the name for the collection of all resulting facts. Moreover, if the conclusions are
-grouped by \<^theory_text>\<open>and\<close>, (some of) the groups\index{conclusion!group} may be named separately in the form\cbstart
+grouped by \<^theory_text>\<open>and\<close>, (some of) the groups\index{conclusion!group} may be named separately in the form
 @{theory_text[display]
 \<open>theorem name\<^sub>1: "C\<^sub>1\<^sub>,\<^sub>1" \<dots> "C\<^latex>\<open>$_{1,g_1}$\<close>" and \<dots> and name\<^sub>h: "C\<^sub>h\<^sub>,\<^sub>1" \<dots> "C\<^latex>\<open>$_{h,g_h}$\<close>"
-  if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}\cbend
+  if "A\<^sub>1" \<dots> "A\<^sub>n" for x\<^sub>1 \<dots> x\<^sub>m \<proof>\<close>}
 which introduces the names for the corresponding collections of facts according to the groups.
 
 In this way the two example facts may be specified and named by the common theorem
@@ -869,9 +831,7 @@ In this way the two example facts may be specified and named by the common theor
     and example2: "(x::nat) \<le> c \<Longrightarrow> x + m \<le> c + m"
 \<proof>\<close>}\index{example1 (example fact)}\index{example2 (example fact)}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Dynamic Fact Sets"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 As an alternative to introducing fact names in theorems   a ``dynamic fact set''\index{fact!set}\index{dynamic fact set} can be declared by
@@ -904,10 +864,10 @@ supports an alternative structured form\index{structured form}\index{syntax!alte
   assumes "A\<^sub>1" \<dots> "A\<^sub>n"
   shows "C\<^sub>1" \<dots> "C\<^sub>h"
   \<proof>\<close>}\index{fixes (keyword)}\index{assumes (keyword)}\index{shows (keyword)}
-\cbstart As \cbend for the general structured form (see Section~\ref{theory-prop-struct}) the variables,
+As for the general structured form (see Section~\ref{theory-prop-struct}) the variables,
 assumptions, and conclusions  may be grouped by \<^theory_text>\<open>and\<close>, a type may be specified for each variable
 group, the keywords belong to the outer syntax and the  \<open>C\<^sub>i\<close> and \<open>A\<^sub>i\<close>  must be individually quoted.
-\cbstart Moreover, the explicit binding of variables\index{variable!binding} in the \<^theory_text>\<open>fixes\<close> part is optional, as in a \<^theory_text>\<open>for\<close> part.\cbend
+Moreover, the explicit binding of variables\index{variable!binding} in the \<^theory_text>\<open>fixes\<close> part is optional, as in a \<^theory_text>\<open>for\<close> part.
 
 Note that this structured form may only be used if a derivation rule is specified in a theorem.
 
@@ -920,16 +880,16 @@ written as
   shows "n*x < n*c"
   \<proof>\<close>}
 
-\cbstart As \cbend for the general structured form of a theorem (some of) the conclusion groups may be named
+As for the general structured form of a theorem (some of) the conclusion groups may be named
 individually which introduces the names for the corresponding fact collections. A possibly
 additional name specified after the \<^theory_text>\<open>theorem\<close> keyword names the collection of the resulting facts
-from all groups together:\cbstart
+from all groups together:
 @{theory_text[display]
 \<open>theorem name:
   fixes x\<^sub>1 \<dots> x\<^sub>m
   assumes "A\<^sub>1" \<dots> "A\<^sub>n"
   shows name\<^sub>1: "C\<^sub>1\<^sub>,\<^sub>1" \<dots> "C\<^latex>\<open>$_{1,g_1}$\<close>" and \<dots> and name\<^sub>h: "C\<^sub>h\<^sub>,\<^sub>1" \<dots> "C\<^latex>\<open>$_{h,g_h}$\<close>"
-  \<proof>\<close>}\cbend\<close>
+  \<proof>\<close>}\<close>
 
 subsection "Definitions as Facts"
 text_raw\<open>\label{theory-theorem-defs}\<close>
@@ -956,9 +916,7 @@ overloaded constant.
 subsection "Displaying and Searching Named Facts"
 text_raw\<open>\label{theory-theorem-search}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Fact Display"
-text_raw\<open>\cbend\<close>
 
 text \<open>
 A named fact or fact set (but not a dynamic fact set) can be displayed\index{fact!display} in its standard form
@@ -970,9 +928,7 @@ command
 @{theory_text[display]
 \<open>print_statement name\<close>}\index{print-statement@print$\_$statement (keyword)}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Fact Search"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Named facts may be searched\index{fact!search $\sim$}\index{search!for facts} using the command

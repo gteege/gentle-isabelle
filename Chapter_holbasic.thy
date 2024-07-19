@@ -16,7 +16,7 @@ mechanisms which are available in HOL for arbitrary types.
 
 The abbreviation ``HOL'' is used in the logics community to denote the general concept of higher
 order logics. In this document we use it specifically to denote the implementation as object logic
-in Isabelle which is \cbstart named Isabelle/HOL. 
+in Isabelle which is named Isabelle/HOL. 
 
 Isabelle/HOL consists of the session HOL/HOL\index{HOL (session)}
 (see Section~\ref{system-invoke-theory}) and several extensions. Most theories in HOL/HOL
@@ -25,7 +25,7 @@ content of all these theories becomes available.
 The most basic theory in HOL/HOL is also named {\tt\sl HOL}. There are additional theories in
 HOL/HOL which are not imported by @{theory Main}, such as for rational and real numbers.
 
-This introduction only covers some of the theories imported by @{theory Main}.\cbend
+This introduction only covers some of the theories imported by @{theory Main}.
 \<close>
 
 section "Predicates and Relations"
@@ -86,7 +86,7 @@ above and often provides relations named \<open>namep\<close> or \<open>nameP\<c
 \<open>name\<close>.
 
 Note that HOL introduces the specific type constructor \<open>rel\<close> (see Section~\ref{holtypes-rel}), where
-the values are equivalent to binary relations \cbstart on a single type \<open>t\<close>\cbend.
+the values are equivalent to binary relations on a single type \<open>t\<close>.
 
 More generally, \<open>n\<close>-ary relations for \<open>n > 2\<close> are directly represented by \<open>n\<close>-ary predicates\index{predicate!n-ary $\sim$}. Every
 \<open>n\<close>-ary relation is equivalent to an \<open>(n-1)\<close>-ary set-valued function.
@@ -157,7 +157,7 @@ Moreover, these are only syntactic definitions, no rules about orderings are imp
 some of its predefined types, such as type \<open>nat\<close>, HOL provides more specific specifications by
 overloading.
 
-\cbstart As \cbend for \<open>(=)\<close> the type of \<open>term\<^sub>1\<close> and \<open>term\<^sub>2\<close> cannot be derived in a term such as \<open>term\<^sub>1 < term\<^sub>2\<close>.
+As for \<open>(=)\<close> the type of \<open>term\<^sub>1\<close> and \<open>term\<^sub>2\<close> cannot be derived in a term such as \<open>term\<^sub>1 < term\<^sub>2\<close>.
 There are relations with the same semantics but specific operand types such as \<open>(\<subseteq>)\<close>\index{/subset-eq@\<open>\<subseteq>\<close> (operator)} for the
 relation \<open>(\<le>)\<close> on sets (see Section~\ref{holtypes-set}).
 \<close>
@@ -197,7 +197,7 @@ They are overloaded only for those types which have a corresponding structure. F
 constant is used for a type for which it is not available an error message of the form
 ``No type arity ...'' is signaled.
 
-\cbstart As \cbend for equality and ordering relations, because the lattice operations and constants are
+As for equality and ordering relations, because the lattice operations and constants are
 overloaded it is not possible to derive the type for valid operands. Again, there are operations and
 constants with more specific operand types, such as \<open>(\<inter>)\<close>\index{/inter@\<open>\<inter>\<close> (operator)} for \<open>(\<sqinter>)\<close> on sets where HOL automatically
 derives the operand types.
@@ -220,7 +220,7 @@ text\<open>
 An arbitrary value satisfying the given predicate \<open>\<lambda>x. bterm\<close> can be denoted by
 @{text[display]
 \<open>SOME x. bterm\<close>}\index{SOME (binder)}
-Only a single variable may be specified after \<open>SOME\<close>, however, \cbstart as \cbend in a lambda term a type may be
+Only a single variable may be specified after \<open>SOME\<close>, however, as in a lambda term a type may be
 specified for it.
 
 The value denoted by the term is underspecified in the sense of Section~\ref{theory-terms-consts}.
@@ -238,7 +238,7 @@ text\<open>
 If only one value satisfies the given predicate \<open>\<lambda>x. bterm\<close> this value can be denoted by
 @{text[display]
 \<open>THE x. bterm\<close>}\index{THE (binder)}\index{definite description operator}
-\cbstart As \cbend for \<open>SOME\<close> only a single variable may be specified with an optional type specification.
+As for \<open>SOME\<close> only a single variable may be specified with an optional type specification.
 
 The value denoted by the term is also underspecified. However,
 after proving that there exists a value \<open>v\<close> which satisfies the predicate \<open>\<lambda>x. bterm\<close> and that
@@ -399,12 +399,12 @@ subsection "The Defining Rules"
 text_raw\<open>\label{holbasic-inductive-defrules}\<close>
 
 text\<open>
-The \<open>P\<^sub>i\<close> are derivation rules which may be specified in inner syntax of the form\cbstart
+The \<open>P\<^sub>i\<close> are derivation rules which may be specified in inner syntax of the form
 @{text[display]
-\<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>}\cbend
+\<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>}
 where the conclusion is always an application of the defined predicate to \<open>k\<close> argument terms. The
-defined predicate \<open>name\<close> may occur in arbitrary ways in the rule assumptions \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, but not in the
-argument terms \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>\cbend. The rule separators \<open>|\<close> belong to the outer syntax, thus every rule must
+defined predicate \<open>name\<close> may occur in arbitrary ways in the rule assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, but not in the
+argument terms \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>. The rule separators \<open>|\<close> belong to the outer syntax, thus every rule must
 be separately quoted.
 
 An example is the following inductive definition for an evenness predicate\index{predicate!evenness $\sim$}:
@@ -416,7 +416,7 @@ subsubsection "Alternative Rule Forms"
 
 text\<open>
 As derivation rules specified in theorems (see Section~\ref{theory-theorem-spec}) the explicit
-bindings of the variables \cbstart \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close>\cbend are optional, variables occurring free in the assumptions
+bindings of the variables \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close> are optional, variables occurring free in the assumptions
 or the conclusion are always automatically bound. As usual, types may be specified for (some of)
 the variables, so explicit bindings can be used as a central place for specifying types for the
 variables, if necessary. The equivalent example with omitted binding is
@@ -425,9 +425,9 @@ variables, if necessary. The equivalent example with omitted binding is
   "evn(0)" | "evn(n) \<Longrightarrow> evn(n+2)"\<close>}\index{evn (example constant)}
 
 Alternatively a rule \<open>P\<^sub>i\<close> may be specified in the structured form described in
-Section~\ref{theory-prop-struct}:\cbstart
+Section~\ref{theory-prop-struct}:
 @{theory_text[display]
-\<open>"name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k" if "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>" for x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close>}\cbend
+\<open>"name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k" if "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>" for x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close>}
 where the assumptions and variables may be grouped by \<^theory_text>\<open>and\<close> and types may be specified for (some
 of) the variable groups, however, no names may be specified for assumption groups, because no proof
 is specified for the rules. In this form the example is written
@@ -450,7 +450,7 @@ Using this form the example can be written as
 
 Note that the syntax of the defining rules only allows to specify when the defined predicate is
 \<open>True\<close>, not when it is \<open>False\<close>. In particular, a rule conclusion may not have the form of a negated
-application \cbstart \<open>\<not> name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>\cbend.
+application \<open>\<not> name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>.
 \<close>
 
 subsubsection "Semantics of an Inductive Definition"
@@ -489,12 +489,12 @@ subsubsection "Monotonicity Properties"
 
 text\<open>
 Actually, this way of implicit specification when the predicate value is \<open>False\<close> is only possible
-if all assumptions \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> used in the rules satisfy a ``monotonicity'' property for the defined
-predicate. HOL is able to prove these properties for most forms of the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend
+if all assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> used in the rules satisfy a ``monotonicity'' property for the defined
+predicate. HOL is able to prove these properties for most forms of the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>
 automatically and then prove the rules themselves and additional rules to be facts. In the
 interactive editor these proof activities are displayed in the Output panel.
 
-A common case where a rule assumption \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend does not satisfy the monotonicity property is if it
+A common case where a rule assumption \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> does not satisfy the monotonicity property is if it
 contains an application of the defined predicate \<open>name\<close> in negated form. Consider the inductive
 definition
 @{theory_text[display]
@@ -521,10 +521,10 @@ for y\<^sub>1 \<dots> y\<^sub>m
 where P\<^sub>1 | \<dots> | P\<^sub>n\<close>}\index{for (keyword)}
 The variables \<open>y\<^sub>i\<close> may be grouped by \<open>and\<close> and types may be specified for (some of) the groups.
 
-Then the defining rules \<open>P\<^sub>i\<close> must have the form\cbstart
+Then the defining rules \<open>P\<^sub>i\<close> must have the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> name y\<^sub>1 \<dots> y\<^sub>m term\<^sub>i\<^sub>,\<^sub>m\<^sub>+\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>}
-and every occurrence of \<open>name\<close> in the \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend must also have \<open>y\<^sub>1 \<dots> y\<^sub>m\<close> as its first \<open>m\<close> arguments.
+and every occurrence of \<open>name\<close> in the \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> must also have \<open>y\<^sub>1 \<dots> y\<^sub>m\<close> as its first \<open>m\<close> arguments.
 
 Specifying fixed arguments is optional, it does not have any effect on the defined predicate,
 however it makes the rules provided by HOL about the predicate simpler (see below).
@@ -542,9 +542,9 @@ text\<open>
 The general form of inductive definition constructs and automatically proves the additional rule\index{cases rule}\index{rule!cases $\sim$}
 @{text[display]
 \<open>\<lbrakk>name ?a\<^sub>1 \<dots> ?a\<^sub>k; RA\<^sub>1; \<dots>; RA\<^sub>n\<rbrakk> \<Longrightarrow> ?P\<close>}
-where every \<open>RA\<^sub>i\<close> has the form\cbstart
+where every \<open>RA\<^sub>i\<close> has the form
 @{text[display]
-\<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>?a\<^sub>1=term\<^sub>i\<^sub>,\<^sub>1; \<dots>; ?a\<^sub>k=term\<^sub>i\<^sub>,\<^sub>k; Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> ?P\<close>}\cbend
+\<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>?a\<^sub>1=term\<^sub>i\<^sub>,\<^sub>1; \<dots>; ?a\<^sub>k=term\<^sub>i\<^sub>,\<^sub>k; Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> ?P\<close>}
 and names it \<open>name.cases\<close>\index{cases@.cases (fact name suffix)}.
 
 This rule has the form of an elimination rule for the predicate as described in
@@ -564,9 +564,9 @@ Section~\ref{case-reasoning-altsynt}):
 \<open>fixes a\<^sub>1 \<dots> a\<^sub>k
 assumes "name a\<^sub>1 \<dots> a\<^sub>k"
 obtains C\<^sub>1 | \<dots> | C\<^sub>n\<close>}
-where every case \<open>C\<^sub>i\<close> has the form\cbstart
+where every case \<open>C\<^sub>i\<close> has the form
 @{theory_text[display]
-\<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "a\<^sub>1=term\<^sub>i\<^sub>,\<^sub>1" \<dots> "a\<^sub>k=term\<^sub>i\<^sub>,\<^sub>k" "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}\cbend
+\<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "a\<^sub>1=term\<^sub>i\<^sub>,\<^sub>1" \<dots> "a\<^sub>k=term\<^sub>i\<^sub>,\<^sub>k" "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}
 
 Together with \<open>name.cases\<close> the similar rule \<open>name.simps\<close>\index{simps@.simps (fact name suffix)} is provided. It is an equation which
 substitutes an arbitrary application of \<open>name\<close> by a disjunction of the cases according to the
@@ -658,10 +658,10 @@ The general form of inductive definition also constructs and automatically prove
 rule\index{induction!rule}\index{rule!induction $\sim$}
 @{text[display]
 \<open>\<lbrakk>name ?a\<^sub>1 \<dots> ?a\<^sub>k; RA\<^sub>1; \<dots>; RA\<^sub>n\<rbrakk> \<Longrightarrow> ?P ?a\<^sub>1 \<dots> ?a\<^sub>k\<close>}
-where every \<open>RA\<^sub>i\<close> has the form\cbstart
+where every \<open>RA\<^sub>i\<close> has the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1'; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>'\<rbrakk> \<Longrightarrow> ?P term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>}
-and in the \<open>Q\<^sub>i\<^sub>,\<^sub>j'\<close>\cbend every application \<open>name t\<^sub>1 \<dots> t\<^sub>k\<close> of the predicate to argument terms is replaced
+and in the \<open>Q\<^sub>i\<^sub>,\<^sub>j'\<close> every application \<open>name t\<^sub>1 \<dots> t\<^sub>k\<close> of the predicate to argument terms is replaced
 by the conjunction \<open>name t\<^sub>1 \<dots> t\<^sub>k \<and> ?P t\<^sub>1 \<dots> t\<^sub>k\<close>. The rule is named \<open>name.induct\<close>\index{induct@.induct (fact name suffix)}.
 
 This rule has the form of an induction rule extended by elimination for the predicate as described
@@ -683,7 +683,7 @@ text\<open>
 The induction rule can be used to prove properties about the defined predicate \<open>name\<close> which may
 involve an iterated application of the defining rules. It abstracts the goal conclusion to a
 function with the same arguments as \<open>name\<close> and then splits it together with the predicate according
-to the predicate's defining rules. See \cbstart \<^cite>\<open>"prog-prove"\<close> \cbend for corresponding proof
+to the predicate's defining rules. See \<^cite>\<open>"prog-prove"\<close> for corresponding proof
 techniques.
 
 Like \<open>name.cases\<close> the rule \<open>name.induct\<close> includes information about the implicit definition of
@@ -734,7 +734,7 @@ subsection "Single-Step Inductive Definitions"
 text_raw\<open>\label{holbasic-inductive-singlestep}\<close>
 
 text\<open>
-A simple case is an inductive definition where no rule assumption \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend contains an application
+A simple case is an inductive definition where no rule assumption \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> contains an application
 of the defined predicate \<open>name\<close>\index{inductive definition!single-step $\sim$}\index{single-step inductive definition}. Then for every defining rule a single backward reasoning step
 will remove the predicate and determine its value. The rule \<open>name.cases\<close> contains the complete
 information about the defined predicate and is sufficient for proving arbitrary properties about
@@ -775,7 +775,7 @@ The \<open>name\<^sub>i\<close> may be grouped by \<open>and\<close> and types m
 
 The defining rules \<open>P\<^sub>i\<close> have the same form as described above, however, every conclusion may be an
 application of one of the defined predicates \<open>name\<^sub>i\<close> (with arbitrary ordering of the rules) and
-every rule assumption \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend may contain applications of all defined predicates.
+every rule assumption \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> may contain applications of all defined predicates.
 
 The following example defines predicates for even and odd numbers in a mutually inductive way:
 @{theory_text[display]
@@ -930,13 +930,13 @@ statements (see Section~\ref{proof-obtain}) HOL introduces the proof method
 It only affects the first goal. Assume that this goal has the form of an elimination rule
 @{theory_text[display]
 \<open>theorem "\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>m; P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> P" \<proof>\<close>}
-where every \<open>P\<^sub>i\<close> is a rule of the form\cbstart
+where every \<open>P\<^sub>i\<close> is a rule of the form
 @{text[display]
-\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> P\<close>}\cbend
+\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> P\<close>}
 (see Section~\ref{case-elim-rules}). The method converts the goal to the form
 @{theory_text[display]
 \<open>\<lbrakk>RA\<^sub>1; \<dots>; RA\<^sub>m\<rbrakk> \<Longrightarrow> D\<^sub>1 \<or> \<dots> \<or> D\<^sub>p\<close>}
-where every \<open>D\<^sub>i\<close> has the form \cbstart \<open>\<exists>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. Q\<^sub>i\<^sub>,\<^sub>1 \<and> \<dots> \<and> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>\cbend. For the quantifier \<open>\<exists>\<close> and the boolean
+where every \<open>D\<^sub>i\<close> has the form \<open>\<exists>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. Q\<^sub>i\<^sub>,\<^sub>1 \<and> \<dots> \<and> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>. For the quantifier \<open>\<exists>\<close> and the boolean
 operators \<open>\<or>\<close> and \<open>\<and>\<close> see Section~\ref{holtypes-bool-funcs}. Because the converted goal does not
 contain the technical variable \<open>P\<close> any more and uses the boolean operators it is sometimes easier
 to prove it.
@@ -993,9 +993,9 @@ text_raw\<open>\label{holbasic-recursive-defeqs}\<close>
 
 text\<open>
 Each of the defining equations \<open>eq\<^sub>i\<close> has the general form of a derivation rule (see
-Section~\ref{theory-prop-rules}) with an equation as its conclusion:\cbstart
+Section~\ref{theory-prop-rules}) with an equation as its conclusion:
 @{text[display]
-\<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k = term\<^sub>i\<close>}\cbend
+\<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k = term\<^sub>i\<close>}
 It is specified in inner syntax. The separating bars \<open>|\<close> belong to the outer syntax, therefore each
 equation must be separately quoted. Note that the conclusion must be an equation using the symbol
 \<open>=\<close> instead of \<open>\<equiv>\<close>. The left side of the equation is restricted to the form of a (non-partial)
@@ -1004,7 +1004,7 @@ arguments according to its type, in every equation it must be applied to \<open>
 conclusion is no equation or if the left side has a different form an error is signaled.
 
 Other than in an Isabelle definition the equations may be recursive, i.e. the defined function
-\<open>name\<close> may be used in \<open>term\<^sub>i\<close> on the right side of the equation (but not in the \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> or \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>\cbend).
+\<open>name\<close> may be used in \<open>term\<^sub>i\<close> on the right side of the equation (but not in the \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> or \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>).
 It may be used in arbitrary ways, also by partial application or by passing it as argument to other
 functions.
 
@@ -1015,9 +1015,9 @@ The familiar example of the faculty function can be defined using two defining e
 | "\<And>n. n > 0 \<Longrightarrow> fac n = n * fac (n-1)"
 \<proof>\<close>}\index{fac (example constant)}
 
-The bound variables \cbstart \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close>\cbend may occur in the assumptions and in the conclusion. However, if
-a bound variable occurs in \<open>term\<^sub>i\<close> on the right side it must also occur in one or more of the\cbstart
-\<open>term\<^sub>i\<^sub>,\<^sub>j\<close>\cbend on the left side, otherwise an error is signaled.
+The bound variables \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close> may occur in the assumptions and in the conclusion. However, if
+a bound variable occurs in \<open>term\<^sub>i\<close> on the right side it must also occur in one or more of the
+\<open>term\<^sub>i\<^sub>,\<^sub>j\<close> on the left side, otherwise an error is signaled.
 
 After termination has been proved (see Section~\ref{holbasic-recursive-term}) for the recursive
 function definition the defining equations are available as the fact set
@@ -1041,9 +1041,9 @@ specifying types for the variables, if necessary. An equivalent definition for t
 where the binding of \<open>n\<close> is omitted.
 
 Alternatively an equation \<open>eq\<^sub>i\<close> may be specified in the structured form described for derivation
-rules in Section~\ref{theory-prop-struct}:\cbstart
+rules in Section~\ref{theory-prop-struct}:
 @{theory_text[display]
-\<open>"name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k = term\<^sub>i" if "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>" for x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close>}\cbend
+\<open>"name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k = term\<^sub>i" if "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>" for x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close>}
 where the assumptions and variables may be grouped by \<open>and\<close> and types may be specified for (some of)
 the variable groups, however, no names may be specified for assumption groups.
 
@@ -1094,13 +1094,13 @@ The function is only defined for the value \<open>5\<close>, no definition is gi
 numbers.
 
 Therefore HOL expects a proof that the equations are complete in the sense that they cover all
-possible cases for the function arguments. In the general case it creates a goal of the form\cbstart
+possible cases for the function arguments. In the general case it creates a goal of the form
 @{text[display]
 \<open>\<And>P x.
   \<lbrakk>\<And>x\<^sub>1\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{1,p_1}$\<close>. \<lbrakk>Q\<^sub>1\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{1,q_1}$\<close>; x = (term\<^sub>1\<^sub>,\<^sub>1, \<dots>, term\<^sub>1\<^sub>,\<^sub>k)\<rbrakk> \<Longrightarrow> P;
      \<dots>
    \<And>x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,p_n}$\<close>. \<lbrakk>Q\<^sub>n\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{n,q_n}$\<close>; x = (term\<^sub>n\<^sub>,\<^sub>1, \<dots>, term\<^sub>n\<^sub>,\<^sub>k)\<rbrakk> \<Longrightarrow> P\<rbrakk>
-  \<Longrightarrow> P\<close>}\cbend
+  \<Longrightarrow> P\<close>}
 which must be proved in the recursive function definition's \<open>\<proof>\<close>. This goal has the form of a
 case rule (see Section~\ref{case-reasoning-rules}) before replacing the variable \<open>P\<close> by an unknown
 upon turning it to a fact. It specifies that \<open>x\<close> covers all possible cases. The variable \<open>x\<close> is set
@@ -1132,12 +1132,12 @@ subsubsection "Using Proof Method \<open>atomize_elim\<close>"
 text\<open>
 Since the goal has the form of a case rule the method \<open>atomize_elim\<close>\index{atomize-elim@atomize$\_$elim (method)} (see
 Section~\ref{holbasic-atomize}) can be applied to it. It converts the general form of the goal
-to the form\cbstart
+to the form
 @{text[display]
 \<open>\<And>x.
     (\<exists> x\<^sub>1\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{1,p_1}$\<close>. Q\<^sub>1\<^sub>,\<^sub>1 \<and> \<dots> \<and> Q\<^latex>\<open>$_{1,q_1}$\<close> \<and> x = (term\<^sub>1\<^sub>,\<^sub>1, \<dots>, term\<^sub>1\<^sub>,\<^sub>k)
   \<or> \<dots> 
-  \<or> (\<exists> x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,p_n}$\<close>. Q\<^sub>n\<^sub>,\<^sub>1 \<and> \<dots> \<and> Q\<^latex>\<open>$_{n,q_n}$\<close> \<and> x = (term\<^sub>n\<^sub>,\<^sub>1, \<dots>, term\<^sub>n\<^sub>,\<^sub>k)\<close>}\cbend
+  \<or> (\<exists> x\<^sub>n\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{n,p_n}$\<close>. Q\<^sub>n\<^sub>,\<^sub>1 \<and> \<dots> \<and> Q\<^latex>\<open>$_{n,q_n}$\<close> \<and> x = (term\<^sub>n\<^sub>,\<^sub>1, \<dots>, term\<^sub>n\<^sub>,\<^sub>k)\<close>}
 which directly expresses that the cases together cover all possibilities and may be easier to prove. 
 In many simple cases of recursive function definitions, however, the method is not necessary and
 the goal can be proved by an automatic method like \<open>auto\<close> or \<open>blast\<close> (see
@@ -1189,11 +1189,11 @@ anymore).
 Therefore HOL expects a proof that the equations are compatible in the sense that they cover
 disjoint arguments spaces or, if the spaces of two equations overlap, the equations specify the same
 function values on the overlapping regions. In the general case HOL creates (after the goal for
-equation completeness) for every pair of equations \<open>eq\<^sub>i\<close> and \<open>eq\<^sub>j\<close> where \<open>i \<le> j\<close> a goal of the form\cbstart
+equation completeness) for every pair of equations \<open>eq\<^sub>i\<close> and \<open>eq\<^sub>j\<close> where \<open>i \<le> j\<close> a goal of the form
 @{text[display]
 \<open>\<And>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> x\<^sub>j\<^sub>,\<^sub>1' \<dots> x\<^latex>\<open>$_{j,p_j}$\<close>'.
   (term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k) = (term\<^sub>j\<^sub>,\<^sub>1, \<dots>, term\<^sub>j\<^sub>,\<^sub>k) \<Longrightarrow> term\<^sub>i = term\<^sub>j\<close>}
-Here \<open>x\<^sub>j\<^sub>,\<^sub>b'\<close> is a renamed \<open>x\<^sub>j\<^sub>,\<^sub>b\<close> to avoid a name clash with an \<open>x\<^sub>i\<^sub>,\<^sub>a\<close>\cbend if necessary. The renamed
+Here \<open>x\<^sub>j\<^sub>,\<^sub>b'\<close> is a renamed \<open>x\<^sub>j\<^sub>,\<^sub>b\<close> to avoid a name clash with an \<open>x\<^sub>i\<^sub>,\<^sub>a\<close> if necessary. The renamed
 variables are consistently replaced in all terms. Moreover, all occurrences of the defined function
 \<open>name\<close> in \<open>term\<^sub>i\<close> and \<open>term\<^sub>j\<close> are replaced by \<open>name_sumC\<close>\index{sumC@$\_$sumC (constant name suffix)} which is the uncurried (see
 Section~\ref{holtypes-tup-funcs}) form of \<open>name\<close> where the arguments are specified as a tuple.
@@ -1237,13 +1237,13 @@ Therefore HOL creates for every recursive definition of a function \<open>name\<
 which relates for all defining equations the arguments of every recursive call on the right side to
 the arguments on the left side. Actually, \<open>name_rel\<close> relates argument tuples, like the arguments of
 \<open>name_sumC\<close> as described above. It is defined inductively (see
-Section~\ref{holbasic-inductive}) using defining rules of the form\cbstart
+Section~\ref{holbasic-inductive}) using defining rules of the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> 
   name_rel (term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k) (term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k)\<close>}
 where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close> is the \<open>l\<close>-th argument in the \<open>j\<close>-th recursive call of \<open>name\<close> in \<open>term\<^sub>i\<close>. There is
 one such rule for every recursive call occurring in the defining equations \<open>eq\<^sub>i\<close>. The defined
-relation \<open>name_rel\<close> never occurs in the \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend, therefore it is a single-step inductive definition
+relation \<open>name_rel\<close> never occurs in the \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, therefore it is a single-step inductive definition
 (see Section~\ref{holbasic-inductive-singlestep}) which could also have been specified as an
 Isabelle definition.
 
@@ -1289,11 +1289,11 @@ text\<open>
 HOL automatically creates and proves simplification rules which directly correspond to the defining
 equations \<open>eq\<^sub>i\<close>. Every such rule is guarded by the domain predicate for the arguments of the
 substituted function application. For the equation \<open>eq\<^sub>i\<close> in the general form as given above the
-rule is\cbstart
+rule is
 @{text[display]
 \<open>\<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>; name_dom (term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k)\<rbrakk> \<Longrightarrow>
   name term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k = term\<^sub>i\<close>}
-where all occurrences of the bound variables \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close>\cbend have been replaced by corresponding
+where all occurrences of the bound variables \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close> have been replaced by corresponding
 unknowns. The set of all these simplification rules is named \<open>name.psimps\<close>\index{psimps@.psimps (fact name suffix)}. The rules are not added
 to the simpset automatically, they can be explicitly used for ``unfolding'' the recursive definition
 in one or more steps. If individual names have been specified for (some of) the \<open>eq\<^sub>i\<close> these names
@@ -1314,12 +1314,12 @@ text\<open>
 HOL also creates and proves a single induction rule \<open>name.pinduct\<close>\index{pinduct@.pinduct (fact name suffix)} of the form
 @{text[display]
 \<open>\<lbrakk>name_dom (?a\<^sub>1, \<dots>, ?a\<^sub>k); RA\<^sub>1; \<dots>; RA\<^sub>n\<rbrakk> \<Longrightarrow> ?P ?a\<^sub>1 \<dots> ?a\<^sub>k\<close>}
-where every \<open>RA\<^sub>i\<close> has the form\cbstart
+where every \<open>RA\<^sub>i\<close> has the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. 
   \<lbrakk>name_dom (term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k); Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>; R\<^sub>i\<^sub>,\<^sub>1; \<dots>; R\<^latex>\<open>$_{i,r_i}$\<close>\<rbrakk>
   \<Longrightarrow> ?P term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>}
-and every \<open>R\<^sub>i\<^sub>,\<^sub>j\<close> has the form \<open>?P term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k\<close> where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close>\cbend is the \<open>l\<close>-th argument in the
+and every \<open>R\<^sub>i\<^sub>,\<^sub>j\<close> has the form \<open>?P term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k\<close> where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close> is the \<open>l\<close>-th argument in the
 \<open>j\<close>-th recursive call of \<open>name\<close> in \<open>term\<^sub>i\<close>.
 
 It can be used for induction with elimination (see Section~\ref{case-induction-elim}) where the
@@ -1372,19 +1372,19 @@ R\<^sub>1
 R\<^sub>r\<close>}
 where every \<open>R\<^sub>h\<close> corresponds to a defining rule for \<open>name_rel\<close> (see
 Section~\ref{holbasic-recursive-domain}) in \<open>name_rel.intros\<close> (see
-Section~\ref{holbasic-inductive-defrules}) and has the form\cbstart
+Section~\ref{holbasic-inductive-defrules}) and has the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> 
   ((term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k), (term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k)) \<in> M\<close>}
-where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close>\cbend is the \<open>l\<close>-th argument in the \<open>j\<close>-th recursive call of \<open>name\<close> in \<open>term\<^sub>i\<close>. The goals
+where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close> is the \<open>l\<close>-th argument in the \<open>j\<close>-th recursive call of \<open>name\<close> in \<open>term\<^sub>i\<close>. The goals
 \<open>R\<^sub>1, \<dots>, R\<^sub>r\<close> together are equivalent to the goal \<open>name_rel x y \<Longrightarrow> M x y\<close>.
 
 The proof method is usually applied in the form
 @{theory_text[display]
 \<open>relation "measure f"\<close>}
-for an appropriate measure function\index{measure function}\index{function!measure $\sim$} \<open>f\<close> as above. It must be constructed so that for every tuple \cbstart
+for an appropriate measure function\index{measure function}\index{function!measure $\sim$} \<open>f\<close> as above. It must be constructed so that for every tuple 
 \<open>(term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k)\<close> of arguments for a recursive call the value is strictly lower than for
-the argument tuple \<open>(term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k)\<close>\cbend in the defining equations \<open>eq\<^sub>i\<close>. The resulting goals
+the argument tuple \<open>(term\<^sub>i\<^sub>,\<^sub>1, \<dots>, term\<^sub>i\<^sub>,\<^sub>k)\<close> in the defining equations \<open>eq\<^sub>i\<close>. The resulting goals
 \<open>wf (measure f)\<close> and \<open>R\<^sub>1, \<dots>, R\<^sub>r\<close> are often solved by method \<open>auto\<close> (see
 Section~\ref{methods-auto-methods}). Then the termination proof has the form
 @{theory_text[display]
@@ -1442,11 +1442,11 @@ associated facts from \<open>name.psimps\<close> by those from \<open>name.simps
 The resulting induction rule is a plain induction rule without elimination of the form
 @{text[display]
 \<open>\<lbrakk>RA\<^sub>1; \<dots>; RA\<^sub>n\<rbrakk> \<Longrightarrow> ?P ?a\<^sub>1 \<dots> ?a\<^sub>k\<close>}
-where every \<open>RA\<^sub>i\<close> has the form\cbstart
+where every \<open>RA\<^sub>i\<close> has the form
 @{text[display]
 \<open>\<And> x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>; R\<^sub>i\<^sub>,\<^sub>1; \<dots>; R\<^latex>\<open>$_{i,r_i}$\<close>\<rbrakk>
   \<Longrightarrow> ?P term\<^sub>i\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>k\<close>}
-and every \<open>R\<^sub>i\<^sub>,\<^sub>j\<close> has the form \<open>?P term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k\<close> where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close>\cbend is the \<open>l\<close>-th argument in the
+and every \<open>R\<^sub>i\<^sub>,\<^sub>j\<close> has the form \<open>?P term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>1 \<dots> term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>k\<close> where \<open>term\<^sub>i\<^sub>,\<^sub>j\<^sub>,\<^sub>l\<close> is the \<open>l\<close>-th argument in the
 \<open>j\<close>-th recursive call of \<open>name\<close> in \<open>term\<^sub>i\<close>.
 
 For the faculty function defined as above the induction rule \<open>fac.induct\<close> is

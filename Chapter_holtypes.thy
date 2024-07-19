@@ -31,14 +31,14 @@ The semantics of the described functions is either given informally for well-kno
 a description of the form \<open>name :: type \<equiv> lambda-term\<close>. The latter is often not the actual
 definition used by HOL for the function, it is only used here for documentation purpose.
 
-\cbstart At the beginning of each of the following sections the theories in session HOL are listed
-where the type, functions, and rules described in the section are actually defined.\cbend
+At the beginning of each of the following sections the theories in session HOL are listed
+where the type, functions, and rules described in the section are actually defined.
 \<close>
 
 section "Boolean Values"
 text_raw\<open>\label{holtypes-bool}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl HOL, Orderings, Complete$\_$Lattices}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl HOL, Orderings, Complete$\_$Lattices}\<close>
 
 text\<open>
 The type of boolean values is specified equivalent to an algebraic type of the form
@@ -126,7 +126,7 @@ The \<open>Uniq\<close> quantifier states that there is atmost one value satisfy
 quantifier states that there is exactly one such value.
 
 An iterated application for an n-ary predicate \<open>\<lambda>x\<^sub>1 \<dots> x\<^sub>n. bterm\<close> can be written in the
-form \<open>\<forall> x\<^sub>1 \<dots> x\<^sub>n. bterm\<close> for all quantifiers. \cbstart As \cbend for lambda terms (see
+form \<open>\<forall> x\<^sub>1 \<dots> x\<^sub>n. bterm\<close> for all quantifiers. As for lambda terms (see
 Section~\ref{theory-terms-lambda}) types may be specified for (some of) the variables as in
 \<open>\<forall> (x\<^sub>1 :: type\<^sub>1) \<dots> (x\<^sub>n :: type\<^sub>n). bterm\<close>.
 
@@ -153,8 +153,8 @@ text_raw\<open>\label{holtypes-bool-rules}\<close>
 text\<open>
 The rules described here are the usual rules for an algebraic type and introduction / elimination
 / destruction rules for the functions, and some specific rules for negation. HOL provides
-many additional rules, see the Isabelle documentation \cbstart \<^cite>\<open>"isar-ref" and "prog-prove" and tutorial\<close>
-\cbend for how to use them in proofs.
+many additional rules, see the Isabelle documentation \<^cite>\<open>"isar-ref" and "prog-prove" and tutorial\<close>
+for how to use them in proofs.
 
 Complex proofs using these rules can often be done automatically by the proof method \<open>blast\<close>\index{blast (method)} (see
 Section~\ref{methods-auto-methods}).
@@ -282,7 +282,7 @@ Therefore it is usually preferable to specify theorems in this form.
 section "The Unit Type"
 text_raw\<open>\label{holtypes-unit}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl Product$\_$Type}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Product$\_$Type}\<close>
 
 text\<open>
 The unit type has only one value. It is specified equivalent to an algebraic type of the form
@@ -341,7 +341,7 @@ Since there are no functions for \<open>unit\<close> there are no introduction /
 section "Natural Numbers"
 text_raw\<open>\label{holtypes-nat}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl Nat, Groups, Rings}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Nat, Groups, Rings}\<close>
 
 text\<open>
 The type of natural numbers is specified equivalent to a recursive algebraic type (see 
@@ -436,7 +436,7 @@ text_raw\<open>\label{holtypes-nat-rules}\<close>
 text\<open>
 HOL provides a large number of rules applicable for proofs about values of type \<open>nat\<close>. Here we only
 show rules for an algebraic type and introduction / elimination / destruction rules for the
-functions, \cbstart as \cbend for other types. They are usually not sufficient for proofs about natural numbers
+functions, as for other types. They are usually not sufficient for proofs about natural numbers
 and should only give an impression about the type \<open>nat\<close> in comparison with other types.
 
 Proofs for linear arithmetic properties of \<open>nat\<close> values using these and other rules can often be
@@ -552,7 +552,7 @@ or can be proved by induction or a combination thereof.
 section "Sets"
 text_raw\<open>\label{holtypes-set}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl Set, Boolean$\_$Algebras, Finite$\_$Set}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Set, Boolean$\_$Algebras, Finite$\_$Set}\<close>
 
 text\<open>
 You may think of the type constructor \<open>set\<close> as being specified equivalent to the parameterized
@@ -715,7 +715,7 @@ and the bounded descriptors (see Section~\ref{holbasic-descr-least})
 @{text[display]
 \<open>LEAST x\<in>sterm. bterm \<equiv> LEAST x. x \<in> sterm \<and> bterm
 GREATEST x\<in>sterm. bterm \<equiv> GREATEST x. x \<in> sterm \<and> bterm\<close>}\index{LEAST (binder)}\index{GREATEST (binder)}
-\cbstart Other than \cbend for the plain quantifiers only one bounded variable may be specified for these forms. If
+Other than for the plain quantifiers only one bounded variable may be specified for these forms. If
 there are more, the quantifiers must be nested as in \<open>\<forall>x\<in>sterm\<^sub>1. \<forall>y\<in>sterm\<^sub>2. bterm\<close>.
 
 As set comprehension syntax for the special case of a predicate which includes a member test HOL
@@ -867,7 +867,7 @@ Section~\ref{methods-auto-methods}). Rules about \<open>card\<close> must often 
 section "Optional Values"
 text_raw\<open>\label{holtypes-option}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl Option}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Option}\<close>
 
 text\<open>
 A function argument is optional\index{function!argument!optional $\sim$} if it can be omitted. In Isabelle, however, every function has a
@@ -1029,7 +1029,7 @@ occur for type \<open>'a option\<close>.
 section "Tuples"
 text_raw\<open>\label{holtypes-tup}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl Product$\_$Type, Basic$\_$BNFs}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Product$\_$Type, Basic$\_$BNFs}\<close>
 
 text \<open>
 Tuples\index{tuple} are represented by HOL as nested pairs\index{pair}. The type of pairs is specified equivalent to an
@@ -1271,7 +1271,7 @@ intended these rules must be deactivated in the form \<^theory_text>\<open>(simp
 section "Functions"
 text_raw\<open>\label{holtypes-func}\<close>
 
-text\<open>\cbstart \<^bold>\<open>Theories:\<close> {\tt\sl Fun, Orderings, Lattices, Complete$\_$Lattices, Basic$\_$BNFs, Nat}\cbend\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Fun, Orderings, Lattices, Complete$\_$Lattices, Basic$\_$BNFs, Nat}\<close>
 
 text\<open>
 The type \<open>('a, 'b) fun\<close>\index{fun (type)} with alternative syntax \<open>'a \<Rightarrow> 'b\<close>\index{=>@\<open>\<Rightarrow>\<close> (operator)} (see Section~\ref{theory-terms-functions})

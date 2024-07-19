@@ -267,11 +267,11 @@ text_raw\<open>\label{system-jedit-documentation}\<close>
 text\<open>
 A comprehensive set of documentation about Isabelle can be opened 
 through the Documentation panel\index{panel!documentation $\sim$}\index{documentation!panel}.
-This \cbstart introduction refers to some of these documentations, if applicable, through
-the bibliography.\cbend 
+This introduction refers to some of these documentations, if applicable, through
+the bibliography.
 
 For example, more information about the use of the interactive editor can be found 
-in the Isabelle \cbstart Manual about jEdit \<^cite>\<open>jedit\<close>.\cbend
+in the Isabelle Manual about jEdit \<^cite>\<open>jedit\<close>.
 \<close>
 
 subsection "The Query Panel"

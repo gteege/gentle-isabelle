@@ -28,7 +28,7 @@ text \<open>
 The proof context is similar to a temporary theory which collects facts and other proof elements.
 It may contain
  \<^item> Facts: as usual, facts are valid propositions. However, they need not be globally valid, 
-  they can be assumed to be only valid locally\index{fact!local $\sim$} during the proof. \cbstart As \cbend in a theory facts and fact
+  they can be assumed to be only valid locally\index{fact!local $\sim$} during the proof. As in a theory facts and fact
   sets may be named in a proof context.
  \<^item> Fixed variables: fixed variables\index{variable!fixed $\sim$}\index{fixed variable} are used to denote the ``arbitrary but fixed'' objects 
   often used in a proof. They can be used in all facts in the same proof context. They
@@ -37,7 +37,7 @@ It may contain
   to abbreviations defined in a theory. Using such names for terms
   occurring in propositions it is often possible to denote propositions in a more concise form.
 
-\cbstart As \cbend in a theory the names for facts and fixed variables have the same form, they can always be
+As in a theory the names for facts and fixed variables have the same form, they can always be
 distinguished by their usage context. The names for term abbreviations have the form of unknowns (see
 Section~\ref{theory-theorem-unknowns}) and are thus always different from variable names.
 
@@ -74,8 +74,8 @@ The initial proof state\index{proof!state!initial $\sim$} in a theorem of the fo
 @{theory_text[display]
 \<open>theorem "\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<^sub>1 &&& \<dots> &&& C\<^sub>h" \<proof>\<close>}
 has the proposition \<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<^sub>1 &&& \<dots> &&& C\<^sub>h\<close>  as the only goal in the goal
-state and an empty proof context. \cbstart In particular, the explicitly bound variables\index{variable!bound $\sim$}
-\<open>x\<^sub>1 \<dots> x\<^sub>m\<close> are not added as fixed variables to the proof state.\cbend
+state and an empty proof context. In particular, the explicitly bound variables\index{variable!bound $\sim$}
+\<open>x\<^sub>1 \<dots> x\<^sub>m\<close> are not added as fixed variables to the proof state.
 
 If the proposition of a theorem is specified in structured form
 @{theory_text[display]
@@ -87,9 +87,9 @@ or
 the initial goal state only contains the conclusion \<open>C\<close>, whereas the initial proof context contains
 the assumptions \<open>A\<^sub>1, \<dots>, A\<^sub>n\<close> as (assumed) facts and the variables \<open>x\<^sub>1 \<dots> x\<^sub>m\<close> as fixed variables.
 
-\cbstart Since variables occurring free in an \<open>A\<^sub>i\<close> or in \<open>C\<close>\index{free occurrence}\index{variable!free occurrence of $\sim$} (i.e., not being explicitly bound by \<open>\<And>\<close>) are
+Since variables occurring free in an \<open>A\<^sub>i\<close> or in \<open>C\<close>\index{free occurrence}\index{variable!free occurrence of $\sim$} (i.e., not being explicitly bound by \<open>\<And>\<close>) are
 automatically by a \<^theory_text>\<open>for\<close> part (see Section~\ref{theory-theorem-spec}), they will also be added to
-the initial proof state as fixed variables.\cbend
+the initial proof state as fixed variables.
 
 If the theorem has multiple conclusions such as
 @{theory_text[display]
@@ -98,19 +98,17 @@ the initial goal state contains the single conclusion \<open>C\<^sub>1 &&& \<dot
 conjunction''\index{conjunction!meta $\sim$} of the separate conclusions. This will be split into separate goals for the individual
 conclusions upon the first application of a proof method (see Chapter~\ref{methods}).\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Assumption Naming"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Both structured forms support naming the assumptions\index{name!for assumption}\index{assumption!name} in the proof context.
 Every assumption group\index{assumption!group} separated by \<^theory_text>\<open>and\<close> may be given a name, i.e., the assumptions
-may be specified in the form\cbstart
+may be specified in the form
 @{theory_text[display]
 \<open>if name\<^sub>1: "A\<^sub>1\<^sub>,\<^sub>1" \<dots> "A\<^latex>\<open>$_{1,m_1}$\<close>" and \<dots> and name\<^sub>n: "A\<^sub>n\<^sub>,\<^sub>1" \<dots> "A\<^latex>\<open>$_{n,m_n}$\<close>"\<close>}
 or
 @{theory_text[display]
-\<open>assumes name\<^sub>1: "A\<^sub>1\<^sub>,\<^sub>1" \<dots> "A\<^latex>\<open>$_{1,m_1}$\<close>" and \<dots> and name\<^sub>n: "A\<^sub>n\<^sub>,\<^sub>1" \<dots> "A\<^latex>\<open>$_{n,m_n}$\<close>"\<close>}\cbend
+\<open>assumes name\<^sub>1: "A\<^sub>1\<^sub>,\<^sub>1" \<dots> "A\<^latex>\<open>$_{1,m_1}$\<close>" and \<dots> and name\<^sub>n: "A\<^sub>n\<^sub>,\<^sub>1" \<dots> "A\<^latex>\<open>$_{n,m_n}$\<close>"\<close>}
 respectively, in the same way as the conclusion groups may be named. However, the assumption names
 are only valid in the proof context, whereas the conclusion names are only valid outside of the
 proof context after the proof is complete.
@@ -130,20 +128,19 @@ text_raw\<open>\label{proof-proc}\<close>
 
 text \<open>
 Assume you want to prove a derivation rule \<open>A \<Longrightarrow> C\<close> with a single assumption \<open>A\<close> and a single
-conclusion \<open>C\<close>. \cbstart There are several different ways how to proceed.\<close>
+conclusion \<open>C\<close>. There are several different ways how to proceed.\<close>
 
 subsection "Constructing a Proof"
 text_raw\<open>\label{proof-proc-construct}\<close>
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The basic procedure to build a proof for it is to construct a sequence of the form
-\<open>F\<^sub>1 \<Longrightarrow> F\<^sub>2, F\<^sub>2 \<Longrightarrow> F\<^sub>3, F\<^sub>3 \<Longrightarrow> \<cdots> \<Longrightarrow> F\<^sub>n\<^sub>-\<^sub>1, F\<^sub>n\<^sub>-\<^sub>1 \<Longrightarrow> F\<^sub>n\<close> \cbstart  where \<open>F\<^sub>1\<close> matches with \<open>A\<close>
+\<open>F\<^sub>1 \<Longrightarrow> F\<^sub>2, F\<^sub>2 \<Longrightarrow> F\<^sub>3, F\<^sub>3 \<Longrightarrow> \<cdots> \<Longrightarrow> F\<^sub>n\<^sub>-\<^sub>1, F\<^sub>n\<^sub>-\<^sub>1 \<Longrightarrow> F\<^sub>n\<close>  where \<open>F\<^sub>1\<close> matches with \<open>A\<close>
 and \<open>F\<^sub>n\<close> matches with \<open>C\<close> (for the exact meaning of ``matches'' see Section~\ref{proof-proc-unif}
 below). The sequence is constructed from derivation rules \<open>R\<^sub>i\<close> for \<open>i=1\<dots>n-1\<close>
 which are already known to be valid (i.e., facts). Every rule \<open>R\<^sub>i\<close> has the form \<open>RA\<^sub>i \<Longrightarrow> RC\<^sub>i\<close>
 where \<open>RA\<^sub>i\<close> denotes the assumption of the rule and \<open>RC\<^sub>i\<close> denotes its conclusion. Every assumption
-\<open>RA\<^sub>i\<close> matches with \<open>F\<^sub>i\<close> in the sequence and every conclusion \<open>RC\<^sub>i\<close> matches with \<open>F\<^sub>i\<^sub>+\<^sub>1\<close>.\cbend
+\<open>RA\<^sub>i\<close> matches with \<open>F\<^sub>i\<close> in the sequence and every conclusion \<open>RC\<^sub>i\<close> matches with \<open>F\<^sub>i\<^sub>+\<^sub>1\<close>.
 
 The sequence can be constructed from left to right (called ``forward reasoning''\index{forward reasoning}\index{reasoning!forward $\sim$}) or from right 
 to left (called ``backward reasoning''\index{backward reasoning}\index{reasoning!backward $\sim$}) or by a combination of both. 
@@ -152,9 +149,7 @@ Consider the rule \<open>(x::nat) < 5 \<Longrightarrow> 2*x+3 \<le> 2*5+3\<close
 example rules \<open>example1\<close> and \<open>example2\<close> from the previous sections as the sequence
 \<open>(x::nat) < 5 \<Longrightarrow> 2*x \<le> 2*5, 2*x \<le> 2*5 \<Longrightarrow> 2*x+3 \<le> 2*5+3\<close> consisting of three facts.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Forward Reasoning"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Forward reasoning starts by assuming \<open>A\<close> to be the local fact \<open>F\<^sub>1\<close> and incrementally constructs the
@@ -165,9 +160,7 @@ using a valid rule \<open>RA\<^sub>i \<Longrightarrow> RC\<^sub>i\<close>. The s
 \<open>A, F\<^sub>2, \<dots>, F\<^sub>i, F\<^sub>i\<^sub>+\<^sub>1\<close> with new current fact \<open>F\<^sub>i\<^sub>+\<^sub>1\<close>. When a step successfully 
 proves a current fact \<open>F\<^sub>n\<close> which matches the conclusion \<open>C\<close> the proof is complete.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Backward Reasoning"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Backward reasoning starts at the conclusion \<open>C\<close> and incrementally 
@@ -213,9 +206,7 @@ In a proof for a derivation rule \<open>A \<Longrightarrow> C\<close> the assump
 intermediate facts \<open>F\<^sub>1, F\<^sub>2, \<dots>, F\<^sub>n\<close> constructed by the proof steps must be stored. There
 are mainly two ways how this can be done in an Isabelle proof.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Storing Facts in the Context"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The first way is to store the facts at the beginning of the sequence in the proof context and
@@ -236,9 +227,7 @@ they are not needed in the special case described here, however, there are proof
 used more than once, therefore it is usually useful to keep them in the proof context, and it is
 irrelevant for detecting whether a proof is complete.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Storing Facts as Assumptions in the Goal State"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The second way is to store all facts in the goal state by using a current goal of the form
@@ -262,8 +251,8 @@ text_raw\<open>\label{proof-proc-multassms}\<close>
 text \<open>
 If the rule to be proved has more than one assumption \<open>A\<close> the sequence to be constructed becomes
 a tree where the branches start at (copies of) the assumptions \<open>A\<^sub>1,\<dots>,A\<^sub>n\<close> and merge to finally 
-lead to the conclusion \<open>C\<close>. Two branches which end in facts \cbstart \<open>F\<^sub>1\<^sub>,\<^sub>n\<close> and \<open>F\<^sub>2\<^sub>,\<^sub>m\<close> are joined by
-a step \<open>\<lbrakk>F\<^sub>1\<^sub>,\<^sub>n;F\<^sub>2\<^sub>,\<^sub>m\<rbrakk> \<Longrightarrow> F\<^sub>1\<close>\cbend to a common branch which continues from fact \<open>F\<^sub>1\<close>.
+lead to the conclusion \<open>C\<close>. Two branches which end in facts \<open>F\<^sub>1\<^sub>,\<^sub>n\<close> and \<open>F\<^sub>2\<^sub>,\<^sub>m\<close> are joined by
+a step \<open>\<lbrakk>F\<^sub>1\<^sub>,\<^sub>n;F\<^sub>2\<^sub>,\<^sub>m\<rbrakk> \<Longrightarrow> F\<^sub>1\<close> to a common branch which continues from fact \<open>F\<^sub>1\<close>.
 
 A proof which constructs this tree may again do this by forward reasoning (beginning at the
 branches), by backward reasoning (beginning at the common conclusion) or a mixture of both. It may
@@ -321,9 +310,7 @@ unchanged. The goal state is always modified so that, if all goals in the new st
 then also all goals in the old state can be proved. This kind of goal state modification is also
 called a ``refinement step''\index{refinement step}.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Proof Mode"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 When writing a proof the ``proof mode''\index{proof!mode} determines the kind of operation which may be written next:
@@ -340,9 +327,7 @@ However, for every statement that states a fact a (sub-)proof must be specified,
 again starts in mode \<open>proof(prove)\<close>. This way it is possible to freely switch between 
 both modes in the course of a proof with nested subproofs.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Choosing Between Statements and Methods"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A backward reasoning step always modifies the goal state, therefore it must be expressed by a
@@ -379,9 +364,7 @@ The last step \<open>MA\<^sub>n\<^sub>+\<^sub>2\<close> may be omitted if it is 
 The part \<^theory_text>\<open>proof `MA\<^sub>n\<^sub>+\<^sub>1`\<close> switches from method application mode \<open>proof(prove)\<close> to statement mode
 \<open>proof(state)\<close>.\<close>
  
-text_raw\<open>\cbstart\<close>
 subsubsection "Proof Scripts"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The part \<^theory_text>\<open>proof \<dots> qed\<close> can be omitted and replaced by \<^theory_text>\<open>done\<close>, then the proof only consists of 
@@ -392,9 +375,7 @@ Proof scripts are intended to store facts as assumptions in the goal state or to
 backward reasoning, where no intermediate facts need to be stored in addition to the goals
 (see Section~\ref{proof-proc-store}).\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Structured Proofs"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the method applications \<open>MA\<^sub>1 \<dots> MA\<^sub>n\<close> are omitted the proof only consists of 
@@ -419,9 +400,7 @@ leads to the form
 In this form the proof consists of a single method application which directly leads 
 from the assumptions and used external facts to the conclusion \<open>C\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Use Proof Scripts or Structured Proofs?"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 As described in the previous section, a structured proof is usually easier to read and write
@@ -437,12 +416,10 @@ assumptions to the conclusion of the subproof. Such a simple proof can always be
 the form \<^theory_text>\<open>by `MA`\<close>.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsection "Bogus Proofs"
 text_raw\<open>\label{proof-struct-bogus}\<close>
 
 subsubsection "Fake Proofs"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A proof can also be specified as
@@ -462,9 +439,7 @@ Fake proofs are dangerous. Isabelle blindly registers the proposition as valid, 
 used for other proofs. If it is not valid, everything can be proved from it. That sounds nicely but
 is not what you really want.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Aborted Proofs"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 There is a second way to abort a proof script by specifying a proof\index{proof!aborted $\sim$} as
@@ -497,9 +472,7 @@ block structure\index{block structure}: A name can be redefined in a nested cont
 context becomes inaccessible (``shadowed'')\index{name!shadowed $\sim$} in the inner context, but becomes accessible again when
 the inner context ends.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Sequencing Nested Contexts"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 When two nested contexts follow each other immediately, this has the effect of ``clearing''
@@ -509,18 +482,16 @@ context starts being empty. This can be denoted by the keyword
 \<open>next\<close>}\index{next (keyword)}
 which can be thought of being equivalent to a pair \<open>} {\<close> of adjacent braces.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Automatic Nesting of Statements"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Moreover the syntax \<^theory_text>\<open>proof `method\<^sub>1` ST\<^sub>1 \<dots> ST\<^sub>n qed `method\<^sub>2`\<close> automatically wraps the statements
 \<open>ST\<^sub>1 \<dots> ST\<^sub>n\<close> in a nested context. Therefore it is possible to denote a structured proof 
-which only consists of a sequence of nested contexts without braces as\cbstart
+which only consists of a sequence of nested contexts without braces as
 @{theory_text[display]
 \<open>proof `method\<^sub>1`
   ST\<^sub>1\<^sub>,\<^sub>1 \<dots> ST\<^latex>\<open>$_{1,m_1}$\<close> next ST\<^sub>2\<^sub>,\<^sub>1 \<dots> ST\<^latex>\<open>$_{2,m_2}$\<close> next \<dots> next ST\<^sub>n\<^sub>,\<^sub>1 \<dots> ST\<^latex>\<open>$_{n,m_n}$\<close>
-qed `method\<^sub>n\<^sub>+\<^sub>2`\<close>}\cbend
+qed `method\<^sub>n\<^sub>+\<^sub>2`\<close>}
 where each occurrence of \<^theory_text>\<open>next\<close> clears the content of the inner context.
 
 Another consequence of this wrapping is that no statement can add elements directly to the outermost
@@ -545,7 +516,6 @@ The outermost proof context used by the subproof is nested in the context of the
 enclosing proof, therefore all content of the enclosing proof context is available there and can be
 referenced by name, as long as the name is not shadowed by a redefinition in the subproof.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Kinds of Subproofs"
 
 text\<open>
@@ -556,7 +526,7 @@ proof.
 The first kind of subproof occurs as part of some statements, as described in
 Section~\ref{proof-statefact}.
 
-The second \cbend kind of subproof has the form
+The second kind of subproof has the form
 @{theory_text[display]
 \<open>subgoal \<proof>\<close>}\index{subgoal (keyword)}
 and may be specified in method application mode \<open>proof(prove)\<close> in place of a single method
@@ -564,9 +534,7 @@ application. Its initial goal state contains a copy of the first goal from the g
 enclosing proof. If the subproof is successfully terminated it removes that goal from the goal state
 of the enclosing proof.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Structured Subproofs"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 There is also the ``structured form''
@@ -682,9 +650,7 @@ which is the only statement which may affect the goal state\index{goal!state} of
 the same as for \<^theory_text>\<open>have\<close>, including naming and structured form. Like \<^theory_text>\<open>have\<close> it is also called a
 ``goal statement''\index{goal!statement}.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Exporting the Fact"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 As described in Section~\ref{proof-struct-nesting}, statements are always wrapped by a nested proof
@@ -713,9 +679,7 @@ To test whether a proposition refines a goal in the enclosing goal state, a
 If that statement is accepted, the proposition refines a goal and removes it. Do not forget to
 replace the fake proof by a genuine proof to make sure that the proposition is actually valid.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The term abbreviation \<open>?thesis\<close>"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Note that in a proof using only forward reasoning the proposition \<open>prop\<close> in a \<^theory_text>\<open>show\<close> statement is
@@ -773,9 +737,7 @@ for descriptions how methods process input facts.
 subsection "Inputting Facts into a Proof"
 text_raw\<open>\label{proof-this-input}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Method Application Mode"
-text_raw\<open>\cbend\<close>
 
 text \<open>
 In method application mode \<open>proof(prove)\<close> facts can be input to the remaining proof 
@@ -790,9 +752,7 @@ facts in the outermost proof context (see Section~\ref{proof-state-initial}), or
 facts from the enclosing theory, or, if in a subproof, they may be facts from contexts of enclosing
 proofs.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Statement Mode"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 In statement mode \<open>proof(state)\<close> fact input is supported with the help of the special
@@ -888,7 +848,7 @@ Like \<^theory_text>\<open>then\<close> it switches to mode \<open>proof(chain)\
 If a proof consists of a fact tree with several branches, every branch can be constructed this
 way. Before switching to the next branch the last fact must be named, so that it can later be used
 to prove the fact where the branches join. A corresponding proof pattern for two branches which
-join at fact \<open>F\<close> is\cbstart
+join at fact \<open>F\<close> is
 @{theory_text[display]
 \<open>have "F\<^sub>1\<^sub>,\<^sub>1" `\<proof>\<^sub>1\<^sub>,\<^sub>1`
 then have "F\<^sub>1\<^sub>,\<^sub>2" `\<proof>\<^sub>1\<^sub>,\<^sub>2`
@@ -899,21 +859,21 @@ then have "F\<^sub>2\<^sub>,\<^sub>2" `\<proof>\<^sub>2\<^sub>,\<^sub>2`
 \<dots>
 then have "F\<^sub>2\<^sub>,\<^sub>n" `\<proof>\<^sub>2\<^sub>,\<^sub>n`
 with name\<^sub>1 have "F" \<proof>
-\<close>}\cbend
+\<close>}
 
 If the theorem has been specified in structured form \<^theory_text>\<open>theorem "C" if "A\<^sub>1" \<dots> "A\<^sub>n"\<close> every branch
-can be started in the form\cbstart
+can be started in the form
 @{theory_text[display]
 \<open>from that have "F\<^sub>1\<^sub>,\<^sub>1"
-\<dots>\<close>}\cbend
+\<dots>\<close>}
 which will input all assumptions to every branch. This works since unneeded assumptions usually do
 not harm in a proof, but it is often clearer for the reader to explicitly name the assumptions
 @{theory_text[display]
 \<open>theorem "C" if a\<^sub>1: "A\<^sub>1" and \<dots> and a\<^sub>n: "A\<^sub>n"\<close>}
-and specify only the relevant assumption by name in the proof:\cbstart
+and specify only the relevant assumption by name in the proof:
 @{theory_text[display]
 \<open>from a\<^sub>1 have "F\<^sub>1\<^sub>,\<^sub>1"
-\<dots>\<close>}\cbend\<close>
+\<dots>\<close>}\<close>
 
 subsection "Naming and Grouping Current Facts"
 text_raw\<open>\label{proof-chain-nameing}\<close>
@@ -931,9 +891,9 @@ The facts specified in \<^theory_text>\<open>note\<close>, \<^theory_text>\<open
 them by \<^theory_text>\<open>and\<close>. Thus it is possible to write
 @{theory_text[display]
 \<open>from name\<^sub>1 and \<dots> and name\<^sub>n have "prop" \<proof>\<close>}
-In the case of a \<^theory_text>\<open>note\<close> statement every group\index{fact!group} can be given an additional explicit name as in\cbstart
+In the case of a \<^theory_text>\<open>note\<close> statement every group\index{fact!group} can be given an additional explicit name as in
 @{theory_text[display]
-\<open>note name\<^sub>1 = name\<^sub>1\<^sub>,\<^sub>1 \<dots> name\<^latex>\<open>$_{1,m_1}$\<close> and \<dots> and name\<^sub>n = name\<^sub>n\<^sub>,\<^sub>1 \<dots> name\<^latex>\<open>$_{n,m_n}$\<close>\<close>}\cbend\<close>
+\<open>note name\<^sub>1 = name\<^sub>1\<^sub>,\<^sub>1 \<dots> name\<^latex>\<open>$_{1,m_1}$\<close> and \<dots> and name\<^sub>n = name\<^sub>n\<^sub>,\<^sub>1 \<dots> name\<^latex>\<open>$_{n,m_n}$\<close>\<close>}\<close>
 
 subsection "Accessing Input Facts in a Proof"
 text_raw\<open>\label{proof-chain-access}\<close>
@@ -1064,7 +1024,7 @@ somewhere in the middle of the fact tree, works by forward reasoning, and when
 it reaches the conclusion the assumed fact remains to be proved. The statement
 @{theory_text[display]
 \<open>presume "prop"\<close>}\index{presume (keyword)}
-inserts such a presumed fact into the proof context. \cbstart As \cbend for \<^theory_text>\<open>assume\<close> the structured form with
+inserts such a presumed fact into the proof context. As for \<^theory_text>\<open>assume\<close> the structured form with
 \<^theory_text>\<open>if\<close> and \<^theory_text>\<open>for\<close> is supported.
 
 When a fact is exported from a context with presumed facts, they do not become a part of
@@ -1079,9 +1039,9 @@ section "Fixing Variables"
 text_raw\<open>\label{proof-fix}\<close>
 
 text \<open>
-\cbdelete \cbstart As described in Section~\ref{proof-state-initial} variables occurring free\index{free occurrence}\index{variable!free occurrence of $\sim$} in the
+As described in Section~\ref{proof-state-initial} variables occurring free\index{free occurrence}\index{variable!free occurrence of $\sim$} in the
 assumptions or conclusions of a theorem are automatically added as
-fixed variables\index{fixed variable}\index{variable!fixed $\sim$} to the outermost proof context. Thus \cbend they can be used everywhere in the proof where
+fixed variables\index{fixed variable}\index{variable!fixed $\sim$} to the outermost proof context. Thus they can be used everywhere in the proof where
 they are not shadowed. If, instead, they are explicitly bound\index{variable!bound $\sim$} in the proposition (see
 Section~\ref{theory-prop-bind}), their use is restricted to the proposition itself. Thus in
 @{theory_text[display]
@@ -1097,7 +1057,7 @@ variables may be explicitly specified to be fixed in the outermost proof context
 and
 @{theory_text[display]
 \<open>theorem fixes x::nat shows "x < 3 \<Longrightarrow> x < 5" \<proof>\<close>}
-are completely equivalent to the previous form.\cbdelete
+are completely equivalent to the previous form.
 \<close>
 
 subsection "Local Variables"
@@ -1191,9 +1151,7 @@ Isabelle, but then the definition cannot be used to determine the defined value 
 corresponding variables, it is underspecified.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsection "Defining Equations Viewed as Local Facts"
-text_raw\<open>\cbend\<close>
 text_raw\<open>\label{proof-define-equations}\<close>
 
 text \<open>
@@ -1230,7 +1188,7 @@ specify additional information about their values. This is done using a statemen
 @{theory_text[display]
 \<open>obtain x\<^sub>1 \<dots> x\<^sub>m where "prop" \<proof>\<close>}\index{obtain (keyword)}\index{where (keyword)}
 where \<open>prop\<close> is a proposition in inner syntax which contains the variables \<open>x\<^sub>1 \<dots> x\<^sub>m\<close>. 
-\cbstart As \cbend for variables introduced by \<^theory_text>\<open>fix\<close>  or \<^theory_text>\<open>define\<close>  the variables may be grouped by \<^theory_text>\<open>and\<close> and
+As for variables introduced by \<^theory_text>\<open>fix\<close>  or \<^theory_text>\<open>define\<close>  the variables may be grouped by \<^theory_text>\<open>and\<close> and
 types may be specified for (some of) the groups.
 
 If the proposition \<open>prop\<close> is a derivation rule with possibly multiple conclusions it may be
@@ -1290,7 +1248,7 @@ corresponding to the conclusions and if names are specified for conclusion group
 to name the resulting facts.
 
 Input facts may be passed to
-\<^theory_text>\<open>obtain\<close> statements. \cbstart As \cbend for the other goal statements, they are input to the \<open>\<proof>\<close>.
+\<^theory_text>\<open>obtain\<close> statements. As for the other goal statements, they are input to the \<open>\<proof>\<close>.
 \<close>
 
 subsection "Exporting Facts after Obtaining Variables"
@@ -1369,9 +1327,7 @@ can be used to match it in the pattern without binding an unknown to it:
 \<open>let "_ \<le> ?rhs" = "2*x+3 \<le> 2*5+3"\<close>}
 will only bind \<open>?rhs\<close> to the term on the righthand side.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Parameterized Term Abbreviations"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Pattern matching can be used to define parameterized abbreviations\index{term!abbreviation!parameterized $\sim$}. If the pattern has the form of
@@ -1387,9 +1343,7 @@ The \<^theory_text>\<open>let\<close> statement
 binds both unknowns to the lambda term \<open>\<lambda>a. 2 * a + 3\<close>. Thus afterwards the use \<open>?lhs 7\<close> results
 in the term \<open>2 * 7 + 3\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Already Bound Unknowns"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The \<open>term\<close> may contain unknowns which are already bound\index{unknown!bound $\sim$}. They are substituted 
@@ -1418,9 +1372,7 @@ If a bound unknown occurs in the pattern its bound term is ignored and the unkno
 according to the pattern matching. In particular, it does not imply that the old and new bound
 terms must be equal, they are completely independent.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Bound Variables in the Matched Term"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the term internally binds variables which are used in a subterm, the subterm cannot be matched
@@ -1530,7 +1482,7 @@ text_raw\<open>\label{proof-moreover-join}\<close>
 text\<open>
 Fact accumulation can also be used for collecting the facts at the end of joined fact branches
 in a proof and inputting them to the joining step. A corresponding proof pattern for two branches
-which join at fact \<open>F\<close> is\cbstart
+which join at fact \<open>F\<close> is
 @{theory_text[display]
 \<open>have "F\<^sub>1\<^sub>,\<^sub>1" `\<proof>\<^sub>1\<^sub>,\<^sub>1`
 then have "F\<^sub>1\<^sub>,\<^sub>2" `\<proof>\<^sub>1\<^sub>,\<^sub>2`
@@ -1544,7 +1496,7 @@ ultimately have "F" \<proof>
 \<close>}
 The \<^theory_text>\<open>moreover\<close> statement starts the second branch and saves the fact \<open>F\<^sub>1\<^sub>,\<^sub>m\<close> to \<open>calculation\<close>.
 The \<^theory_text>\<open>ultimately\<close> statement adds the fact \<open>F\<^sub>2\<^sub>,\<^sub>n\<close> to \<open>calculation\<close> and then inputs the set to
-the proof of \<open>F\<close>\cbend. 
+the proof of \<open>F\<close>. 
 
 Note that \<^theory_text>\<open>moreover\<close> does not chain the current facts to the following goal statement.
 

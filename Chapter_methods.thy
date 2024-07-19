@@ -221,9 +221,7 @@ but in a different form (usually applied to other arguments). Then an applicatio
 method will replace a term containing \<open>f\<close> by a different term containing \<open>f\<close>. The idea is to replace
 terms in several steps using one or more introduction rules until finally removing \<open>f\<close> completely.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<open>intro\<close> Method"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 This proof technique can also be applied by the method
@@ -234,9 +232,7 @@ in the goal state as long as this is possible. It is intended to be used with in
 Then it automatically deconstructs the goals as much as possible with the given rules. Note that
 the method does not use the \<open>intro\<close> set.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Examples"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The rule \<open>example1\<close> from Section~\ref{theory-theorem-named} is an introduction rule for both
@@ -255,9 +251,7 @@ applicable and useful for a large number of proofs as possible. Besides by the \
 \<open>intro\<close> set is also used internally by some of the automatic methods described in
 Section~\ref{methods-auto-methods}.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Searching Introduction Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the cursor in the text area is positioned in a proof, introduction rules applicable to the first
@@ -302,9 +296,7 @@ some standard cases where the goal replacement is clearly expected by the proof 
 Also note that \<open>?thesis\<close> still abbreviates the original goal conclusion and thus cannot be used in
 the proof anymore.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<open>..\<close> Proof"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 In the abbreviated form \<^theory_text>\<open>by method\<close> of a structured proof the method cannot be omitted, but
@@ -338,12 +330,10 @@ Using method \<^theory_text>\<open>rule\<close>\index{rule (method)} the step ca
 \<open>have "F\<^sub>i\<^sub>+\<^sub>1" proof (rule r\<^sub>i)\<close>}
 The goal of this subproof is simply \<open>F\<^sub>i\<^sub>+\<^sub>1\<close>, so applying the \<^theory_text>\<open>rule\<close> method with \<open>r\<^sub>i\<close> will result
 in the new goal \<open>RA\<^sub>i'\<close> which unifies with \<open>F\<^sub>i\<close>. The subproof is not finished, since its goal state 
-is not empty. But the goal unifies with an already known fact. \cbstart Solving a goal which
-resulted from an assumption of an applied rule is also called ``discharging an assumption''.\cbend\<close>
+is not empty. But the goal unifies with an already known fact. Solving a goal which
+resulted from an assumption of an applied rule is also called ``discharging an assumption''.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Discharging Assumptions Using the \<open>fact\<close> Method"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The proof method
@@ -381,9 +371,7 @@ proof -
   show ?thesis by (rule example2) (fact f\<^sub>2)
 qed\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Automatic Fact Selection"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The \<open>fact\<close> method can be specified in the form
@@ -420,9 +408,7 @@ By unifying the input facts with the rule assumptions the method determines the 
 immediately be solved and thus can be omitted, then it removes the assumptions from the rule so
 that the corresponding goals are never created.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Discharging Assumptions Using Explicit Fact Input"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 This allows to establish the connection from a fact \<open>F\<^sub>i\<close> to \<open>F\<^sub>i\<^sub>+\<^sub>1\<close> in a fact chain by a
@@ -434,9 +420,7 @@ the \<^theory_text>\<open>rule\<close> method and removes the assumption from th
 in the assumption-less ``rule'' \<open>RC\<^sub>i\<close>. When it is applied to the goal \<open>F\<^sub>i\<^sub>+\<^sub>1\<close> it unifies and
 removes the goal, thus the subproof is complete.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Discharging Assumptions Using Chaining"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 For the fact sequence chaining can be used to write a structured proof without naming the facts:
@@ -487,9 +471,7 @@ chained fact \<open>F\<^sub>i\<^sub>-\<^sub>1\<close>. The method \<open>this\<c
 by \<open>F\<^sub>i\<^sub>-\<^sub>1\<close>. Then it applies the fact \<open>F\<^sub>i\<^sub>-\<^sub>1\<close> as rule to this goal which removes it and finishes
 the subproof.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<open>.\<close> Proof"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The proof
@@ -523,9 +505,7 @@ sequence is complete the goal is \<open>\<lbrakk>A; F\<^sub>2; \<dots>; F\<^sub>
 application of method \<^theory_text>\<open>assumption\<close> will remove the goal and terminate the proof
 (see Section~\ref{methods-assumption-method}).\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<open>frule\<close> Method"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A rule is applied for forward reasoning by the method
@@ -582,9 +562,7 @@ not applied in the intended way. Finally, it is not possible to generalize this 
 with several branches. The branches cannot be joined, because \<^theory_text>\<open>frule\<close> always takes only one
 assumption into account.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<open>drule\<close> Method"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The second drawback can be compensated for by using another method for applying the rule. This is
@@ -625,9 +603,7 @@ Analogous to the \<open>intro\<close> set for introduction rules there is an int
 destruction rules. It is used by some automatic methods, however, it is not used for automatically
 selecting rules for \<^theory_text>\<open>frule\<close> and \<^theory_text>\<open>drule\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Searching Destruction Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the cursor in the text area is positioned in a proof, destruction rules applicable to the first
@@ -636,9 +612,7 @@ for a search by \<^theory_text>\<open>find_theorems\<close> or in the Query pane
 Section~\ref{theory-theorem-search}. It finds all named facts which can be applied by the \<open>frule\<close>
 or \<open>drule\<close> method to the first goal, i.e., the major premise unifies with a goal assumption.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Examples"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The rule \<open>example1\<close> from Section~\ref{theory-theorem-named} is a
@@ -714,9 +688,7 @@ unified with every sub-term of the goal conclusion, the first match is replaced 
 which is \<open>b\<close> after substituting unknowns in the same way as in \<open>a\<close>. If there is no match
 of \<open>a\<close> in the goal conclusion an error is signaled.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Rewriting in Goal Assumptions"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 For a goal \<open>\<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<close> the method only rewrites in the conclusion \<open>C\<close>. The first
@@ -724,9 +696,7 @@ match in the assumptions \<open>A\<^sub>1 \<dots> A\<^sub>n\<close> can be subst
 @{theory_text[display]
 \<open>subst (asm) name\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Rewriting Specific Sub-Term Occurrences"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If not only the first match shall be substituted, a number of the match or a range of numbers
@@ -734,9 +704,7 @@ may be specified in both forms as in
 @{theory_text[display]
 \<open>subst (asm) (i..j) name\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Rewriting With Defining Equations"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The equality fact can also be a meta equality of the form \<open>a \<equiv> b\<close>. Therefore the method can
@@ -748,9 +716,7 @@ the method \<^theory_text>\<open>subst inc_def\<close> will rewrite the first oc
 that the defining equation is automatically named \<open>inc_def\<close>. Note the use of unification to
 handle the actual argument term \<open>t\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Rewriting With Conditional Equations"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The equality fact may be conditional, i.e., it may be a derivation rule with assumptions of the
@@ -760,9 +726,7 @@ after rewriting, where \<open>RA\<^sub>i'\<close> result from \<open>RA\<^sub>i\
 goals are inserted before the original goal, so the next method application will usually process
 the goal \<open>\<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> RA\<^sub>1'\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Examples"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 As an example if there are theorems
@@ -801,9 +765,7 @@ Basically, simplification uses a set of equations and searches an equation in th
 the left hand side unifies with a sub-term in the goal, then substitutes it. This step is 
 repeated until no sub-term in the goal unifies with a left hand side in an equation in the set.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Non-Terminating Simplification"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 It is apparent that great care must be taken when populating the set of equations, otherwise 
@@ -811,9 +773,7 @@ simplification may not terminate. If two equations \<open>a = b\<close> and \<op
 will exchange matching terms forever. If an equation \<open>a = a+0\<close> is in the set, a term matching
 \<open>a\<close> will be replaced by an ever growing sum with zeroes.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Simplification With Definitional Equations"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Simplification with a set of definitional equations from constant definitions (see 
@@ -823,9 +783,7 @@ Simplification terminates if no defined constant from the set remains in the goa
 Although the resulting goal usually is larger than the original goal, it is simpler in the 
 sense that it uses fewer defined constants.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Simplification and Trivial Goals"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the set contains conditional equations, simplification may produce additional goals. Then 
@@ -851,9 +809,7 @@ an error is signaled.
 The \<open>simp\<close> method simplifies the whole goal, i.e., it applies rewriting to the conclusion and 
 to all assumptions.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Simplification Using Arbitrary Facts"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The simpset may contain facts which are not directly equations, but can be converted to an
@@ -867,9 +823,7 @@ proof may be performed by a single application of the simplifier in the form
 @{theory_text[display]
 \<open>by simp\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Simplification in HOL"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 In Isabelle HOL (see Section~\ref{holbasic}) the simpset is populated with a large number of facts
@@ -925,9 +879,7 @@ example are terms with an internal case distinction (see Section~\ref{holtdefs-d
 process such terms in a goal conclusion the terms must be split. Splitting a term\index{term!splitting} usually results
 in several new goals with simpler terms which are then further processed by the simplifier.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Split Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Term splitting is done by applying specific rules to the goal. These rules are called ``split
@@ -954,7 +906,7 @@ resulting goals have the form
 where \<open>C\<^sub>i\<close> is constructed from \<open>C\<close> by mainly replacing \<open>term\<close> by \<open>term\<^sub>i\<close>.
 
 Note that this form of a split rule can only be applied for splitting terms in the conclusion of a
-goal. See the \cbstart Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close> \cbend for other forms which split
+goal. See the Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close> for other forms which split
 terms in assumptions of a goal.
 \<close>
 
@@ -1034,8 +986,8 @@ by the command
 \<open>declare [[simp_trace_new depth=n]]\<close>}
 outside a theorem or definition. The number \<open>n\<close> should be atleast \<open>2\<close>. When the cursor is
 positioned on an application of the \<open>simp\<close> method the button ``Show trace'' can be used
-in the Simplifier Trace panel to display the trace in a separate window. See the \cbstart Isabelle/Isar
-reference manual \<^cite>\<open>"isar-ref"\<close> \cbend for more information about how to use the trace.
+in the Simplifier Trace panel to display the trace in a separate window. See the Isabelle/Isar
+reference manual \<^cite>\<open>"isar-ref"\<close> for more information about how to use the trace.
 
 Another technique is to replace the \<open>simp\<close> method by a sequence of \<open>subst\<close> method applications
 and explicitly specify the equations which should have been used. To do this for a structured
@@ -1076,7 +1028,7 @@ simplification rules can be specified for the \<open>auto\<close> method in the 
 @{theory_text[display]
 \<open>auto simp add: name\<^sub>1 \<dots> name\<^sub>n\<close>}
 
-For more information about these methods see the \cbstart Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close>.\cbend
+For more information about these methods see the Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close>.
 \<close>
 
 subsection "Trying Methods"

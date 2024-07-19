@@ -49,9 +49,7 @@ where \<open>x\<^sub>1 \<dots> x\<^sub>k\<close> are the local variables, \<open
 and the set of these assumptions is named using the case name. Moreover, like the \<^theory_text>\<open>assume\<close>
 statement, the \<^theory_text>\<open>case\<close> statement makes the assumed facts current.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Explicit Assumption Naming"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Instead of using the case name for naming the assumptions an explicit assumption name\index{assumption!name}\index{name!for assumption} \<open>aname\<close> may be 
@@ -61,9 +59,7 @@ specified:
 If defined in the case, other names for single assumptions or assumption groups may be automatically
 introduced.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Naming Local Variables"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The local variables \<open>x\<^sub>1 \<dots> x\<^sub>k\<close> are fixed by the \<^theory_text>\<open>case\<close> statement but are hidden, they cannot be
@@ -106,9 +102,7 @@ qed\<close>}
 Every \<^theory_text>\<open>show\<close> statement uses the local term abbreviation \<open>?case\<close> to refer to the conclusion of
 the corresponding goal.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Determining the Cases Introduced by a Method Application"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 To find out which cases have been introduced by a method application, the command
@@ -145,9 +139,7 @@ The effect is that if no other variables are fixed and no other facts are assume
 \<^theory_text>\<open>show ?case\<close> after the corresponding \<^theory_text>\<open>case\<close> statement will refine the goal and remove it from the
 goal state.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Case Naming"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The cases are named\index{case!name}\index{name!for case} by numbers starting with \<open>1\<close>. If other names should be used they may be
@@ -157,9 +149,7 @@ specified as arguments to the method:
 If fewer names are specified than goals are present, only for the first \<open>n\<close> goals cases are created.
 If more names are specified an error is signaled.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Composed Methods"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 When \<^theory_text>\<open>goal_cases\<close> is used in a composed proof method\index{method!composed $\sim$} it can provide cases for the goals produced
@@ -170,9 +160,7 @@ provides cases for all goals existing after \<^theory_text>\<open>method\<close>
 the goal there will be only one case. This can be useful to work with a goal produced by 
 \<^theory_text>\<open>method\<close>. In particular, the conclusion of that goal is available as \<open>?case\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Inspecting the Cases"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Note that the proof state(s) resulting from \<^theory_text>\<open>goal_cases\<close> are not visible for the reader of the proof.
@@ -240,9 +228,7 @@ When this case rule is applied to the goal \<^theory_text>\<open>\<And> x\<^sub>
 Section~\ref{methods-rule-method}, it unifies \<open>?P\<close> with the conclusion \<open>C\<close> and replaces the goal
 in the way described above.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Validity of Case Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A case rule is only valid, if the \<open>Q\<^sub>i\<close> together cover all possibilities, i.e., if 
@@ -252,9 +238,7 @@ used as conclusion in a goal, hence a case rule can always be applied to arbitra
 depends on the \<open>Q\<^sub>i\<close> whether splitting a specific goal with the case rule is useful for proving
 the goal.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Examples"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 A case rule for testing a natural number for being zero would be
@@ -278,9 +262,7 @@ is used for this purpose. Here the unknown \<open>?Q\<close> represents the comp
 additional assumption, therefore the rule can be used for arbitrary propositions. By substituting 
 the term \<open>n = 0\<close> for \<open>?Q\<close> the rule is prepared to be applied in the same way as above.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "General Form of Case Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Case rules may even be more general than shown above. Instead of a single proposition \<open>Q\<^sub>i\<close> every 
@@ -288,17 +270,15 @@ case may have locally bound variables and an arbitrary number of assumptions, re
 meta rule of the form
 @{text[display]
 \<open>\<lbrakk>P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> ?P\<close>}
-where every \<open>P\<^sub>i\<close> is a rule of the form\cbstart
+where every \<open>P\<^sub>i\<close> is a rule of the form
 @{text[display]
-\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> ?P\<close>}\cbend
+\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> ?P\<close>}
 That means, the \<open>P\<^sub>i\<close> may be arbitrary rules but they must all have as conclusion the unknown \<open>?P\<close>
 which is also the conclusion of the overall case rule. When such a case rule is applied to a goal
-it splits\index{case!split} the goal into \<open>k\<close> cases and adds the variables \cbstart \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the assumptions
-\<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>\cbend to the \<open>i\<close>th case.\<close>
+it splits\index{case!split} the goal into \<open>k\<close> cases and adds the variables \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the assumptions
+\<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close> to the \<open>i\<close>th case.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Case Rules and \<^theory_text>\<open>obtain\<close> Statements"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Note that the goal which must be proved for an \<^theory_text>\<open>obtain\<close>\index{obtain (keyword)} statement (see
@@ -306,9 +286,7 @@ Section~\ref{proof-obtain}) has the form of a case rule with only one case of th
 \<open>\<And>x\<^sub>1 \<dots> x\<^sub>m. prop \<Longrightarrow> P\<close>. Thus a proof for this goal shows that \<open>prop\<close> covers all cases, i.e., it
 is redundant.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Specifying Case Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Remember that to write your own case rule you have to specify a theorem which uses variables in
@@ -332,7 +310,7 @@ in the goal state.
 Additionally, the method creates a named context\index{named context} for every goal resulting from the rule
 application. The context contains (only) the variables and assumptions specified in the corresponding
 case\index{case} in the case rule. For the most general form depicted above the context for the \<open>i\<close>th case 
-contains the variables \cbstart \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>\cbend. No term abbreviation
+contains the variables \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>. No term abbreviation
 \<open>?case\<close> is defined, because the conclusion of every new goal is the same as that of the original 
 goal, thus the existing abbreviation \<open>?thesis\<close>\index{?thesis (term abbreviation)} can be used instead.
 
@@ -340,9 +318,7 @@ The names\index{name!for case}\index{case name} used for the contexts created by
 the case rule. Therefore, predefined case rules often create cases with names which are easy to
 understand by a proof writer.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Examples"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 In Isabelle HOL (see Section~\ref{holtypes}) the rule \<open>\<lbrakk>?Q \<Longrightarrow> ?P; \<not> ?Q \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close> is available
@@ -369,9 +345,7 @@ Note that the \<^theory_text>\<open>case\<close> statement adds only the assumpt
 assumptions in the original goal (here \<open>x < c\<close>) must be added to the context in the usual ways (see 
 Section~\ref{proof-assume}) if needed for the proof.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Case Rules with Several Unknowns"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Often a case rule has only one unknown in the case assumptions. If there are more, several terms
@@ -380,9 +354,7 @@ there are unknowns in the case assumptions the resulting goals will contain unbo
 must be instantiated in the rest of the proof (e.g., by method \<^theory_text>\<open>drule\<close>). If more terms are
 specified an error is signaled.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Input Facts for the \<^theory_text>\<open>cases\<close> Method"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The \<^theory_text>\<open>cases\<close> method treats input facts like the empty method (see Section~\ref{methods-empty})
@@ -404,9 +376,7 @@ have "(x::nat) < c \<Longrightarrow> n*x \<le> n*c"
 proof (cases "n = 0")
 \<dots>\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Automatic Case Rule Selection"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Like the \<^theory_text>\<open>rule\<close> method (see Section~\ref{methods-rule-method}) the \<^theory_text>\<open>cases\<close> method supports
@@ -439,40 +409,38 @@ In a theorem specified in structured form using \<^theory_text>\<open>shows\<clo
 the part of the form \<^theory_text>\<open>shows "C"\<close> may alternatively be specified in the form
 @{theory_text[display]
 \<open>obtains C\<^sub>1 | \<dots> | C\<^sub>k\<close>}\index{obtains (keyword)}
-where every case \<open>C\<^sub>i\<close> has the form\cbstart
+where every case \<open>C\<^sub>i\<close> has the form
 @{theory_text[display]
 \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}\index{where (keyword)}
-As usual, the variables \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the propositions \<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>\cbend may be grouped by \<open>and\<close>, for
+As usual, the variables \<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the propositions \<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close> may be grouped by \<open>and\<close>, for
 every variable group a type may be specified and the proposition groups may be named. The keywords
 and the \<open>|\<close> separators belong to the outer syntax, the propositions must be individually quoted.
 
 This form is mainly equivalent to
 @{theory_text[display]
 \<open>shows "\<lbrakk>P\<^sub>1;  \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> thesis"\<close>}
-where every \<open>P\<^sub>i\<close> is a rule\cbstart
+where every \<open>P\<^sub>i\<close> is a rule
 @{text[display]
-\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> thesis\<close>}\cbend
+\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> thesis\<close>}
 which is exactly the general form of a case rule stated by the \<^theory_text>\<open>shows\<close> clause, using, after proof,
 the unknown \<open>?thesis\<close> for all conclusions.
 
 For its own proof the \<^theory_text>\<open>obtains\<close> form creates the same goal as the \<^theory_text>\<open>shows\<close> form, but additionally
 it adds all \<open>P\<^sub>i\<close> as assumed facts to the outermost proof context and names this set \<open>that\<close>\index{that (assumption name)}.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Specifying Explicit Case Names"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 When the theorem is applied as case rule by the \<^theory_text>\<open>cases\<close> method the named context created for case
-\<open>C\<^sub>i\<close> is simply named \<open>i\<close>. An explicit name\index{case!name}\index{name!for case} may be specified for it by using the extended form\cbstart
+\<open>C\<^sub>i\<close> is simply named \<open>i\<close>. An explicit name\index{case!name}\index{name!for case} may be specified for it by using the extended form
 @{theory_text[display]
-\<open>(name\<^sub>i) x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}\cbend
+\<open>(name\<^sub>i) x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}
 For its own proof the \<^theory_text>\<open>obtains\<close> form uses \<open>name\<^sub>i\<close>, if present, as additional name for \<open>P\<^sub>i\<close> in its
 proof context.
 
-If a case \<open>C\<^sub>i\<close> has no bound variables it has simply the form\cbstart
+If a case \<open>C\<^sub>i\<close> has no bound variables it has simply the form
 @{theory_text[display]
-\<open>"Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}\cbend
+\<open>"Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}
 which omits the keyword \<^theory_text>\<open>where\<close>, also if an explicit name is specified.
 
 As an example, the rule \<open>case_split\<close> may be defined and proved as
@@ -483,9 +451,7 @@ As an example, the rule \<open>case_split\<close> may be defined and proved as
 using the case names \<open>True\<close> and \<open>False\<close>, as described above, and using the \<^theory_text>\<open>blast\<close> method (see
 Section~\ref{methods-auto-methods}) for the proof.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<^theory_text>\<open>consider\<close> Statement"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 There is also a statement for stating a case rule on the fly in a structured proof. It has the form
@@ -504,9 +470,7 @@ be used to state that specific propositions cover all (remaining) possibilities 
 context. They need not cover all globally possible cases, if some cases have already been excluded
 using locally assumed or proved facts, only the remaining possibilities need to be covered.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Chaining a \<^theory_text>\<open>consider\<close> Statement"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Since case rules can be input as fact to a proof by case based reasoning, fact chaining\index{fact!chaining} can be used
@@ -525,9 +489,7 @@ the other \<open>\<proof>\<close>s prove the stated proposition, each using one 
 assumption. The \<^theory_text>\<open>cases\<close> method is always applied without arguments, since there are no additional
 unknowns in the \<open>C\<^sub>i\<close> which can be instantiated.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Example"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the example goal \<open>(x::nat) < c \<Longrightarrow> n*x \<le> n*c\<close> should be stated for locally fixed variables,
@@ -597,7 +559,7 @@ specific form
 where the first assumption contains the application of a specific function \<open>f\<close> (perhaps written
 using an operator name) which may only occur in different form in the other assumptions. The
 conclusion is a single unknown which must not occur in the first assumption and may only occur as
-conclusion in other assumption (\cbstart as \cbend in an assumption in a case rule).
+conclusion in other assumption (as in an assumption in a case rule).
 
 When an elimination rule is applied to a goal by the \<^theory_text>\<open>erule\<close> method, it removes (``eliminates'')
 the function application from an assumption in the goal or it replaces it by a different form, so
@@ -610,18 +572,16 @@ Since the order of the assumptions after the major premise is irrelevant for the
 the general form of an elimination rule can be considered to be
 @{theory_text[display]
 \<open>theorem "\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>m; P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> P" \<proof>\<close>}
-where every \<open>P\<^sub>i\<close> is a rule of the form\cbstart
+where every \<open>P\<^sub>i\<close> is a rule of the form
 @{text[display]
-\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> P\<close>}\cbend
+\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> P\<close>}
 and the variable \<open>P\<close> does not occur in the \<open>RA\<^sub>1 \<dots> RA\<^sub>m\<close>.
 
 Analogous to the \<open>intro\<close> set for introduction rules there is an internal fact set \<open>elim\<close>\index{elim (fact set name)} for
 elimination rules. It is used by some automatic methods, however, it is not used for automatically
 selecting rules for \<open>erule\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Example"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 As an example consider the elimination rule specified as
@@ -636,9 +596,7 @@ it replaces the goal by the two goals
 \<open>x < 5 \<Longrightarrow> C
 x = 5 \<Longrightarrow> C\<close>}\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Searching Elimination Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 If the cursor in the text area is positioned in a proof, elimination rules applicable to the first
@@ -648,9 +606,7 @@ Section~\ref{theory-theorem-search}. It finds all named facts which can be appli
 method to the first goal, i.e., the major premise unifies with a goal assumption and the conclusions
 unify as well.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "The \<open>elim\<close> Method"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Elimination rule application can be iterated by the method
@@ -661,9 +617,7 @@ set to a goal in the goal state as long as this is possible. It is intended to b
 elimination rules. Then it automatically eliminates functions from assumptions in the goals as much
 as possible with the given rules. Note that the method does not use the \<open>elim\<close> set.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Destruction Rules as Elimination Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Every destruction rule\index{rule!destruction $\sim$} \<open>\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>n\<rbrakk> \<Longrightarrow> C\<close> can be re-stated as the elimination rule
@@ -679,18 +633,18 @@ The alternative syntax available for case rules described in Section~\ref{case-r
 be extended for elimination rules\index{syntax!alternative $\sim$!for elimination rules}. An elimination rule
 @{theory_text[display]
 \<open>theorem "\<lbrakk>RA\<^sub>1;\<dots>;RA\<^sub>m; P\<^sub>1; \<dots>; P\<^sub>k\<rbrakk> \<Longrightarrow> P" \<proof>\<close>}
-where every \<open>P\<^sub>i\<close> is a rule of the form\cbstart
+where every \<open>P\<^sub>i\<close> is a rule of the form
 @{text[display]
-\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> P\<close>}\cbend
+\<open>\<And>x\<^sub>i\<^sub>,\<^sub>1\<dots>x\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1;\<dots>;Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> P\<close>}
  can be specified using the alternative syntax
 @{theory_text[display]
 \<open>theorem
 assumes "RA\<^sub>1" \<dots> "RA\<^sub>m"
 obtains C\<^sub>1 | \<dots> | C\<^sub>k
 \<proof>\<close>}\index{obtains (keyword)}
-where every \<open>C\<^sub>i\<close> is\cbstart
+where every \<open>C\<^sub>i\<close> is
 @{theory_text[display]
-\<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}\cbend
+\<open>x\<^sub>i\<^sub>,\<^sub>1 \<dots> x\<^latex>\<open>$_{i,p_i}$\<close> where "Q\<^sub>i\<^sub>,\<^sub>1" \<dots> "Q\<^latex>\<open>$_{i,q_i}$\<close>"\<close>}
 The major premise and possibly other additional assumptions are specified using \<^theory_text>\<open>assumes\<close>, then
 the assumptions for the cases are specified using \<^theory_text>\<open>obtains\<close>. As usual, the set \<open>RA\<^sub>1, \<dots>, RA\<^sub>m\<close> is
 automatically named \<open>assms\<close> and the set of the \<open>P\<^sub>i\<close> is automatically named \<open>that\<close> in the outermost
@@ -772,19 +726,19 @@ subsection "Induction Rules"
 text_raw\<open>\label{case-induction-rules}\<close>
 
 text\<open>
-\cbstart As \cbend for case based reasoning (see Section~\ref{case-reasoning}) a goal is split into these
+As for case based reasoning (see Section~\ref{case-reasoning}) a goal is split into these
 cases\index{case!split} by applying a meta rule. For induction the splitting can be done by a meta rule of the form
 @{text[display]
 \<open>\<lbrakk>P\<^sub>1 ; ...; P\<^sub>n \<rbrakk> \<Longrightarrow> ?P ?a\<close>}
-where every \<open>P\<^sub>i\<close> is a rule of the form\cbstart
+where every \<open>P\<^sub>i\<close> is a rule of the form
 @{text[display]
 \<open>\<And>y\<^sub>i\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<rbrakk> \<Longrightarrow> ?P term\<^sub>i\<close>}
 where the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> may contain the unknown \<open>?P\<close> but no other unknowns, in particular not
 \<open>?a\<close>. A rule for a base case usually has no bound variables \<open>y\<^sub>i\<^sub>,\<^sub>j\<close> and no assumptions
 \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, at least the \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> do not contain \<open>?P\<close>. The remaining rules mostly have only a single
-assumption \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend which contains \<open>?P\<close>.
+assumption \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> which contains \<open>?P\<close>.
 
-\cbstart Rules of this form are called ``induction rules''\index{induction!rule}\index{rule!induction $\sim$}\cbend. Note that the unknown \<open>?a\<close> only occurs once in the conclusion of the meta rule and nowhere else. Like
+Rules of this form are called ``induction rules''\index{induction!rule}\index{rule!induction $\sim$}. Note that the unknown \<open>?a\<close> only occurs once in the conclusion of the meta rule and nowhere else. Like
 the case rules induction rules must be ``prepared'' for use, this is done by replacing \<open>?a\<close>
 by a specific term \<open>term\<close>. This is the term for which all possible cases shall be processed
 in the goal. It must have the same type as all \<open>term\<^sub>i\<close> in the \<open>P\<^sub>i\<close>.
@@ -792,12 +746,10 @@ in the goal. It must have the same type as all \<open>term\<^sub>i\<close> in th
 Usually, ``all possible cases'' means all values of the type of \<open>term\<close>, then \<open>term\<close> consists of a 
 single variable which may adopt any values of its type. There are also other forms of induction where
 more complex terms are used, but they are not presented in this introduction, refer to other 
-Isabelle documentations \cbstart \<^cite>\<open>"isar-ref" and "prog-prove"\<close> \cbend for them. In the following the unknown \<open>?a\<close> will always be replaced by a
+Isabelle documentations \<^cite>\<open>"isar-ref" and "prog-prove"\<close> for them. In the following the unknown \<open>?a\<close> will always be replaced by a
 variable \<open>x\<close>.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Applying Induction Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 When a prepared induction rule is applied to a goal \<open>C\<close> without bound variables and assumptions as 
@@ -809,11 +761,11 @@ unknown \<open>?P\<close>, so that applying \<open>?P\<close> to the argument \<
 can be described by applying \<open>?P\<close> to the terms \<open>term\<^sub>i\<close> for the specific values in the rules \<open>P\<^sub>i\<close> for 
 the cases. 
 
-The application of the prepared rule results in the \<open>n\<close> goals\cbstart
+The application of the prepared rule results in the \<open>n\<close> goals
 @{text[display]
 \<open>\<And> y\<^sub>1\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{1,p_1}$\<close>. \<lbrakk>Q\<^sub>1\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{1,q_1}$\<close>\<rbrakk> \<Longrightarrow> PC term\<^sub>1
 \<dots>
-\<And> y\<^sub>n\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{n,p_n}$\<close>. \<lbrakk>Q\<^sub>n\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{n,q_n}$\<close>\<rbrakk> \<Longrightarrow> PC term\<^sub>n\<close>}\cbend
+\<And> y\<^sub>n\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{n,p_n}$\<close>. \<lbrakk>Q\<^sub>n\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{n,q_n}$\<close>\<rbrakk> \<Longrightarrow> PC term\<^sub>n\<close>}
 
 The induction rule is only valid if the terms \<open>term\<^sub>i\<close> cover all possible values of their associated
 type. If this has been proved the induction rule is available as a fact which can be applied.
@@ -822,16 +774,14 @@ matches all propositions which contain the variable \<open>x\<close> in one or m
 on the \<open>P\<^sub>i\<close> in the rule whether splitting a specific goal with the induction rule is useful for 
 proving the goal.
 
-The real power of induction rules emerges, when a \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> contains the unknown \<open>?P\<close>. Due to the
+The real power of induction rules emerges, when a \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> contains the unknown \<open>?P\<close>. Due to the
 type associated with \<open>?P\<close> it must be applied to an argument \<open>term\<^sub>i\<^sub>,\<^sub>j\<close> of the same type as \<open>x\<close> and
 the \<open>term\<^sub>i\<close>. Then the goal resulting from \<open>P\<^sub>i\<close> states the property that if \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> holds when
 specialized to \<open>PC term\<^sub>i\<^sub>,\<^sub>j\<close>, \<open>PC\<close> holds for \<open>term\<^sub>i\<close> (an ``induction step''\index{induction!step}). Thus, for covering the
-possible values of \<open>x\<close>, the step from \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>\cbend to \<open>term\<^sub>i\<close> can be repeated arbitrarily often which
+possible values of \<open>x\<close>, the step from \<open>term\<^sub>i\<^sub>,\<^sub>j\<close> to \<open>term\<^sub>i\<close> can be repeated arbitrarily often which
 allows to cover some types with infinite value sets.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Example"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 An induction rule for the natural numbers is
@@ -853,9 +803,7 @@ By substituting the arguments in the function applications its assumption part y
 \<And>y. 0\<le>y \<Longrightarrow> 0\<le>(y+1)\<close>}
 which correspond to the base case and induction step as described above.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "General Form of Induction Rules"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Induction rules\index{induction!rule}\index{rule!induction $\sim$} may even be more general than shown above. Instead of applying \<open>?P\<close> to a single 
@@ -883,22 +831,18 @@ goal state.
 Additionally, the method creates a named context\index{named context} for every goal resulting from the rule
 application. The context contains the variables and assumptions specified in the corresponding
 case in the induction rule. For the general form depicted above the context for the \<open>i\<close>th case 
-contains the variables \cbstart \<open>y\<^sub>i\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>\cbend. 
+contains the variables \<open>y\<^sub>i\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{i,p_i}$\<close>\<close> and the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>. 
 The term abbreviation \<open>?case\<close>\index{?case (term abbreviation)} is defined for the case conclusion \<open>PC term\<^sub>i\<close> which is to
 be proved for the case.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Input Facts"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The \<^theory_text>\<open>induction\<close> method treats input facts like the empty method (see Section~\ref{methods-empty})
 and the \<^theory_text>\<open>cases\<close> method (see Section~\ref{case-reasoning-cases}) by inserting them as assumptions 
 into the original goal before splitting it.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Automatic Rule Selection"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Also like the \<^theory_text>\<open>cases\<close> method the \<^theory_text>\<open>induction\<close> method supports
@@ -909,9 +853,7 @@ argument, which means that only one variable is specified in the method:
 Then the rule is selected according to the type of \<open>x\<close>. In Isabelle HOL (see 
 Section~\ref{holbasic}) most types have an associated induction rule.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Examples"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 The rule \<open>\<lbrakk>?P True; ?P False\<rbrakk> \<Longrightarrow> ?P ?a\<close> is associated with type \<open>bool\<close>. Therefore induction can be 
@@ -926,7 +868,7 @@ True \<and> False = False\<close>}
 which cover all possible cases for \<open>b\<close>. Here, the type has only two values, therefore induction is 
 not really needed.
 
-\cbstart As \cbend for the \<^theory_text>\<open>cases\<close> method (see Section~\ref{case-reasoning-cases}) the names used for the contexts 
+As for the \<^theory_text>\<open>cases\<close> method (see Section~\ref{case-reasoning-cases}) the names used for the contexts 
 created by the \<^theory_text>\<open>induction\<close> method can be specified by attributing the induction rule. They can be 
 determined from the proof skeleton which is displayed in the interactive editor
 when the cursor is positioned on the \<^theory_text>\<open>induction\<close> method (see Section~\ref{case-context-struct}).
@@ -958,14 +900,14 @@ subsection "Case Assumption Naming and the \<^theory_text>\<open>induct\<close> 
 text_raw\<open>\label{case-induction-naming}\<close>
 
 text\<open>
-As usual, the \<^theory_text>\<open>case\<close> statement uses the case name as name for the assumptions \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close>\cbend in the
+As usual, the \<^theory_text>\<open>case\<close> statement uses the case name as name for the assumptions \<open>Q\<^sub>i\<^sub>,\<^sub>1 \<dots> Q\<^latex>\<open>$_{i,q_i}$\<close>\<close> in the
 \<open>i\<close>th case or an explicit name\index{name!for assumption}\index{assumption!name} may be specified for them (see Section~\ref{case-context-case}).
 Additionally, the \<open>induction\<close> method arranges the named context for a case so that the set of
 assumptions is split into those which in the rule contain the unknown \<open>?P\<close> and those which do not.
 These sets are separately named, so that they can be referenced individually.
 
 The set of assumptions which originally contained \<open>?P\<close> now contain an application of \<open>PC\<close> to
-a value \cbstart \<open>term\<^sub>i\<^sub>,\<^sub>j\<close>\cbend and allow the step from this value to value \<open>term\<^sub>i\<close> by induction. These assumptions
+a value \<open>term\<^sub>i\<^sub>,\<^sub>j\<close> and allow the step from this value to value \<open>term\<^sub>i\<close> by induction. These assumptions
 are called ``induction hypotheses'' and are named \<open>"cname.IH"\<close>\index{IH@.IH (fact name suffix)} where \<open>cname\<close> is the case name or the
 explicit name for the case assumptions. The other assumptions are independent from \<open>PC\<close>, they are 
 additional hypotheses and are named \<open>"cname.hyps"\<close>\index{hyps@.hyps (fact name suffix)}. Both forms of names
@@ -1017,17 +959,17 @@ be replaced by \<open>PC\<close> applied to the term together with all assumptio
 the same term. Therefore the \<open>induction\<close> and \<open>induct\<close> methods work in a different way. They unify
 \<open>?P x\<close> with the conclusion \<open>C\<close> and separately with every assumption \<open>A\<^sub>l\<close> and thus additionally
 determine an abstracted function \<open>PA\<^sub>l\<close> for every \<open>A\<^sub>l\<close>. Then they replace every \<open>?P term\<close> in a \<open>P\<^sub>i\<close>
-or in a \cbstart \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>\cbend in the rule by an application \<open>PC term\<close> together with assumptions \<open>PA\<^sub>1 term; \<dots>;
+or in a \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> in the rule by an application \<open>PC term\<close> together with assumptions \<open>PA\<^sub>1 term; \<dots>;
 PA\<^sub>m term\<close>.
 
-The assumptions for a direct occurrence of \<open>?P term\<^sub>i\<close> as conclusion in a \<open>P\<^sub>i\<close> are added after all \cbstart
+The assumptions for a direct occurrence of \<open>?P term\<^sub>i\<close> as conclusion in a \<open>P\<^sub>i\<close> are added after all 
 \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, so that the \<open>i\<close>th goal created by the \<open>induction\<close> method now has the form
 @{text[display]
 \<open>\<And> y\<^sub>i\<^sub>,\<^sub>1 \<dots> y\<^latex>\<open>$_{i,p_i}$\<close>. \<lbrakk>Q\<^sub>i\<^sub>,\<^sub>1; \<dots>; Q\<^latex>\<open>$_{i,q_i}$\<close>; PA\<^sub>1 term\<^sub>i; \<dots>; PA\<^sub>m term\<^sub>i\<rbrakk> \<Longrightarrow> PC term\<^sub>i\<close>}
 Additionally, the assumptions for occurrences of a \<open>?P term\<close> in a \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> must be added which usually
 can be done by replacing \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close> by the rule \<open>Q\<^sub>i\<^sub>,\<^sub>j'\<close> of the form \<open>\<lbrakk>PA\<^sub>1 term; \<dots>; PA\<^sub>m term\<rbrakk> \<Longrightarrow> Q\<^sub>i\<^sub>,\<^sub>j''\<close>
 where \<open>Q\<^sub>i\<^sub>,\<^sub>j''\<close> results by substituting \<open>?P term\<close> in \<open>Q\<^sub>i\<^sub>j\<close> by \<open>PC term\<close>. If \<open>?P\<close> is applied to several
-different terms in \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, several sets of corresponding assumptions are added in \<open>Q\<^sub>i\<^sub>,\<^sub>j'\<close>\cbend.
+different terms in \<open>Q\<^sub>i\<^sub>,\<^sub>j\<close>, several sets of corresponding assumptions are added in \<open>Q\<^sub>i\<^sub>,\<^sub>j'\<close>.
 
 Moreover, the \<open>induction\<close> method (and also the \<open>induct\<close> method) arranges the named contexts in a
 way that the assumptions \<open>PA\<^sub>1 term\<^sub>i; \<dots>; PA\<^sub>m term\<^sub>i\<close> which originate from the goal are named by
