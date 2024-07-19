@@ -1,6 +1,8 @@
 #! /bin/bash
 $ISABELLE_PDFLATEX root.tex
+$ISABELLE_BIBTEX root
 $ISABELLE_PDFLATEX root.tex
 $ISABELLE_PDFLATEX root.tex
+$ISABELLE_MAKEINDEX root.idx
 $ISABELLE_PDFLATEX root.tex
 

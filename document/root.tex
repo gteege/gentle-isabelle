@@ -34,6 +34,10 @@
 % with pdflatex font encoding T1 is required instead of OT1 (the default) to print \guilsinglleft and others
 \usepackage[T1]{fontenc}
 
+% TG: added for index generation with index as chapter in toc
+\usepackage{imakeidx}
+\makeindex[intoc]
+
 % this should be the last package used
 \usepackage{pdfsetup}
 
@@ -53,10 +57,13 @@
 
 \begin{document}
 
-\title{A Gentle Introduction to Isabelle and Isabelle HOL}
-\author{Gunnar Teege}
-\date{May 10, 2024}
-%\postdate{\par\vskip 1cm Changebars mark changes relative to the version of March, 24, 2024\end{center}}
+\title{A Gentle Introduction to Isabelle\\ and Isabelle/HOL}
+\author{{\em Gunnar Teege}\\
+        Universität der Bundeswehr München \\
+        \texttt{gunnar.teege@unibw.de}
+}
+%\date{May 10, 2024}
+\postdate{\par\vskip 1cm Changebars mark content related changes relative to the version of May, 10, 2024\end{center}}
 \maketitle
 
 \tableofcontents
@@ -68,8 +75,18 @@
 \input{session}
 
 % optional bibliography
-%\bibliographystyle{abbrv}
-%\bibliography{root}
+\begingroup
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Bibliography}
+  \bibliographystyle{abbrv}
+  \cbstart
+  \bibliography{root}
+\endgroup
+
+% TG: insert the index
+\printindex
+\cbend
 
 \end{document}
 
