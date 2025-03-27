@@ -36,11 +36,6 @@ The \<open>cname\<^sub>i\<close> are names and the \<open>type\<^sub>i\<^sub>,\<
 The types are specified in inner syntax and must be quoted, if they are not a single type name. All 
 other parts belong to the outer syntax. 
 
-Recursion\index{recursion} is supported for the types, i.e., the name \<open>name\<close> of the defined type may occur in the 
-type specifications \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>. However, there must be atleast one constructor specification which
-is not recursive, otherwise the definition does not ``terminate''. Isabelle checks this condition
-and signals an error if it is not satisfied.
-
 As a convention, capitalized names are used in HOL for the \<open>cname\<^sub>i\<close>.
 
 An example for a datatype definition with two constructor specifications is
@@ -49,6 +44,17 @@ An example for a datatype definition with two constructor specifications is
   Dim2 nat nat
 | Dim3 nat nat nat\<close>}\index{coord (example type)}\index{Dim2 (example constant)}\index{Dim3 (example constant)}
 Its value set is equivalent to the union of pairs and triples of natural numbers.
+\<close>
+
+text_raw\<open>\cbstart\<close>
+subsubsection "Recursive Algebraic Types"
+text_raw\<open>\cbend\<close>
+
+text\<open>
+Recursion\index{recursion} is supported for the types, i.e., the name \<open>name\<close> of the defined type may occur in the 
+type specifications \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>. However, there must be atleast one constructor specification which
+is not recursive, otherwise the definition does not ``terminate''. Isabelle checks this condition
+and signals an error if it is not satisfied.
 
 An example for a recursive datatype definition with two constructor specifications is
 @{theory_text[display]
@@ -57,12 +63,41 @@ An example for a recursive datatype definition with two constructor specificatio
 | Tree nat tree tree\<close>}\index{tree (example type)}\index{Leaf (example constant)}\index{Tree (example constant)}
 Its value set is equivalent to the set of all binary trees with a natural number in every node.
 
+\cbstart Moreover, recursive occurrences of \<open>name\<close> are only allowed on live parameter positions
+(see Section~\ref{holbasic-bnf-natural}) of a bounded natural functor \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> (see
+Section~\ref{holbasic-bnf-bounded}). Due to composability of BNFs this means
+that all type constructors in which the recursive occurrence is nested must be bounded
+natural functors. If this is not the case an error is signaled. 
+
+In the definition of \<open>tree\<close> above the recursive occurrences are not nested in other type
+constructors, therefore the condition is satisfied. If the second constructor specification is
+modified to
+@{theory_text[display]
+\<open>\<dots> | Tree nat "tree set" tree\<close>}
+an error will result because \<open>set\<close> is not registered as BNF (it cannot, because
+it is none, see Section~\ref{holbasic-bnf-bounded}). If the constructor specification is modified to
+@{theory_text[display]
+\<open>\<dots> | Tree nat "tree \<Rightarrow> bool" tree\<close>}
+another error will result because \<open>tree \<Rightarrow> bool\<close> is an abbreviation of \<open>(tree, bool) fun\<close> and \<open>fun\<close>
+is a BNF (see Section~\ref{holbasic-bnf-bounded}), but \<open>tree\<close> occurs on its
+dead parameter's position. If the constructor specification is modified to
+@{theory_text[display]
+\<open>\<dots> | Tree nat "nat \<Rightarrow> tree" tree\<close>}
+everything is fine because now the recursive occurrence is on the live parameter position.\cbend
+\<close>
+
+text_raw\<open>\cbstart\<close>
+subsubsection "Parameterized Algebraic Types"
+text_raw\<open>\cbend\<close>
+
+text\<open>
 Like declared types algebraic types may be parameterized (see Section~\ref{theory-terms-types}):
 @{theory_text[display]
 \<open>datatype ('name\<^sub>1,\<dots>,'name\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n\<close>}
 where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type specifications \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>, i.e.,
-the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> may be polymorphic (see Section~\ref{theory-terms-types}). As usual, the parentheses
-may be omitted if there is only one type parameter.
+the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> may be polymorphic (see Section~\ref{theory-terms-types}). \cbstart Recursive
+occurrences of \<open>name\<close> must always be applied to the type parameters, no other types are allowed as 
+arguments\cbend. As usual, the parentheses may be omitted if there is only one type parameter.
 
 An example for a parameterized datatype definition with one type parameter is
 @{theory_text[display]
@@ -72,7 +107,13 @@ An example for a parameterized datatype definition with one type parameter is
 Its value set is equivalent to the union of pairs and triples of values of the type parameter. The
 type \<open>coord\<close> is equivalent to the type \<open>nat coordx\<close>. The type \<open>real coordx\<close> is equivalent to the
 union of pairs and triples of values of type \<open>real\<close> of the real numbers.
-\<close>
+
+\cbstart An example for a parameterized recursive datatype definition with one type parameter is
+@{theory_text[display]
+\<open>datatype 'a treex = 
+  Leaf 'a
+| Tree 'a "'a treex" "'a treex"\<close>}\index{treex (example type)}
+With this definition the type \<open>tree\<close> is equivalent to the type \<open>nat treex\<close>.\cbend\<close>
 
 subsection "Constructors"
 text_raw\<open>\label{holtdefs-data-constr}\<close>
@@ -145,7 +186,8 @@ is denoted by \<open>MkRecrd 5 {1,2,3} True\<close>.
 
 Since there must be atleast one nonrecursive constructor specification, definitions with a single
 constructor specification cannot be recursive.
-\<close>
+
+\cbstart For more comfortable record implementations in Isabelle see Section~\ref{holtdefs-record}.\cbend\<close>
 
 subsection "Destructors"
 text_raw\<open>\label{holtdefs-data-destr}\<close>
@@ -210,6 +252,8 @@ where every \<open>prop\<^sub>p\<close> is a proposition of the form
 @{text[display]
 \<open>sname\<^sub>i\<^sub>,\<^sub>j (cname\<^sub>q var\<^sub>1 \<dots> var\<^latex>\<open>$_{k_q}$\<close>) = term\<^sub>p\<close>}
 and specifies \<open>term\<^sub>p\<close> as the default value of selector \<open>sname\<^sub>i\<^sub>,\<^sub>j\<close> for values constructed by \<open>cname\<^sub>q\<close>.
+\cbstart If a default value is specified for a \<open>cname\<^sub>i\<close> where the selector is already defined, the
+default specification is ignored.\cbend
 
 The definition
 @{theory_text[display]
@@ -311,131 +355,81 @@ subsection "Parameterized Algebraic Types as Bounded Natural Functors"
 text_raw\<open>\label{holtdefs-data-bnf}\<close>
 
 text\<open>
-As described in Section~\ref{holtdefs-data-constr} every datatype value can be thought of being
-equivalent to a tuple of constructor argument values, so in some sense the constructor argument
-values are ``contained'' in the datatype value. If an algebraic type has type parameters, these may
-occur as constructor argument types or as parts thereof. In this sense every datatype value is a
-``container''\index{container type}\index{type!container $\sim$} of a certain number of values of every type parameter.
+\cbstart
+Every algebraic type can be considered to be a disjoint union (specified by the alternatives) of
+tuples (denoted by the constructor specifications). A disjoint union corresponds to a sum type
+(see Section~\ref{holtypes-sum}), a tuple to a product type (see Section~\ref{holtypes-tup}). Seen
+as type constructors both are BNFs (see Section~\ref{holbasic-bnf-bounded}).
+Due to composability of BNFs this implies that an algebraic type is a bounded
+natural functor as soon as all constructor argument types \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> are BNFs.
+This is even true for recursive algebraic types.
 
-As an example, every value of the polymorphic datatype \<open>'a coordx\<close> defined in
-Section~\ref{holtdefs-data-def} contains two or three values of the type parameter \<open>'a\<close>.
-\<close>
+HOL checks every datatype definition whether it satisfies this condition by checking whether all
+type constructors used in the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> have been registered as BNF (see
+Section~\ref{holbasic-bnf-register}) or are a recursive occurrence of the defined datatype. If that
+is the case the datatype is itself registered as BNF, all required goals are
+automatically proved. If it is not the case the datatype is registered as if all parameters are dead
+(see Section~\ref{holbasic-bnf-natural}).
 
-subsubsection "Retrieving Contained Values"
+Like the \<^theory_text>\<open>bnf\<close> command a datatype definition does not register the generated mapper \<open>m\<close> as functor.
+If needed this must be done explicitly using the \<^theory_text>\<open>functor\<close> command (see
+Section~\ref{holbasic-bnf-register}).
 
-text\<open>
-More generally, a type constructor \<open>name\<close> is called a ``bounded natural functor''\index{bounded natural functor}\index{functor!bounded natural $\sim$} (BNF), if it has
-for every type parameter \<open>'p\<^sub>i\<close> a function \<open>('p\<^sub>1,\<dots>,'p\<^sub>m) name \<Rightarrow> 'p\<^sub>i set\<close> which returns for every
-value of type \<open>('p\<^sub>1,\<dots>,'p\<^sub>m) name\<close> the set of contained values of type \<open>'p\<^sub>i\<close>, and if all these sets
-are ``bounded'', i.e. their maximal size is only determined by \<open>name\<close> and not by the actual types
-substituted for the type parameters.
-
-As an example, values of type \<open>'a coordx\<close> contain maximally
-\<open>3\<close> values of type \<open>'a\<close>, irrespective whether \<open>'a\<close> is substituted by type \<open>bool\<close>, where there are
-only two possible values, or by type \<open>nat\<close>, where there are infinitely many possible values. For a
-recursive datatype the set of contained values is often not bound by a number, instead it is bound
-to be finite, even if the actual type argument has inifinitely many values.
-
-Every definition
+Both example types \<open>coordx\<close> and \<open>treex\<close> specified in Section~\ref{holtdefs-data-def} are detected
+and registered by HOL as BNFs with one live type parameter. The datatype
 @{theory_text[display]
-\<open>datatype ('p\<^sub>1,\<dots>,'p\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n\<close>}
-of a parameterized datatype with type parameters \<open>'p\<^sub>1,\<dots>,'p\<^sub>m\<close> introduces for every type parameter
-\<open>'p\<^sub>i\<close> this ``set function''\index{set function}\index{function!set $\sim$} as
-@{text[display]
-\<open>seti_name :: "('p\<^sub>1,\<dots>,'p\<^sub>m) name \<Rightarrow> 'p\<^sub>i set"\<close>}\index{set-@set$\_$ (constant name prefix)}\index{seti-@set<i>$\_$ (constant name prefix)}
-If \<open>m = 1\<close> the single set function is named \<open>set_name\<close>, if \<open>m = 2\<close> the two set functions are named
-\<open>set1_name\<close> and \<open>set2_name\<close>.
+\<open>datatype 'a nobnf = Dim2 'a 'a | Dimset "'a set"\<close>}
+is not recognized by HOL as BNF, because it uses the type constructor \<open>set\<close> in
+its second constructor specification, which is not a BNF (see
+Section~\ref{holbasic-bnf-bounded}).
 
-For the datatype \<open>coordx\<close> the only set function is \<open>set_coordx\<close>. It maps every value of a type
-\<open>t coordx\<close> to the set of either two or three coordinate values of type \<open>t\<close>.
+Since (bounded) natural functors model container types (see Section~\ref{holbasic-bnf-natural}), the
+same is true for corresponding datatypes. As an example, every value of the polymorphic datatype
+\<open>'a coordx\<close> contains two or three values of the type parameter \<open>'a\<close> as its content. For a recursive
+datatype the content consists of the values at all direct occurrences of the type parameters united
+with the content of all recursive occurrences of datatype values.
 \<close>
 
-subsubsection "Replacing Contained Values"
+subsubsection "BNF Functions"
 
 text\<open>
-Moreover, for a bounded natural functor it must be possible to replace the contained values
-``in-place'' without modifying any other parts of the container value. Contained values are replaced
-by applying a function to them. This property can be modeled by a single function called a ``map
-function''\index{map function}\index{function!map $\sim$}. It takes as arguments one function \<open>f\<^sub>i\<close> for every type parameter \<open>'p\<^sub>i\<close> and returns a
-function on the container values which replaces every contained value \<open>x\<close> of type \<open>'p\<^sub>i\<close> by \<open>f\<^sub>i x\<close>.
+If HOL detects that a datatype is a BNF, it also generates definitions for the
+mapper (see Section~\ref{holbasic-functor-mapper}), the set-function(s) (see
+Section~\ref{holbasic-bnf-natural}), the predicator and the relator (see
+Section~\ref{holbasic-bnf-predrel}). The names are generated from the datatype name as \<open>map_name\<close>, 
+\<open>seti_name\<close>, \<open>pred_name\<close>, and \<open>rel_name\<close>, where \<open>i\<close> is the position number of the corresponding
+type parameter \<open>'name\<^sub>i\<close> (see Section~\ref{holtdefs-data-def}). So, if there are two type parameters
+the set-functions are named \<open>set1_name\<close> and \<open>set2_name\<close>. If the datatype has only one type
+parameter the (single) set-function is named \<open>set_name\<close>.
 
-Every datatype definition as above introduces the map function as
-@{text[display]
-\<open>map_name :: "('p\<^sub>1 \<Rightarrow> 'q\<^sub>1) \<Rightarrow> \<dots> \<Rightarrow> ('p\<^sub>m \<Rightarrow> 'q\<^sub>m)
-   \<Rightarrow> ('p\<^sub>1,\<dots>,'p\<^sub>m) name \<Rightarrow> ('q\<^sub>1,\<dots>,'q\<^sub>m) name"\<close>}\index{map-@map$\_$ (constant name prefix)}
-It takes as arguments \<open>m\<close> functions \<open>f\<^sub>1, \<dots>, f\<^sub>m\<close> and a datatype value.
-Every \<open>f\<^sub>i\<close> may map its arguments of type \<open>'p\<^sub>i\<close> to values of the same type or of a different type
-\<open>'q\<^sub>i\<close>. In the latter case also the resulting datatype value is of a different type (a different
-instance of the same parameterized datatype).
+If a datatype is not recognized as a BNF, none of these functions are defined
+by HOL.
 
-An alternative way of understanding \<open>map_name\<close> is that the partial application (see
-Section~\ref{theory-terms-multargs}) \<open>map_name f\<^sub>1 \<dots> f\<^sub>m\<close> ``lifts'' the \<open>m\<close> functions to a
-function between instances of type \<open>('p\<^sub>1,\<dots>,'p\<^sub>m) name\<close> and \<open>('q\<^sub>1,\<dots>,'q\<^sub>m) name\<close>. In particular, if
-\<open>m=1\<close> then \<open>map_name\<close> lifts every function \<open>f :: t\<^sub>1 \<Rightarrow> t\<^sub>2\<close> to the function \<open>(map_name f) :: t\<^sub>1 name
-\<Rightarrow> t\<^sub>2 name\<close>.
+For the type \<open>coordx\<close> the mapper \<open>map_coordx\<close> has type \<open>('p \<Rightarrow> 'q) \<Rightarrow> 'p coordx \<Rightarrow> 'q coordx\<close>. For
+instance, if \<open>f :: real \<Rightarrow> nat\<close> is the function that rounds every real number to the next natural
+number, the application \<open>map_coordx f cv\<close> replaces the real coordinates in \<open>cv\<close> of type \<open>real coordx\<close>
+by rounded natural coordinates, resulting in a value of type \<open>nat coordx\<close>.
 
-The function \<open>map_coordx\<close> has type \<open>('p \<Rightarrow> 'q) \<Rightarrow> 'p coordx \<Rightarrow> 'q coordx\<close>. For instance, if
-\<open>f :: real \<Rightarrow> nat\<close> is the function that rounds every real number to the next natural number, the
-application \<open>map_coordx f cv\<close> replaces the real coordinates in \<open>cv\<close> of type \<open>real coordx\<close> by
-rounded natural coordinates, resulting in a value of type \<open>nat coordx\<close>.
+For \<open>coordx\<close> the only set function is \<open>set_coordx\<close>. It maps every value of a type \<open>T coordx\<close> to the
+set of either two or three coordinate values of type \<open>T\<close>.
 
-In general a type constructor with such a map function is called a ``functor''. It does not only
-support constructing values from values of the parameter types, but also functions from functions
-on the parameter types.
-\<close>
-
-subsubsection "Constructing Predicates and Relations"
-
-text\<open>
-A bounded natural functor can use the sets of contained values returned by the set functions to
-lift predicates and relations (see Section~\ref{holbasic-pred}) in a similar way from contained
-values to container values. This is modeled by a ``predicator function''\index{predicator function}\index{function!predicator $\sim$} and a ``relator function''
-\index{relator function}\index{function!relator $\sim$}.
-
-For a datatype definition as above the predicator function is provided as
-@{text[display]
-\<open>pred_name :: "('p\<^sub>1 \<Rightarrow> bool) \<Rightarrow> \<dots> \<Rightarrow> ('p\<^sub>m \<Rightarrow> bool)
-    \<Rightarrow> ('p\<^sub>1,\<dots>,'p\<^sub>m) name \<Rightarrow> bool"\<close>}\index{pred-@pred$\_$ (constant name prefix)}
-It takes as arguments \<open>m\<close> unary predicates \<open>p\<^sub>1, \<dots>, p\<^sub>m\<close> and a datatype value \<open>x\<close> and tests whether
-all values in \<open>seti_name x\<close> satisfy the corresponding predicate \<open>p\<^sub>i\<close>.
-
-The partial application \<open>pred_name p\<^sub>1 \<dots> p\<^sub>m\<close> lifts the predicates \<open>p\<^sub>1, \<dots>, p\<^sub>m\<close> to a predicate on the
-corresponding instance of type \<open>('p\<^sub>1,\<dots>,'p\<^sub>m) name\<close>.
-
-The function \<open>pred_coordx\<close> has type \<open>('p \<Rightarrow> bool) \<Rightarrow> 'p coordx \<Rightarrow> bool\<close>. For
+The predicator \<open>pred_coordx\<close> has type \<open>('p \<Rightarrow> bool) \<Rightarrow> 'p coordx \<Rightarrow> bool\<close>. For
 instance, if \<open>cv\<close> is of type \<open>nat coordx\<close> the term \<open>pred_coordx (\<lambda>n. n=0) cv\<close> tests whether
 all coordinates of \<open>cv\<close> are \<open>0\<close>.
 
-The relator function is provided as
-@{text[display]
-\<open>rel_name :: "('p\<^sub>1 \<Rightarrow> 'q\<^sub>1 \<Rightarrow> bool) \<Rightarrow> \<dots> \<Rightarrow> ('p\<^sub>m \<Rightarrow> 'q\<^sub>m \<Rightarrow> bool)
-   \<Rightarrow> ('p\<^sub>1,\<dots>,'p\<^sub>m) name \<Rightarrow> ('q\<^sub>1,\<dots>,'q\<^sub>m) name \<Rightarrow> bool"\<close>}\index{rel-@rel$\_$ (constant name prefix)}
-It takes as arguments \<open>m\<close> binary relations \<open>r\<^sub>1, \<dots>, r\<^sub>m\<close> and two datatype values \<open>x, y\<close> and tests
-whether all pairs of values contained at the same position in  \<open>x\<close> and \<open>y\<close> are related by the
-corresponding \<open>r\<^sub>i\<close>. This is done by constructing a container of type \<open>('p\<^sub>1\<times>'q\<^sub>1, \<dots>, 'p\<^sub>m\<times>'q\<^sub>m) name\<close>
-where all contained values are pairs (see Section~\ref{holbasic-tuples}) which can be retrieved
-by the set functions and tested whether they are related. Using the map function every contained
-pair can be replaced by its first or second component, respectively, resulting in the containers
-to be tested for being related.
-
-The partial application \<open>rel_name r\<^sub>1 \<dots> r\<^sub>m\<close> lifts the relations \<open>r\<^sub>1, \<dots>, r\<^sub>m\<close> to a relation between
-the corresponding instances of the types \<open>('p\<^sub>1,\<dots>,'p\<^sub>m) name\<close> and \<open>('q\<^sub>1,\<dots>,'q\<^sub>m) name\<close>.
-
-The function \<open>rel_coordx\<close> has type \<open>('p \<Rightarrow> 'q \<Rightarrow> bool) \<Rightarrow> 'p coordx \<Rightarrow> 'q coordx \<Rightarrow> bool\<close>. For
+The relator \<open>rel_coordx\<close> has type \<open>('p \<Rightarrow> 'q \<Rightarrow> bool) \<Rightarrow> 'p coordx \<Rightarrow> 'q coordx \<Rightarrow> bool\<close>. For
 instance, if \<open>cv\<^sub>1\<close> and \<open>cv\<^sub>2\<close> are of type \<open>nat coordx\<close> the term \<open>rel_coordx (\<le>) cv\<^sub>1 cv\<^sub>2\<close> tests
 whether \<open>cv\<^sub>1\<close> and \<open>cv\<^sub>2\<close> have the same dimension and every coordinate in \<open>cv\<^sub>1\<close> is lower or equal to
-the corresponding coordinate in \<open>cv\<^sub>2\<close>.
-\<close>
+the corresponding coordinate in \<open>cv\<^sub>2\<close>.\cbend
 
-subsubsection "Specifying Names for the BNF Functions"
-
-text\<open>
-The form
+\cbstart Similar as for the command \<^theory_text>\<open>lift_bnf\<close> (see Section~\ref{holbasic-quotlift-bnf}) the \cbend
+form
 @{theory_text[display]
 \<open>datatype (sname\<^sub>1: 'p\<^sub>1,\<dots>, sname\<^sub>m: 'p\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n
   for map: mname pred: pname rel: rname\<close>}\index{for (keyword)}
 of a datatype definition allows to define alternate names \<open>sname\<^sub>i\<close>, \<open>mname\<close>, \<open>pname\<close>, \<open>rname\<close>
-for (some of) the set, map, predicator, and relator functions.
+for (some of) the set-, mapper, predicator, and relator functions. If the datatype is not recognized
+as BNF by HOL the names are ignored.
 \<close>
 
 subsection "Rules"
@@ -451,8 +445,10 @@ Several rules are configured for automatic application, e.g., they are added to 
 automatic application by the simplifier (see Section~\ref{methods-simp-simp}). Other rules must
 be explicitly used by referring them by their name. 
 
-Only some basic rules are described here, for more information refer to
-\<^cite>\<open>datatypes\<close>.
+Only some basic rules are described here, for more information refer to \<^cite>\<open>datatypes\<close>. \cbstart
+All introduced rules can be displayed using the ``Print Context'' tab in the Query panel
+\index{panel!query $\sim$} as described in Section~\ref{theory-theorem-search}, if the cursor is
+positioned after the \<^theory_text>\<open>datatype\<close> definition.\cbend
 \<close>
 
 subsubsection "Simplifier Rules"
@@ -631,6 +627,16 @@ qed\<close>}
 and in the second case the assumptions \<open>p x\<^sub>2, p x\<^sub>3\<close> are named \<open>Tree.IH\<close>.
 \<close>
 
+text_raw\<open>\cbstart\<close>
+subsubsection "BNF Rules"
+
+text\<open>
+If HOL detects a datatype to be a BNF (see Section~\ref{holtdefs-data-bnf}) it
+also provides the rules which are provided by the \<^theory_text>\<open>bnf\<close> command (see
+Section~\ref{holbasic-bnf-register}) with their names in the namespace of the datatype.
+\<close>
+text_raw\<open>\cbend\<close>
+
 subsection "Recursive Functions on Algebraic Types"
 text_raw\<open>\label{holtdefs-data-recursive}\<close>
 
@@ -714,7 +720,7 @@ termination by lexicographic_order\<close>}
 which includes the completeness and compatibility proof and a termination proof. If the termination
 proof cannot be done by the proof method \<^theory_text>\<open>lexicographic_order\<close> (see
 Section~\ref{holbasic-recursive-term}) an error is signaled, then the long form must be used to
-specify another termination proof.
+specify \cbstart a different \cbend termination proof.
 
 The faculty function definitions in Section~\ref{holbasic-recursive-defeqs} are not of the required
 form: the definition(s) of \<open>fac\<close> use an assumption in their second equation, the definition of
@@ -776,6 +782,711 @@ written
   "fac3 0 = 1"
 | "fac3 (Suc n) = (Suc n) * fac3 n"\<close>}\index{fac3 (example constant)}\<close>
 
+section "Subtypes"
+text_raw\<open>\label{holtdefs-sub}\<close>
+
+text \<open>
+A subtype\index{subtype} specifies the values of a \cbstart new type \<open>T'\<close> \cbend by a set of values
+of an existing type \cbstart \<open>T\<close>\cbend. However,
+since the values of different types are always disjoint, the values in the set are not directly the
+values of the new type, instead, there is a 1-1 relation between them\cbdelete.
+
+\cbdelete
+A subtype is defined\index{definition!subtype $\sim$} in the form
+@{theory_text[display]
+\<open>typedef name = "term" \<proof>\<close>}\index{typedef (keyword)}
+where \<open>name\<close> is the name of the new type \cbstart \<open>T'\<close> \cbend and \<open>term\<close> is a term for the representing set. The
+\<open>\<proof>\<close> must prove that the representing set is not empty. A subtype definition implies that
+for every value in the representing set there is a unique value in the defined subtype.
+
+Note that the concept of subtypes actually depends on the specific HOL type \<open>set\<close> for specifying
+the representing set. See Section~\ref{holtypes-set} for how to denote terms for this set. Also
+note that the set is always of \cbstart type \<open>T set\<close> where \<open>T\<close> \cbend is the common type of all set elements.
+This implies that the representing set is always a subset of the set of all values of \cbstart \<open>T\<close>
+which explains the designation of type \cbstart \<open>T'\<close> \cbend as ``subtype'' of \<open>T\<close>\cbend.
+
+A simple example is the type\cbstart
+@{theory_text[display]
+\<open>typedef threesub = "{0::nat,1,2}" by auto\<close>}\index{threesub (example type)}
+which has three values. The representing set contains three natural numbers. As usual,
+their type \<open>nat\<close> must be explicitly specified because the constants \<open>0, 1, 2\<close> may also denote values
+of other types. However, they do not denote the values of the new type \<open>threesub\<close>, the type definition
+does not introduce constants for them.\cbend\<close>
+
+text_raw\<open>\cbstart\<close>
+subsection "Subtypes as Quotients"
+text_raw\<open>\label{holtdefs-sub-quot}\<close>
+
+text \<open>
+The values of type \<open>T\<close> in the representing set can be related to their corresponding values of the
+new type \<open>T'\<close> by a relation \<open>R :: T \<Rightarrow> T' \<Rightarrow> bool\<close>. Since there is a unique value in \<open>T'\<close> for every
+set member and all values of \<open>T'\<close> are related with a set member, \<open>R\<close> is right-unique and right-total.
+
+As described in Section~\ref{holbasic-quotlift} this means that \<open>T'\<close> is a quotient of \<open>T\<close> with
+transfer relation \<open>R\<close>. This observation implies the existence of all other items related to a
+quotient: the morphisms \<open>abs_T', rep_T'\<close>, the domain \<open>D\<close> of \<open>R\<close> and the equivalence relation \<open>E\<close>
+(see Section~\ref{holbasic-quotlift}). As usual for a quotient, \<open>T'\<close> is called ``abstract type''
+and \<open>T\<close> is called ``raw type''.
+
+Since the relation between \<open>D\<close> and \<open>T'\<close> is 1-1, the transfer relation \<open>R\<close> is also left-unique
+(see Section~\ref{holbasic-quotlift-quot})
+
+The domain \<open>D\<close> of \<open>R\<close> is the set of all values in \<open>T\<close> related to a value in \<open>T'\<close>, so it is exactly
+the representing set used to define the subtype. The abstraction function \<open>abs_T' :: T \<Rightarrow> T'\<close> maps
+all values in \<open>D\<close> to their corresponding value in \<open>T'\<close> and is underspecified otherwise. The
+representation function \<open>rep_T' :: T' \<Rightarrow> T\<close> is uniquely determined and maps all values of \<open>T'\<close> to
+their corresponding value in \<open>D\<close>. As usual, the values in \<open>D\<close> are called representation values for
+the values of \<open>T'\<close>. The equivalence relation \<open>E\<close> is the equality restricted to the representing set
+\<open>eq_onp (\<lambda>x. x\<in>D)\<close>.
+\<close>
+
+subsubsection "The Morphism Names"
+
+text\<open>
+The subtype definition \<^theory_text>\<open>typedef T' = D \<proof>\<close> introduces the constants \<open>Abs_T'\<close>
+\index{Abs-@Abs$\_$ (constant name prefix)} and \<open>Rep_T'\<close>\index{Rep-@Rep$\_$ (constant name prefix)}
+for the morphisms (note the capitalization of the names). The function \<open>Abs_T'\<close> can be used to
+denote the values of the subtype. Thus, \<open>Abs_T'\<close> plays the role of a constructor for type \<open>T'\<close>,
+whereas \<open>Rep_T'\<close> can be thought of being a destructor for \<open>T'\<close>.
+
+In the example the morphisms are \<open>Abs_threesub :: nat \<Rightarrow> threesub\<close> and \<open>Rep_threesub :: threesub \<Rightarrow> nat\<close>. The
+values of type \<open>threesub\<close> may be denoted as \<open>(Abs_threesub 0)\<close>, \<open>(Abs_threesub 1)\<close>, and \<open>(Abs_threesub 2)\<close>.
+The term \<open>(Abs_threesub 42)\<close> is a valid term of type \<open>threesub\<close>, however, no information about its value
+is available.
+
+Alternative names may be specified for the morphisms in the form
+@{theory_text[display]
+\<open>typedef name = "term" morphisms rname aname \<proof>\<close>}\index{morphisms (keyword)}
+where \<open>rname\<close> replaces \<open>Rep_name\<close> and \<open>aname\<close> replaces \<open>Abs_name\<close>.
+\<close>
+
+subsection "Parameterized Subtypes"
+text_raw\<open>\label{holtdefs-sub-param}\<close>
+text_raw\<open>\cbend\<close>
+
+text\<open>
+Like declared types subtypes may be parameterized (see Section~\ref{theory-terms-types}):
+@{theory_text[display]
+\<open>typedef ('name\<^sub>1,\<dots>,'name\<^sub>n) name = "term" \<proof>\<close>}
+where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type of the \<open>term\<close>, i.e., the 
+\<open>term\<close> may be polymorphic (see Section~\ref{theory-terms-consts}). \cbstart Then it does not
+denote a fixed set of values, it denotes for every instantiation of the type parameters a different
+set of values from a different type.
+
+As an example the type
+@{theory_text[display]
+\<open>typedef 'a eqpair = "{(x::'a,y::'a). x = y}" by auto\<close>}\index{eqpair (example type)}
+has the set of all pairs (see Section~\ref{holbasic-tuples}) as its representing set, where the
+first and second components are equal. The type of both components is the type parameter \<open>'a\<close>, thus
+the raw type is the type \<open>'a \<times> 'a\<close> of pairs of values of the same type. If \<open>'a\<close> is instantiated
+by type \<open>bool\<close> the representing set is \<open>{(True,True),(False,False)}\<close> whereas if \<open>'a\<close> is instantiated
+by type \<open>nat\<close> the representing set is infinite.\cbend
+\<close>
+
+subsection "Type Copies"
+text_raw\<open>\label{holtdefs-sub-copies}\<close>
+
+text \<open>
+A type copy\index{type!copy} is the special case of a subtype definition where the representing set
+is the universal set (see Section~\ref{holtypes-set-values}) of \cbstart the raw type:
+@{theory_text[display]
+\<open>typedef name = "UNIV :: T set" by auto\<close>}
+The non-emptiness proof can always be performed by the \<open>auto\<close> method, since the universal set covers
+all values in type \<open>T\<close> and types are always non-empty.
+
+As described at the end of Section~\ref{holbasic-quotlift-setup} a type copy is the case where the
+transfer relation \<open>R\<close> is left-unique and left-total and thus the new type \<open>name\<close> is ``isomorphic''
+to \<open>T\<close>. The values are in 1-1 relation, although, as usual for distinct types, the value sets are
+disjoint. The equivalence relation \<open>E\<close> is the equality \<open>(=)\<close> on \<open>T\<close>.
+
+For a parameterized type copy the raw type \<open>T\<close> is some type expression constructed from the type
+parameters. An example is the type copy
+@{theory_text[display]
+\<open>typedef ('a, 'b) cpyfun = "UNIV :: ('a \<Rightarrow> 'b) set" by simp\<close>}\index{cpyfun (example type)}
+of the type of functions from \<open>'a\<close> to \<open>'b\<close>.\cbend\<close>
+
+subsection "Subtype Rules"
+text_raw\<open>\label{holtdefs-sub-rules}\<close>
+
+text \<open>
+A subtype definition only introduces a small number of rules, no rules are added to the simpset.
+All introduced rules can be displayed using the ``Print Context'' tab in the Query panel
+\index{panel!query $\sim$} as described in Section~\ref{theory-theorem-search}, if the cursor is
+positioned after the subtype definition.
+\<close>
+
+subsubsection "Basic Morphism Rules"
+
+text\<open>
+\cbstart As described in Section~\ref{holbasic-quotlift-quot} for a left-unique transfer relation the
+morphisms are inverse of each other. For a subtype definition \<^theory_text>\<open>typedef T' = D \<proof>\<close> this is
+expressed by two rules of the form
+@{text[display]
+\<open>Abs_T'_inverse:
+  ?y \<in> D \<Longrightarrow> Rep_T' (Abs_T' ?y) = ?y
+Rep_T'_inverse:
+  Abs_T' (Rep_T' ?x) = ?x\<close>}\index{inverse@$\_$inverse (fact name suffix)}
+
+This also implies that both morphisms are injective which is stated explicitly by two rules of the form
+@{text[display]
+\<open>Abs_T'_inject:
+  \<lbrakk>?y\<^sub>1 \<in> D; ?y\<^sub>2 \<in> D\<rbrakk> \<Longrightarrow> (Abs_T' ?y\<^sub>1 = Abs_T' ?y\<^sub>2) = (?y\<^sub>1 = ?y\<^sub>2)
+Rep_T'_inject:
+  (Rep_T' ?x\<^sub>1 = Rep_T' ?x\<^sub>2) = (?x\<^sub>1 = ?x\<^sub>2)\<close>}\index{inject@$\_$inject (fact name suffix)}
+
+Since all values of type \<open>T'\<close> can be denoted as \<open>Abs_T' y\<close> for some \<open>y\<close> in the representing set \<open>D\<close>,
+the rule \<open>Abs_T'_inject\<close> can be used to prove equality or inequality for values of type \<open>T'\<close> based on
+the equality for values in \<open>D\<close>.
+\<close>
+
+subsubsection "Case Rules"
+
+text\<open>
+Every subtype definition \<^theory_text>\<open>typedef T' = D \<proof>\<close> introduces a case rule (see
+Section~\ref{case-reasoning-rules}) of the form
+@{text[display]
+\<open>Abs_T'_cases:
+  (\<And>y. \<lbrakk>?x = Abs_T' y; y \<in> D\<rbrakk> \<Longrightarrow> ?P) \<Longrightarrow> ?P\<close>}\index{cases@$\_$cases (fact name suffix)}
+It is valid because the \<open>Abs_T'\<close> application covers all possibilities of constructing a
+value \<open>?x\<close> of \<open>T'\<close>.
+
+The rule \<open>Abs_T'_cases\<close> is associated with the new subtype \<open>T'\<close> for use by the \<^theory_text>\<open>cases\<close> method
+(see Section~\ref{case-reasoning-cases}). Therefore the application of the method
+@{theory_text[display]
+\<open>cases "term"\<close>}
+where \<open>term\<close> is of type \<open>T'\<close> applies \<open>Abs_T'_cases\<close> to replace the current goal. Since the rule has
+only one case, it does not split the goal. Applying it to a goal \<^theory_text>\<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<close>
+as described in Section~\ref{case-reasoning-cases} results in the single new goal
+@{text[display]
+\<open>\<And> x\<^sub>1 \<dots> x\<^sub>m y. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n; term = Abs_T' y; y \<in> D\<rbrakk> \<Longrightarrow> C\<close>}
+where the variable \<open>y\<close> and the two assumptions from the case rule have been added. Together the new
+goal provides a representation of \<open>term\<close> by applying \<open>Abs_T'\<close> to a value \<open>y\<close> from the representing
+set \<open>D\<close>. This may allow to use facts about \<open>y\<close> to prove the goal.
+
+The name for the named context created by the \<^theory_text>\<open>cases\<close> method is simply the morphism name
+\<open>Abs_T'\<close>. Therefore a structured proof using case based reasoning for a \<open>term\<close> of subtype \<open>T'\<close>
+has the form
+@{theory_text[display]
+\<open>proof (cases "term")
+  case (Abs_T' y) \<dots> show ?thesis \<proof>
+qed\<close>}
+The name \<open>y\<close> of the locally fixed variable can be freely selected, it denotes the morphism
+argument, i.e., the representation value for \<open>term\<close>.
+
+Every subtype definition \<^theory_text>\<open>typedef T' = D \<proof>\<close> also introduces an elimination rule (see
+Section~\ref{case-elim-rules}) of the form
+@{text[display]
+\<open>Rep_T'_cases:
+  \<lbrakk>?y \<in> D; \<And>x. ?y = Rep_T' x \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close>}
+It is valid because the \<open>Rep_T'\<close> application covers all possibilities to determine a representation
+value \<open>?y\<close> in \<open>D\<close>.
+
+With the help of this rule it is possible to introduce an abstraction value \<open>x\<close> corresponding to
+a representation value \<open>?y\<close>, consuming an assumption or input fact that \<open>?y\<close> is in \<open>D\<close>. For
+application by the method \<^theory_text>\<open>cases\<close> the rule is annotated by \<open>[consumes 1]\<close> and the name for the
+created named context is the morphism name \<open>Rep_T'\<close>. As described in Section~\ref{case-elim-struct}
+a pattern for using the rule in a structured proof is
+@{theory_text[display]
+\<open>theorem "C" if "y \<in> D"
+  using that
+proof (cases rule: Rep_T'_cases)
+  case (Rep_T' x) \<dots> show ?thesis \<proof>
+qed\<close>}\<close>
+
+subsubsection "Induction Rules"
+
+text\<open>
+Every subtype definition \<^theory_text>\<open>typedef T' = D \<proof>\<close> introduces two induction rules (see
+Section~\ref{case-induction-rules}) of the form
+@{text[display]
+\<open>Abs_T'_induct:
+  (\<And>y. y \<in> D \<Longrightarrow> ?P (Abs_T' y)) \<Longrightarrow> ?P ?a
+Rep_T'_induct:
+  \<lbrakk>?a \<in> D; \<And>x. ?P (Rep_T' x)\<rbrakk> \<Longrightarrow> ?P ?a\<close>}\index{induct@$\_$induct (fact name suffix)}
+The former rule is a plain induction rule, the latter is an induction rule with elimination where
+the major premise states that the value \<open>?a\<close> is in \<open>D\<close>. Both rules only contain a ``base case''
+and no ``induction step'' with a recursive occurrence of values of the defined type \<open>T'\<close>. As for
+the case rules they are valid because the morphism applications cover all possibilities of
+constructing values of \<open>T'\<close> or values in \<open>D\<close>, respectively.
+
+Since the rules only consist of a base case they are mainly equivalent to the case rules. However,
+when applied by the \<open>induct\<close> method, they not only provide a representation by a morphism for a
+specified variable, they also substitute every occurrence of the variable by the morphism
+representation.
+
+The rule \<open>Abs_T'_induct\<close> is associated with subtype \<open>T'\<close> for use by the methods \<^theory_text>\<open>induction\<close> and
+\<^theory_text>\<open>induct\<close> (see Section~\ref{case-induction}). Therefore the application of the method
+@{theory_text[display]
+\<open>induction x\<close>}
+where \<open>x\<close> is a variable of type \<open>T'\<close> replaces a goal by a goal where every occurrence of \<open>x\<close> is
+substituted by the term \<open>Abs_T' y\<close> and \<open>y\<close> is a new bound variable with the additional assumption
+\<open>y \<in> D\<close> named \<open>Abs_T'.hyps\<close>. As usual for the induction methods, \<open>x\<close> is substituted in the goal
+conclusion and also in all goal assumptions.
+
+As for the case rule and the \<^theory_text>\<open>cases\<close> method, the name for the named context created by the 
+methods \<^theory_text>\<open>induction\<close> and \<^theory_text>\<open>induct\<close> is simply the morphism name \<open>Abs_T'\<close>. Therefore a structured
+proof using induction for a variable \<open>x\<close> of subtype \<open>T'\<close> has the form
+@{theory_text[display]
+\<open>proof (induction x)
+  case (Abs_T' y) \<dots> show ?case \<proof>
+qed\<close>}
+
+As an example, the induction rule for the subtype \<open>threesub\<close> defined above is
+@{text[display]
+\<open>Abs_threesub_induct:
+  "\<And>y. y \<in> {0, 1, 2} \<Longrightarrow> ?P (Abs_threesub y)) \<Longrightarrow> ?P ?a\<close>}
+By applying the method \<open>(induction x)\<close> the goal \<open>x = Abs_threesub 0 \<Longrightarrow> x \<noteq> Abs_threesub 1\<close> is replaced by
+the goal \<open>\<And>y.  \<lbrakk>y \<in> {0, 1, 2}; Abs_threesub y = Abs_threesub 0\<rbrakk> \<Longrightarrow> Abs_threesub y \<noteq> Abs_threesub 1\<close>
+(which does not help for the proof, but shows the effect of the induction rule).
+
+The rule \<open>Rep_T'_induct\<close> is annotated by \<open>[consumes 1]\<close> for application by the methods \<^theory_text>\<open>induction\<close>
+and \<^theory_text>\<open>induct\<close> and the name for the created named context is the morphism name \<open>Rep_T'\<close>. As described
+in Section~\ref{case-induction-elim} a pattern for using the rule in a structured proof is
+@{theory_text[display]
+\<open>theorem "C" if "y \<in> D"
+  using that
+proof (induction rule: Rep_T'_induct)
+  case (Rep_T' x) \<dots> show ?case \<proof>
+qed\<close>}
+
+As an example, the induction rule with elimination for the subtype \<open>threesub\<close> defined above is
+@{text[display]
+\<open>Rep_threesub_induct:
+  \<lbrakk>?a \<in> {0, 1, 2}; \<And>x. ?P (Rep_threesub x)\<rbrakk> \<Longrightarrow> ?P ?a\<close>}\<close>
+
+subsection "Registering Subtypes as Quotients"
+text_raw\<open>\label{holtdefs-sub-setup}\<close>
+
+text \<open>
+Although every subtype defined by \<^theory_text>\<open>typedef T' = D \<proof>\<close> is a quotient, HOL does not
+automatically register it as such (see Section~\ref{holbasic-quotlift-setup}). However, it
+generates and proves the fact
+@{text[display]
+\<open>type_definition_T':
+  type_definition Rep_T' Abs_T' D\<close>}
+This is a type-definition theorem (see Section~\ref{holbasic-quotlift-quot}) and can be used for
+registering \<open>T'\<close> as quotient using the command
+@{theory_text[display]
+\<open>setup_lifting type_definition_T'\<close>}
+As usual, the command prepares for defining functions on the subtype by lifting them from the raw
+type (see Section~\ref{holbasic-quotlift-lift}) and introduces transfer rules for transferring terms
+from the subtype to the raw type (see Section~\ref{holbasic-quotlift-setup}).
+
+This use of the predicate \<open>type_definition\<close> for characterizing types introduced by the \<^theory_text>\<open>typedef\<close>
+command is the reason for its name.
+
+As described in Section~\ref{holbasic-quotlift-setup}, if the raw type \<open>T\<close> of a polymorphic subtype
+is no BNF or has dead type parameters, the relator \<open>rel_T\<close> cannot be used to provide full transfer
+support, the \<^theory_text>\<open>setup_lifting\<close> command will issue a warning in this case.
+\<close>
+
+subsection "Lifting Functions to Subtypes"
+text_raw\<open>\label{holtdefs-sub-lift}\<close>
+
+text \<open>
+After registering a subtype as quotient as described in Section~\ref{holtdefs-sub-setup}, functions
+can be lifted from the raw type to the subtype as described in Section~\ref{holbasic-quotlift-lift}.
+
+Since the transfer relation for a subtype is left-unique, the respectfulness property required for
+a function to be lifted is based on closedness of the representing set. For a subtype defined by
+\<^theory_text>\<open>typedef T' = D \<proof>\<close> the respectfulness property for an operation \<open>f::T\<Rightarrow>T\<close> is
+@{text[display]
+\<open>\<And>x::T. x \<in> D \<Longrightarrow> f x \<in> D\<close>}
+and for a function \<open>f::u\<Rightarrow>T\<close> where only the results shall be lifted it is
+@{text[display]
+\<open>\<And>x::u. f x \<in> D\<close>}
+For a function \<open>f::T\<Rightarrow>u\<close> where only the arguments shall be lifted respectfulness is always satisfied.
+
+For the example type \<open>threesub\<close> as defined above, after registering it as quotient by
+@{theory_text[display]
+\<open>setup_lifting type_definition_threesub\<close>}
+example functions can be lifted from type \<open>nat\<close> as follows:
+@{theory_text[display]
+\<open>lift_definition suc3 :: "threesub \<Rightarrow> threesub"
+  is "\<lambda>x. (x+1) mod 3" by auto
+lift_definition mod3 :: "nat \<Rightarrow> threesub"
+  is "\<lambda>x. x mod 3" by auto
+lift_definition evn3 :: "threesub \<Rightarrow> bool"
+  is "\<lambda>x. x mod 2 = 0" done\<close>}
+The first example defines a cyclic successor function on \<open>threesub\<close>. Here the argument and result
+type are lifted, the goal to be proved for respectfulness is
+\<open>\<And>n. n \<in> {0, 1, 2} \<Longrightarrow> (n + 1) mod 3 \<in> {0, 1, 2}\<close> which can be proved by the \<open>auto\<close> method. The
+second example calculates the remainder modulo \<open>3\<close> and represents the result in type \<open>threesub\<close>,
+the goal to be proved is \<open>\<And>n. n mod 3 \<in> {0, 1, 2}\<close>. The third example defines a predicate for
+evenness on \<open>threesub\<close>, no goal needs to be proved because only the argument type is lifted,
+therefore the proof is empty and can immediately be terminated by \<open>done\<close>.
+
+As described in Section~\ref{holbasic-quotlift-lift} HOL provides automatic support for transferring
+terms containing functions defined by lifting to the raw type. As an example in the theorem
+@{theory_text[display]
+\<open>theorem "evn3 (suc3 (mod3 7))" apply(transfer) by simp\<close>}
+the \<open>transfer\<close> method replaces the goal by the proposition \<open>(7 mod 3 + 1) mod 3 mod 2 = 0\<close> which is
+simply a property of natural numbers and can be proved by the simplifier using the existing rules
+about the natural numbers. No rules about the subtype \<open>threesub\<close> are required.
+
+This is a typical way of working with a subtype using the lifting package: All functions on the
+subtype are introduced by lifting, then all theorems specified for the subtype can be proved using
+transfer and the existing facts about the raw type.
+
+In the case of a type copy (see Section~\ref{holtdefs-sub-copies}) the representing set contains all
+values of the raw type and is closed for all functions. Therefore arbitrary functions can be lifted
+from the raw type to a type copy using an empty proof.\<close>
+
+subsection "Subtypes of Bounded Natural Functors"
+text_raw\<open>\label{holtdefs-sub-bnf}\<close>
+
+text \<open>
+As described in Section~\ref{holbasic-quotlift-bnf} a subtype \<open>T'\<close> of a BNF \<open>T\<close> (the type of the
+elements of the representing set) may again be a BNF. In that case the \<^theory_text>\<open>lift_bnf\<close> command can be
+used to register \<open>T'\<close> as BNF. Note that before using the command it is necessary to explicitly
+register \<open>T'\<close> as quotient by the command \<^theory_text>\<open>setup_lifting type_definition_T'\<close> (see
+Section~\ref{holtdefs-sub-setup}).
+
+If the representing set does not contain all values of \<open>T\<close> the nonemptiness witness of \<open>T\<close> (see
+Section~\ref{holbasic-quotlift-bnf}) may get
+lost in \<open>T'\<close>. Therefore usually a new witness which belongs to the representing set must be
+specified in the command:
+@{theory_text[display]
+\<open>lift_bnf ('a\<^sub>1,\<dots>,'a\<^sub>n) T' [wits: "term"] \<proof>\<close>}
+where \<open>term\<close> specifies a function from arguments of types \<open>'a\<^sub>1,\<dots>,'a\<^sub>n\<close> to values which must be
+in the representing set.
+
+After registering the example type \<open>eqpair\<close> defined in Section~\ref{holtdefs-sub-param} as
+quotient using
+@{theory_text[display]
+\<open>setup_lifting type_definition_eqpair\<close>}
+it can be registered as BNF using the command
+@{theory_text[display]
+\<open>lift_bnf 'a eqpair [wits: "\<lambda>(x::'a). (x,x)"] by auto\<close>}
+because the pair \<open>(x,x)\<close> has equal components and is thus in the representing set of \<open>eqpair\<close>.
+
+For a type copy \<open>T'\<close> (see Section~\ref{holtdefs-sub-copies}) of a BNF \<open>T\<close> the transfer relation is
+also left-total and the \<^theory_text>\<open>copy_bnf\<close> command (see Section~\ref{holbasic-quotlift-bnf}) can be used to
+register \<open>T'\<close> as BNF (after registering it as quotient). No proof is required, a type copy of a BNF
+is always a BNF.
+
+After registering the example type \<open>cpyfun\<close> defined in Section~\ref{holtdefs-sub-copies} as
+quotient using
+@{theory_text[display]
+\<open>setup_lifting type_definition_cpyfun\<close>}
+it can be registered as BNF using the command
+@{theory_text[display]
+\<open>copy_bnf ('a, 'b) cpyfun\<close>}
+\<close>
+text_raw\<open>\cbend\<close>
+
+section "Quotient Types"
+text_raw\<open>\label{holtdefs-quot}\<close>
+
+text_raw\<open>\cbstart\<close>
+
+text \<open>
+A quotient type\index{quotient!type}\index{type!quotient $\sim$} specifies the values of a new type
+\<open>T'\<close> by equivalence classes of an equivalence relation \<open>E\<close> on an existing type \<open>T\<close>. As usual, the
+equivalence classes are not directly the values of the new type, instead, there is a 1-1 relation
+between them.
+
+A quotient type is defined\index{definition!quotient type $\sim$} in the form
+@{theory_text[display]
+\<open>quotient_type name = "type" / "term" \<proof>\<close>}\index{quotient-type@quotient$\_$type (keyword)}
+where \<open>name\<close> is the name of the new type \<open>T'\<close>, \<open>type\<close> specifies the existing type \<open>T\<close>, and \<open>term\<close>
+specifies the equivalence relation \<open>E\<close> which must be of type \<open>T \<Rightarrow> T \<Rightarrow> bool\<close>. The
+\<open>\<proof>\<close> must prove that \<open>E\<close> is an equivalence relation which is stated by the predicate
+application \<open>equivp E\<close>\index{equivp (constant)} (see Section~\ref{holtypes-rel-funcs}).
+
+A simple example is the quotient type
+@{theory_text[display]
+\<open>quotient_type rem3 = nat / "\<lambda>x y. x mod 3 = y mod 3"
+  by (simp add: equivp_def) metis\<close>}\index{rem3 (example type)}
+which has three values related to the remainder classes of natural numbers modulo \<open>3\<close>.
+
+If the \<open>type\<close> specified in a \<^theory_text>\<open>quotient_type\<close> definition has not been registered as functor
+(see Section~\ref{holbasic-functor-reg}) the \<^theory_text>\<open>quotient_type\<close> definition signals a warning, that
+no map function has been defined for it. As described in Section~\ref{holbasic-bnf-register} this
+also happens for types registered as BNF, they have a defined mapper, but it is not registered.\<close>
+
+subsection "Quotient Types as Quotients"
+text_raw\<open>\label{holtdefs-quot-quot}\<close>
+
+text \<open>
+As the name suggests, a quotient type \<open>T'\<close> defined for \<open>T\<close> and \<open>E\<close> is a quotient of \<open>T\<close>. The
+corresponding transfer relation \<open>R :: T \<Rightarrow> T' \<Rightarrow> bool\<close> relates all values in an equivalence class
+of \<open>E\<close> with the value in \<open>T'\<close> which corresponds to that class. Since there is a unique value in \<open>T'\<close>
+for every member of a class and all values of \<open>T'\<close> are related with a class member, \<open>R\<close> is
+right-unique and right-total, i.e., \<open>T'\<close> is a quotient of \<open>T\<close>.
+
+This observation implies the existence of all other items related to a quotient: the morphisms
+\<open>abs_T', rep_T'\<close>, the domain \<open>D\<close> of \<open>R\<close> and the equivalence relation \<open>E\<close> (which is used in the
+definition) (see Section~\ref{holbasic-quotlift}). As usual for a quotient, \<open>T'\<close> is called
+``abstract type'' and \<open>T\<close> is called ``raw type''.
+
+In contrast to a subtype definition (see Section~\ref{holtdefs-sub-setup}) a quotient type
+definition immediately registers the quotient type \<open>T'\<close> as quotient of its raw type \<open>T\<close> using an
+internal \<^theory_text>\<open>setup_lifting\<close> command (see Section~\ref{holbasic-quotlift-setup}).
+
+The property \<open>equivp E\<close> implies the reflexivity rule \<open>reflp E\<close> (see Section~\ref{holbasic-quotlift}),
+i.e., for a quotient type definition as above the transfer relation \<open>R\<close> is always left-total. HOL
+automatically proves the reflexivity rule and uses it in the internal \<^theory_text>\<open>setup_lifting\<close> command as
+described for left-total transfer relations in Section~\ref{holbasic-quotlift-setup}.
+
+A more general quotient type where \<open>R\<close> needs not be left-total can be defined in the form
+@{theory_text[display]
+\<open>quotient_type name = "type" / partial: "term" \<proof>\<close>}\index{partial: (keyword)}
+Here the \<open>\<proof>\<close> has only to prove the weaker property \<open>part_equivp E\<close>
+\index{part_equivp@part$\_$equivp (constant)} (see Section~\ref{holtypes-rel-funcs}) which does not 
+imply \<open>reflp E\<close> and allows \<open>E\<close> to be partial in the sense that there may be values in \<open>T\<close> which are
+not even equivalent by \<open>E\<close> to themselves. In this case the domain \<open>D\<close> of \<open>R\<close> is the set of values
+which are equivalent to themselves: \<open>D = {x. E x x}\<close>. Such a quotient type corresponds to the most
+general case of quotient described in Section~\ref{holbasic-quotlift}. It is also automatically
+registered as quotient by an internal \<^theory_text>\<open>setup_lifting\<close> command but with omitted reflexivity rule.\<close>
+
+subsubsection "The Morphism Names"
+
+text\<open>
+The quotient type definition \<^theory_text>\<open>quotient_type T' = T / E\<close> introduces the constants \<open>abs_T'\<close> and
+\<open>rep_T'\<close> for the morphisms (note the lowercase names in contrast to the morphism names described
+for subtypes in Section~\ref{holtdefs-sub-quot}).
+
+Additionally it introduces the constants \<open>Abs_T' :: (T set) \<Rightarrow> T'\<close> and
+\<open>Rep_T' :: T' \<Rightarrow> (T set)\<close>. The former maps each equivalence class of \<open>E\<close> to the corresponding
+value in the quotient type, it is underspecified for all other sets of values of type \<open>T\<close>. The
+latter maps all values in the quotient type to the corresponding equivalence class of \<open>E\<close>.\<close>
+
+subsubsection "Quotient Types and Subtypes"
+
+text\<open>
+In general, for a quotient type the equivalence classes of \<open>E\<close> are no singletons, therefore the
+transfer relation \<open>R\<close> is not left-unique. Only if \<open>E\<close> is the equality \<open>(=)\<close> or the restricted
+equality \<open>eq_onp (\<lambda>x. x\<in>D)\<close> (see Section~\ref{holbasic-equal-eq}) this would be the case.
+
+Since every subtype (see Section~\ref{holtdefs-sub}) is a quotient with a left-unique transfer
+relation, for every subtype defined by \<^theory_text>\<open>typedef T' = D\<close> with a representing set \<open>D :: T set\<close>
+the quotient type definition
+@{theory_text[display]
+\<open>quotient_type T' = T / partial: "eq_onp (\<lambda>x. x\<in>D)" \<proof>\<close>}
+has nearly the same effect as the subtype definition together with the \<^theory_text>\<open>setup_lifting\<close> command for
+it. The main differences are the morphism names and the rules generated for them (see
+Section~\ref{holtdefs-quot-rules}).
+
+In the same way for every type copy \<^theory_text>\<open>typedef T' = (UNIV::T)\<close> (see Section~\ref{holtdefs-sub-copies})
+the quotient type definition
+@{theory_text[display]
+\<open>quotient_type T' = T / "(=)" \<proof>\<close>}
+has nearly the same effect as the type copy definition together with the \<^theory_text>\<open>setup_lifting\<close> command
+for it.\<close>
+
+subsection "Parameterized Quotient Types"
+text_raw\<open>\label{holtdefs-quot-param}\<close>
+
+text\<open>
+Like declared types quotient types may be parameterized (see Section~\ref{theory-terms-types}):
+@{theory_text[display]
+\<open>quotient_type ('name\<^sub>1,\<dots>,'name\<^sub>n) name = "type" / "term" \<proof>\<close>}
+where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in \<open>type\<close> i.e., the \<open>type\<close> (and also the
+\<open>term\<close>) may be polymorphic (see Section~\ref{theory-terms-consts}).
+
+As an example the type
+@{theory_text[display]
+\<open>quotient_type 'a quotpair = "'a \<times> 'a" / "\<lambda>(x\<^sub>1,x\<^sub>2) (y\<^sub>1,y\<^sub>2). x\<^sub>2 = y\<^sub>2"
+  by(simp add: equivp_def split_beta) (metis case_prod_conv)\<close>}\index{quotpair (example type)}
+is defined using the equivalence relation on pairs (see Section~\ref{holbasic-tuples}), where pairs
+are equivalent if they have the same second component (i.e., the first component is ignored). Note
+that this means the resulting quotient type is isomorphic to the type parameter \<open>'a\<close> itself.
+
+As described in Section~\ref{holbasic-quotlift-setup}, if the raw type \<open>T\<close> of a polymorphic quotient
+type is no BNF or has dead type parameters, the relator \<open>rel_T\<close> cannot be used to provide full
+transfer support. The quotient type definition will issue a warning in this case, caused by the
+internal \<^theory_text>\<open>setup_lifting\<close> command.\<close>
+
+subsection "Quotient Type Rules"
+text_raw\<open>\label{holtdefs-quot-rules}\<close>
+
+text \<open>
+Since a quotient type definition includes the \<^theory_text>\<open>setup_lifting\<close> command, it introduces all
+corresponding rules as described in Section~\ref{holbasic-quotlift-setup}. Additionally, it
+introduces similar rules like a subtype definition (see Section~\ref{holtdefs-sub-rules}), these
+are described in the following subsections. No rules are added to the simpset.
+
+All introduced rules can be displayed using the ``Print Context'' tab in the Query panel
+\index{panel!query $\sim$} as described in Section~\ref{theory-theorem-search}, if the cursor is
+positioned after the \<^theory_text>\<open>quotient_type\<close> definition.
+\<close>
+
+subsubsection "Basic Morphism Rules"
+
+text\<open>
+Other than for subtypes the basic morphism rules for a quotient type defined by
+\<^theory_text>\<open>quotient_type T' = T / E \<proof>\<close> are not directly defined for the morphisms, but instead for
+the functions \<open>Abs_T'\<close> and \<open>Rep_T'\<close> which map between values of \<open>T'\<close> and equivalence classes
+of \<open>E\<close>. Whenever \<open>Abs_T'\<close> is applied to a variable in a rule, the rule must contain the additional
+assumption that the variable belongs to the set of equivalence classes of \<open>E\<close>. This set is specified
+in the rules by a complex term, for better presentation this term is abbreviated by \<open>\<C>(E)\<close> in the
+following subsections.
+
+As mappings to/from equivalence classes the functions are inverse of each other. This is expressed
+by two rules of the form
+@{text[display]
+\<open>Abs_T'_inverse:
+  ?y \<in> \<C>(E) \<Longrightarrow> Rep_T' (Abs_T' ?y) = ?y
+Rep_T'_inverse:
+  Abs_T' (Rep_T' ?x) = ?x\<close>}\index{inverse@$\_$inverse (fact name suffix)}
+
+This also implies that both functions are injective which is stated explicitly by two rules of the form
+@{text[display]
+\<open>Abs_T'_inject:
+  \<lbrakk>?y\<^sub>1 \<in> \<C>(E); ?y\<^sub>2 \<in> \<C>(E)\<rbrakk> \<Longrightarrow> (Abs_T' ?y\<^sub>1 = Abs_T' ?y\<^sub>2) = (?y\<^sub>1 = ?y\<^sub>2)
+Rep_T'_inject:
+  (Rep_T' ?x\<^sub>1 = Rep_T' ?x\<^sub>2) = (?x\<^sub>1 = ?x\<^sub>2)\<close>}\index{inject@$\_$inject (fact name suffix)}
+
+Since all values of type \<open>T'\<close> can be denoted as \<open>Abs_T' y\<close> for some equivalence class \<open>y\<close>,
+the rule \<open>Abs_T'_inject\<close> can be used to prove equality or inequality for values of type \<open>T'\<close>
+based on the equality of equivalence classes of \<open>E\<close>.\<close>
+
+subsubsection "Case Rules and Induction Rules"
+
+text\<open>
+Every quotient type definition \<^theory_text>\<open>quotient_type T' = T / E \<proof>\<close> introduces case rules (see
+Section~\ref{case-reasoning-rules}) and induction rules (see Section~\ref{case-induction-rules})
+similar to those described for subtypes (see Section~\ref{holtdefs-sub-rules}), where again the
+single values in the representing set \<open>D\<close> are replaced by equivalence classes of \<open>E\<close>. All other
+remarks given for the subtype rules also apply here. The rules are
+@{text[display]
+\<open>Abs_T'_cases:
+  (\<And>y. \<lbrakk>?x = Abs_T' y; y \<in> \<C>(E)\<rbrakk> \<Longrightarrow> ?P) \<Longrightarrow> ?P
+Rep_T'_cases:
+  \<lbrakk>?y \<in> \<C>(E); \<And>x. ?y = Rep_T' x \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P
+Abs_T'_induct:
+  (\<And>y. y \<in> \<C>(E) \<Longrightarrow> ?P (Abs_T' y)) \<Longrightarrow> ?P ?a
+Rep_T'_induct:
+  \<lbrakk>?a \<in> \<C>(E); \<And>x. ?P (Rep_T' x)\<rbrakk> \<Longrightarrow> ?P ?a\<close>}
+\index{cases@$\_$cases (fact name suffix)}\index{induct@$\_$induct (fact name suffix)}
+
+Additionally the quotient type definition introduces the induction rule
+@{text[display]
+\<open>T'.abs_induct: (\<And>y. ?P (abs_T' y)) \<Longrightarrow> ?P ?a\<close>}
+It can be used to replace values of \<open>T'\<close> based on values of \<open>T\<close> instead of equivalence classes.\<close>
+
+subsubsection "Morphism Definitions"
+
+text\<open>
+For the actual morphisms the quotient type definition generates definitions based on \<open>Abs_T'\<close> and
+\<open>Rep_T'\<close>.
+
+The morphism \<open>abs_T'\<close> is defined in the form 
+@{text[display]
+\<open>abs_T'_def: abs_T' x \<equiv> Abs_T' {y. E x y}\<close>}
+Here for the argument \<open>x\<close> the class \<open>{y. E x y}\<close> of all equivalent values is mapped by \<open>Abs_T'\<close> to
+the corresponding value in \<open>T'\<close>.
+
+The morphism \<open>rep_T'\<close> is defined in the form 
+@{text[display]
+\<open>rep_T'_def: rep_T' x \<equiv> SOME y. y \<in> Rep_T' x\<close>}
+using the choice operator (see Section~\ref{holbasic-descr-choice}). In this way, although the
+representation function is normally not unique, HOL can provide a single definition without the need
+to decide which specific representation values to use.\<close>
+
+subsubsection "Quotient Theorem"
+
+text\<open>
+Every quotient type definition \<^theory_text>\<open>quotient_type T' = T / E \<proof>\<close> introduces the quotient theorem
+(see Section~\ref{holbasic-quotlift-quot})
+@{text[display]
+\<open>Quotient_T': Quotient E abs_T' rep_T' cr_T'\<close>}
+and provides the definition
+@{text[display]
+\<open>cr_T'_def: cr_T' = \<lambda>x y. abs_T' x = y\<close>}
+for the transfer relation \<open>R\<close> named \<open>cr_T'\<close>. The quotient theorem is then used in the internal
+\<^theory_text>\<open>setup_lifting\<close> command to register \<open>T'\<close> as quotient.
+
+The quotient type definition also introduces the type-definition theorem
+@{text[display]
+\<open>type_definition_T': type_definition Rep_T' Abs_T' \<C>(E)\<close>}
+which allows to view \<open>T'\<close> as subtype of the type \<open>T set\<close> with the equivalence classes \<open>\<C>(E)\<close> of
+\<open>E\<close> as representing set. However, since every type can only be registered once as a quotient, the
+type-definition theorem cannot be used for a corresponding registration.\<close>
+
+subsection "Lifting Functions to Quotient Types"
+text_raw\<open>\label{holtdefs-quot-lift}\<close>
+
+text \<open>
+Since the definition of a quotient type includes its registration as quotient, functions can be
+lifted immediately after the definition from the raw type to the quotient type as described in
+Section~\ref{holbasic-quotlift-lift}.
+
+As described in Section~\ref{holbasic-quotlift-lift} the respectfulness property required for
+a function to be lifted corresponds to preserving the equivalence used to define the quotient type.
+For a quotient type defined by \<^theory_text>\<open>quotient_type T' = T / E \<proof>\<close> the respectfulness property
+for an operation \<open>f::T\<Rightarrow>T\<close> is
+@{text[display]
+\<open>\<And>x y. E x y \<Longrightarrow> E (f x) (f y)\<close>}
+and for a function \<open>f::T\<Rightarrow>u\<close> where only the arguments shall be lifted it is
+@{text[display]
+\<open>\<And>x y. E x y \<Longrightarrow> (f x) = (f y)\<close>}
+For a function \<open>f::u\<Rightarrow>T\<close> where only the results shall be lifted respectfulness is always satisfied.
+
+For the example type \<open>rem3\<close> as defined above, example functions can be lifted from type \<open>nat\<close> as
+follows:
+@{theory_text[display]
+\<open>lift_definition add3 :: "rem3 \<Rightarrow> rem3 \<Rightarrow> rem3"
+  is "(+)" using mod_add_cong by blast
+lift_definition zro3 :: "rem3 \<Rightarrow> bool"
+  is "\<lambda>x. x mod 3 = 0" by simp
+lift_definition sub3 :: "nat \<Rightarrow> nat \<Rightarrow> rem3"
+  is "(-)" done\<close>}
+The first example defines addition of remainder classes. Here the argument and result
+types are lifted, the goal to be proved for respectfulness is
+@{text[display]
+\<open>\<And>n\<^sub>1 n\<^sub>2 m\<^sub>1 m\<^sub>2. \<lbrakk>n\<^sub>1 mod 3 = n\<^sub>2 mod 3; m\<^sub>1 mod 3 = m\<^sub>2 mod 3\<rbrakk>
+  \<Longrightarrow> (n\<^sub>1 + m\<^sub>1) mod 3 = (n\<^sub>2 + m\<^sub>2) mod 3\<close>}
+which can be proved using the fact \<open>mod_add_cong\<close> provided by HOL. The second example defines a
+predicate for being the zero remainder class, the goal to be proved is 
+\<open>\<And>n\<^sub>1 n\<^sub>2. n\<^sub>1 mod 3 = n\<^sub>2 mod 3 \<Longrightarrow> (n\<^sub>1 mod 3 = 0) = (n\<^sub>2 mod 3 = 0)\<close>.
+The third example calculates the difference and represents the result in type \<open>rem3\<close>, no goal needs
+to be proved because only the result type is lifted, therefore the proof is empty and can
+immediately by terminated by \<open>done\<close>.\<close>
+
+subsubsection "Support for Transfer"
+
+text\<open>
+As described in Section~\ref{holbasic-quotlift-lift} HOL provides automatic support for transferring
+terms containing functions defined by lifting to the raw type. As an example in the theorem
+@{theory_text[display]
+\<open>theorem "zro3 (add3 (sub3 10 5) (sub3 3 2))" apply(transfer) by simp\<close>}
+the \<open>transfer\<close> method replaces the goal by the proposition \<open>(10 - 5 + (3 - 2)) mod 3 = 0\<close> which is
+simply a property of natural numbers and can be proved by the simplifier using the existing rules
+about the natural numbers. No rules about the quotient type \<open>rem3\<close> are required.
+
+This is a typical way of working with a quotient type using the lifting package: All functions on the
+quotient type are introduced by lifting, then all theorems specified for the quotient type can be
+proved using transfer and the existing facts about the raw type.\<close>
+
+subsubsection "Lifting Functions to Partial Quotient Types"
+
+text\<open>
+If the quotient type has been defined by \<^theory_text>\<open>quotient_type T' = T / partial: E \<proof>\<close> lifting
+functions works mainly in the same way as described above. However, in the case of a function
+\<open>f::u\<Rightarrow>T\<close> where only the results shall be lifted, respectfulness is no more automatically satisfied.
+The respectfulness property to be proved here is \<open>\<And>x. E (f x) (f x)\<close> which means that all result
+values \<open>(f x)\<close> must belong to the domain \<open>D\<close> of the transfer relation (see
+Section~\ref{holbasic-quotlift-absraw}).\<close>
+
+subsection "Quotient Types for Bounded Natural Functors"
+text_raw\<open>\label{holtdefs-quot-bnf}\<close>
+
+text \<open>
+As described in Section~\ref{holbasic-quotlift-bnf} a quotient type \<open>T'\<close> of a BNF \<open>T\<close> may again be
+a BNF. If \<open>T'\<close> has been defined by \<^theory_text>\<open>quotient_type T' = T / E \<proof>\<close> the \<^theory_text>\<open>lift_bnf\<close> command can
+be used to register \<open>T'\<close> as BNF. If, instead, \<open>T'\<close> has been defined by
+\<^theory_text>\<open>quotient_type T' = T / partial: E \<proof>\<close> where the transfer relation need not be left-total,
+the \<^theory_text>\<open>lift_bnf\<close> command is not supported, it signals an error message about a missing reflexivity
+rule (which is only available for a left-total transfer relation).
+
+The example type \<open>quotpair\<close> defined in Section~\ref{holtdefs-quot-param} can be registered as BNF
+using the command
+@{theory_text[display]
+\<open>lift_bnf 'a quotpair by force auto\<close>}\<close>
+text_raw\<open>\cbend\<close>
+
 section "Record Types"
 text_raw\<open>\label{holtdefs-record}\<close>
 
@@ -830,8 +1541,9 @@ subsubsection "Record Type Schemes"
 text \<open>
 To be able to extend a record type by additional fields, a record type definition
 \<^theory_text>\<open>record rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots> fname\<^sub>n :: "ftype\<^sub>n"\<close> actually
-defines a type constructor \<open>rname_scheme\<close>\index{scheme@$\_$scheme (type name suffix)} with a single type parameter and an additional component
-of that type which is called the ``more part''\index{more part}. Every instantiation of \<open>('a rname_scheme)\<close> is called
+defines a \cbstart parameterized type \cbend \<open>rname_scheme\<close>\index{scheme@$\_$scheme (type name suffix)}
+with a single type parameter and an additional component of that type which is called the ``more
+part''\index{more part}. Every instantiation of \<open>('a rname_scheme)\<close> is called
 a record type scheme\index{type!record $\sim$!scheme}\index{record!type scheme}, the most general one is \<open>('a rname_scheme)\<close> where the
 more part has an arbitrary type \<open>'a\<close>. For the defined record type the more part has type
 \<open>unit\<close> (see Section~\ref{holtypes-unit}), i.e., type \<open>rname\<close> is the same as \<open>(unit rname_scheme)\<close>.
@@ -901,10 +1613,11 @@ subsubsection "Parameterized Record Types"
 
 text \<open>
 Like declared types record types may be parameterized\index{record!type!parameterized $\sim$}\index{type!record $\sim$!parameterized $\sim$} (see Section~\ref{theory-terms-types}):
+\cbstart
 @{theory_text[display]
-\<open>record ('name\<^sub>1,\<dots>,'name\<^sub>n) rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots>
+\<open>record ('name\<^sub>1,\<dots>,'name\<^sub>m) rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots>
                                     fname\<^sub>n :: "ftype\<^sub>n"\<close>}
-where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the component types \<open>ftype\<^sub>i\<close>, i.e.,
+where the \<open>'name\<^sub>j\<close> \cbend are the type parameters. They may occur in the component types \<open>ftype\<^sub>i\<close>, i.e.,
 the \<open>ftype\<^sub>i\<close> may be polymorphic (see Section~\ref{theory-terms-types}). As usual, the parentheses
 may be omitted if there is only one type parameter.
 
@@ -1013,8 +1726,13 @@ a record selector function for a field is polymorphic and may also be applied to
 record to return the field value. However, to make a field name unique, it must be qualified
 by the name of the record type where it has been introduced.
 
+\cbstart Additionally a record type definition always defines the selector named \<open>more\<close> for the more
+part.\cbend
+
 If \<open>r\<close> is a variable of type \<open>recrd\<close> as defined above, the term \<open>nums r\<close> selects the value of the
-second field. The same works if \<open>r\<close> has the extended type \<open>recrd2\<close>.
+second field. The same works if \<open>r\<close> has the extended type \<open>recrd2\<close>. \cbstart The term \<open>recrd.more r\<close>
+selects the value of the more part which is the unit value if \<open>r\<close> has type \<open>recrd\<close> and the extension
+fragment if \<open>r\<close> has type \<open>recrd2\<close>.\cbend
 
 A field selector cannot be applied directly to a record fragment. The fields of the fragment can
 only be selected if the fragment is embedded in the extended record.
@@ -1078,7 +1796,8 @@ The rules for injectivity of the record constructor have the form
 \<open>(\<lparr>fname\<^sub>1 = ?x\<^sub>1, \<dots>, fname\<^sub>n = ?x\<^sub>n, \<dots>= ?x\<rparr> = 
   \<lparr>fname\<^sub>1 = ?y\<^sub>1, \<dots>, fname\<^sub>n = ?y\<^sub>n, \<dots>= ?y\<rparr>)
 = (?x\<^sub>1 = ?y\<^sub>1 \<and> \<dots> \<and> ?x\<^sub>n = ?y\<^sub>n \<and> ?x = ?y)\<close>}
-are named \<open>rname.iffs\<close>\index{iffs@.iffs (fact name suffix)} for the record type \<open>rname\<close>.
+\cbstart and \cbend are named \<open>rname.iffs\<close>\index{iffs@.iffs (fact name suffix)} for the record type
+\<open>rname\<close>.
 
 Other rules added by a record definition to the simpset process terms where selectors or update
 functions are applied to constructed record values. They have the form of equations
@@ -1194,245 +1913,105 @@ Like the cases methods a transformation of this kind may enable the application 
 methods.
 \<close>
 
-section "Subtypes"
-text_raw\<open>\label{holtdefs-sub}\<close>
-
-text \<open>
-A subtype\index{subtype} specifies the values of a type by a set of values of an existing type. However,
-since the values of different types are always disjoint, the values in the set are not directly the
-values of the new type, instead, there is a 1-1 relation between them, they are isomorphic. The 
-values in the set are called ``representations''\index{representation}, the values in the new type are called
-``abstractions''\index{abstraction}.\<close>
-
-subsection "Subtype Definitions"
-text_raw\<open>\label{holtdefs-sub-def}\<close>
-
-text \<open>
-A subtype is defined\index{definition!subtype $\sim$} in the form
-@{theory_text[display]
-\<open>typedef name = "term" \<proof>\<close>}\index{typedef (keyword)}
-where \<open>name\<close> is the name of the new type and \<open>term\<close> is a term for the representing set. The
-\<open>\<proof>\<close> must prove that the representing set is not empty. A subtype definition implies that
-for every value in the representing set there is a unique value in the defined subtype.
-
-Note that the concept of subtypes actually depends on the specific HOL type \<open>set\<close> for specifying
-the representing set. See Section~\ref{holtypes-set} for how to denote terms for this set. Also
-note that the set is always of a type \<open>t' set\<close> where \<open>t'\<close> is the common type of all set elements.
-This implies that the representing set is always a subset of the set of all values of a type \<open>t'\<close>
-which explains the designation as ``subtype''.
-
-A simple example is the type
-@{theory_text[display]
-\<open>typedef three = "{1::nat,2,3}" by auto\<close>}\index{three (example type)}
-which has three values. The representations are natural numbers. As usual, the type \<open>nat\<close> must be
-specified because the constants \<open>1, 2, 3\<close> may also denote values of other types. However, they do
-not denote the values of the new type \<open>three\<close>, the type definition does not introduce constants
-for them.
-
-Instead, a subtype definition \<^theory_text>\<open>typedef t = rset \<proof>\<close> introduces two functions \<open>Abs_t\<close>\index{Abs-@Abs$\_$ (constant name prefix)}
-and \<open>Rep_t\<close>\index{Rep-@Rep$\_$ (constant name prefix)}. These are morphisms\index{morphism}\index{subtype!morphisms} between \<open>rset\<close> and the new type, \<open>Abs_t\<close> maps from \<open>rset\<close> 
-to type \<open>t\<close>, \<open>Rep_t\<close> is its inverse. Both functions are injective, together they provide the
-1-1 mapping between the subtype and the representing set. The function \<open>Abs_t\<close> can be used to
-denote the values of the subtype. Thus, \<open>Abs_t\<close> plays the role of a constructor for type \<open>t\<close>,
-whereas \<open>Rep_t\<close> can be thought of being a destructor for \<open>t\<close>.
-
-Actually, if the representing set \<open>rset\<close> is of type \<open>t' set\<close>, the morphism  \<open>Abs_t\<close> is a function of
-type \<open>t' \<Rightarrow> t\<close>, since it must be total like all functions in Isabelle. However, \<open>Abs_t\<close> is
-underspecified as described in Section~\ref{theory-terms-consts}, no information is given about its
-result values if applied to values which are not in \<open>rset\<close>.
-
-In the example the morphisms are \<open>Abs_three :: nat \<Rightarrow> three\<close> and \<open>Rep_three :: three \<Rightarrow> nat\<close>. The
-values of type \<open>three\<close> may be denoted as \<open>(Abs_three 1)\<close>, \<open>(Abs_three 2)\<close>, and \<open>(Abs_three 3)\<close>.
-The term \<open>(Abs_three 42)\<close> is a valid term of type \<open>three\<close>, however, no information about its value
-is available.
-
-Alternative names may be specified for the morphisms in the form
-@{theory_text[display]
-\<open>typedef t = "term" morphisms rname aname \<proof>\<close>}\index{morphisms (keyword)}
-where \<open>rname\<close> replaces \<open>Rep_t\<close> and \<open>aname\<close> replaces \<open>Abs_t\<close>.
-
-Like declared types subtypes may be parameterized (see Section~\ref{theory-terms-types}):
-@{theory_text[display]
-\<open>typedef ('name\<^sub>1,\<dots>,'name\<^sub>n) name = "term" \<proof>\<close>}
-where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type of the \<open>term\<close>, i.e., the 
-\<open>term\<close> may be polymorphic (see Section~\ref{theory-terms-consts}).
-\<close>
-
-subsection "Type Copies"
-text_raw\<open>\label{holtdefs-sub-copies}\<close>
-
-text \<open>
-A type copy\index{type!copy} is the special case of a subtype definition where the representing set is the universal
-set (see Section~\ref{holtypes-set-values}) of another type \<open>t'\<close>:
-@{theory_text[display]
-\<open>typedef t = "UNIV :: t' set" by auto\<close>}
-The non-emptiness proof can always be performed by the \<open>auto\<close> method, since the universal set covers
-all values in type \<open>t'\<close> and types are always non-empty.
-
-The result is a type \<open>t\<close> which is distinct from \<open>t'\<close> but is ``isomorphic'' to it. The values are in
-1-1 relation, although, as usual for distinct types, the value sets are disjoint.
-\<close>
-
-subsection "Subtype Rules"
-text_raw\<open>\label{holtdefs-sub-rules}\<close>
-
-text \<open>
-A subtype definition only introduces a small number of rules, no rules are added to the simpset.
-\<close>
-
-subsubsection "Basic Morphism Rules"
+text_raw\<open>\cbstart\<close>
+subsection "Records as Bounded Natural Functors"
+text_raw\<open>\label{holtdefs-record-bnf}\<close>
 
 text\<open>
-The two morphisms of a subtype definition \<^theory_text>\<open>typedef t = rset \<proof>\<close> are characterized to be
-inverses of each other by two rules of the form
-@{text[display]
-\<open>Abs_t_inverse:
-  ?y \<in> rset \<Longrightarrow> Rep_t (Abs_t ?y) = ?y
-Rep_t_inverse:
-  Abs_t (Rep_t ?x) = ?x\<close>}\index{inverse@$\_$inverse (fact name suffix)}
-
-This implies that both morphisms are injective which is stated explicitly by two rules of the form
-@{text[display]
-\<open>Abs_t_inject:
-  \<lbrakk>?y\<^sub>1 \<in> rset; ?y\<^sub>2 \<in> rset\<rbrakk> \<Longrightarrow> (Abs_t ?y\<^sub>1 = Abs_t ?y\<^sub>2) = (?y\<^sub>1 = ?y\<^sub>2)
-Rep_t_inject:
-  (Rep_t ?x\<^sub>1 = Rep_t ?x\<^sub>2) = (?x\<^sub>1 = ?x\<^sub>2)\<close>}\index{inject@$\_$inject (fact name suffix)}
-
-Since all values of type \<open>t\<close> can be denoted as \<open>Abs_t y\<close> for some \<open>y\<close> in the representing set \<open>rset\<close>,
-the rule \<open>Abs_t_inject\<close> can be used to prove equality or inequality for values of type \<open>t\<close> based on
-the equality for values in \<open>rset\<close>.
+As described in Section~\ref{holtdefs-record-def} a record type is mainly equivalent to the tuple
+type for all fields. Seen as type constructors, tuple types are BNFs (see
+Section~\ref{holbasic-bnf-bounded}). Due to composability of BNFs this implies that a (polymorphic)
+record type is a bounded natural functor as soon as all (polymorphic) field types are BNFs.
+However, HOL does not register record types as BNFs automatically, this must be done manually.
 \<close>
 
-subsubsection "Case Rules"
+subsubsection "Record Type Constructors"
 
 text\<open>
-Every subtype definition \<^theory_text>\<open>typedef t = rset \<proof>\<close> introduces a case rule (see
-Section~\ref{case-reasoning-rules}) of the form
-@{text[display]
-\<open>Abs_t_cases:
-  (\<And>y. \<lbrakk>?x = Abs_t y; y \<in> rset\<rbrakk> \<Longrightarrow> ?P) \<Longrightarrow> ?P\<close>}\index{cases@$\_$cases (fact name suffix)}
-It is valid because the \<open>Abs_t\<close> application covers all possibilities of constructing a
-value \<open>?x\<close> of the subtype.
+The actual type constructor introduced by a record definition \<^theory_text>\<open>record ('a\<^sub>1,\<dots>,'a\<^sub>m) rname = \<dots>\<close> is
+named \<open>rname_ext\<close>\index{ext@$\_$ext (type name suffix)}. The record type scheme name \<open>rname_scheme\<close>
+is a synonym for it, whereas \<open>('a\<^sub>1,\<dots>,'a\<^sub>m) rname\<close> is a synonym for \<open>('a\<^sub>1,\<dots>,'a\<^sub>m, unit) rname_ext\<close> (see
+Section~\ref{holtdefs-record-def}).
 
-The rule \<open>Abs_t_cases\<close> is associated with the new subtype \<open>t\<close> for use by the \<^theory_text>\<open>cases\<close> method
-(see Section~\ref{case-reasoning-cases}). Therefore the application of the method
-@{theory_text[display]
-\<open>cases "term"\<close>}
-where \<open>term\<close> is of type \<open>t\<close> applies \<open>Abs_t_cases\<close> to replace the current goal. Since the rule has
-only one case, it does not split the goal. Applying it to a goal \<^theory_text>\<open>\<And> x\<^sub>1 \<dots> x\<^sub>m. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n\<rbrakk> \<Longrightarrow> C\<close>
-as described in Section~\ref{case-reasoning-cases} results in the single new goal
-@{text[display]
-\<open>\<And> x\<^sub>1 \<dots> x\<^sub>m y. \<lbrakk>A\<^sub>1; \<dots>; A\<^sub>n; term = Abs_t y; y \<in> rset\<rbrakk> \<Longrightarrow> C\<close>}
-where the variable \<open>y\<close> and the two assumptions from the case rule have been added. Together the new
-goal provides a representation of \<open>term\<close> by applying \<open>Abs_t\<close> to a value \<open>y\<close> from the representing
-set \<open>rset\<close>. This may allow to use facts about \<open>y\<close> to prove the goal.
+The type constructor \<open>rname_ext\<close> is internally defined as a type copy (see
+Section~\ref{holtdefs-sub-copies}) of a tuple type with all record field types as components. This
+tuple type is constructed from pairs (see Section~\ref{holbasic-tuples}) in a balanced way, so that
+the number of steps to access a component using the selectors \<open>fst\<close> and \<open>snd\<close> (see
+Section~\ref{holbasic-tuples}) is always logarithmic in the number of components.
 
-The name for the named context created by the \<^theory_text>\<open>cases\<close> method is simply the morphism name
-\<open>Abs_t\<close>. Therefore a structured proof using case based reasoning for a \<open>term\<close> of subtype \<open>t\<close>
-has the form
-@{theory_text[display]
-\<open>proof (cases "term")
-  case (Abs_t y) \<dots> show ?thesis \<proof>
-qed\<close>}
-The name \<open>y\<close> of the locally fixed variable can be freely selected, it denotes the morphism
-argument, i.e., the representation value for \<open>term\<close>.
-
-Every subtype definition \<^theory_text>\<open>typedef t = rset \<proof>\<close> also introduces an elimination rule (see
-Section~\ref{case-elim-rules}) of the form
-@{text[display]
-\<open>Rep_t_cases:
-  \<lbrakk>?y \<in> rset; \<And>x. ?y = Rep_t x \<Longrightarrow> ?P\<rbrakk> \<Longrightarrow> ?P\<close>}
-It is valid because the \<open>Rep_t\<close> application covers all possibilities to determine a representation
-value \<open>?y\<close> in \<open>rset\<close>.
-
-With the help of this rule it is possible to introduce an abstraction value \<open>x\<close> corresponding to
-a representation value \<open>?y\<close>, consuming an assumption or input fact that \<open>?y\<close> is in \<open>rset\<close>. For
-application by the method \<^theory_text>\<open>cases\<close> the rule is annotated by \<open>[consumes 1]\<close> and the name for the
-created named context is the morphism name \<open>Rep_t\<close>. As described in Section~\ref{case-elim-struct}
-a pattern for using the rule in a structured proof is
-@{theory_text[display]
-\<open>theorem "C" if "y \<in> rset"
-  using that
-proof (cases rule: Rep_t_cases)
-  case (Rep_t x) \<dots> show ?thesis \<proof>
-qed\<close>}\<close>
-
-subsubsection "Induction Rules"
-
-text\<open>
-Every subtype definition \<^theory_text>\<open>typedef t = rset \<proof>\<close> introduces two induction rules (see
-Section~\ref{case-induction-rules}) of the form
-@{text[display]
-\<open>Abs_t_induct:
-  (\<And>y. y \<in> rset \<Longrightarrow> ?P (Abs_t y)) \<Longrightarrow> ?P ?a
-Rep_t_induct:
-  \<lbrakk>?a \<in> rset; \<And>x. ?P (Rep_t x)\<rbrakk> \<Longrightarrow> ?P ?a\<close>}\index{induct@$\_$induct (fact name suffix)}
-The former rule is a plain induction rule, the latter is an induction rule with elimination where
-the major premise states that the value \<open>?a\<close> is in \<open>rset\<close>. Both rules only contain a ``base case''
-and no ``induction step'' with a recursive occurrence of values of the defined type \<open>t\<close>. As for
-the case rules they are valid because the morphism applications cover all possibilities of
-constructing values of \<open>t\<close> or values in \<open>rset\<close>, respectively.
-
-Since the rules only consist of a base case they are mainly equivalent to the case rules. However,
-when applied by the \<open>induct\<close> method, they not only provide a representation by a morphism for a
-specified variable, they also substitute every occurrence of the variable by the morphism
-representation.
-
-The rule \<open>Abs_t_induct\<close> is associated with subtype \<open>t\<close> for use by the methods \<^theory_text>\<open>induction\<close> and
-\<^theory_text>\<open>induct\<close> (see Section~\ref{case-induction}). Therefore the application of the method
-@{theory_text[display]
-\<open>induction x\<close>}
-where \<open>x\<close> is a variable of type \<open>t\<close> replaces a goal by a goal where every occurrence of \<open>x\<close> is
-substituted by the term \<open>Abs_t y\<close> and \<open>y\<close> is a new bound variable with the additional assumption
-\<open>y \<in> rset\<close> named \<open>Abs_t.hyps\<close>. As usual for the induction methods, \<open>x\<close> is substituted in the goal
-conclusion and also in all goal assumptions.
-
-As for the case rule and the \<^theory_text>\<open>cases\<close> method, the name for the named context created by the 
-methods \<^theory_text>\<open>induction\<close> and \<^theory_text>\<open>induct\<close> is simply the morphism name \<open>Abs_t\<close>. Therefore a structured
-proof using induction for a variable \<open>x\<close> of subtype \<open>t\<close> has the form
-@{theory_text[display]
-\<open>proof (induction x)
-  case (Abs_t y) \<dots> show ?case \<proof>
-qed\<close>}
-
-As an example, the induction rule for the subtype \<open>three\<close> defined in 
-Section~\ref{holtdefs-sub-def} is
-@{text[display]
-\<open>Abs_three_induct:
-  "\<And>y. y \<in> {1, 2, 3} \<Longrightarrow> ?P (Abs_three y)) \<Longrightarrow> ?P ?a\<close>}
-By applying the method \<open>(induction x)\<close> the goal \<open>x = Abs_three 0 \<Longrightarrow> x \<noteq> Abs_three 1\<close> is replaced by
-the goal \<open>\<And>y.  \<lbrakk>y \<in> {1, 2, 3}; Abs_three y = Abs_three 0\<rbrakk> \<Longrightarrow> Abs_three y \<noteq> Abs_three 1\<close>
-(which does not help for the proof, but shows the effect of the induction rule).
-
-The rule \<open>Rep_t_induct\<close> is annotated by \<open>[consumes 1]\<close> for application by the methods \<^theory_text>\<open>induction\<close>
-and \<^theory_text>\<open>induct\<close> and the name for the created named context is the morphism name \<open>Rep_t\<close>. As described
-in Section~\ref{case-induction-elim} a pattern for using the rule in a structured proof is
-@{theory_text[display]
-\<open>theorem "C" if "y \<in> rset"
-  using that
-proof (induction rule: Rep_t_induct)
-  case (Rep_t x) \<dots> show ?case \<proof>
-qed\<close>}
-
-As an example, the induction rule with elimination for the subtype \<open>three\<close> defined in 
-Section~\ref{holtdefs-sub-def} is
-@{text[display]
-\<open>Rep_three_induct:
-  \<lbrakk>?a \<in> {1, 2, 3}; \<And>x. ?P (Rep_three x)\<rbrakk> \<Longrightarrow> ?P ?a\<close>}\<close>
-
-section "Quotient Types"
-text_raw\<open>\label{holtdefs-quot}\<close>
-
-(* Achtung: siehe HOL-Library: Quotient_Type, Quotient_* *)
-text\<open>
-**todo**
+Using a type copy implies that different records with the same component types are different,
+although isomorphic. It also makes it possible to define the field selector (see
+Section~\ref{holtdefs-record-destr}) and update (see Section~\ref{holtdefs-record-update})
+functions specifically for each record type.
 \<close>
 
-section "Lifting and Transfer"
-text_raw\<open>\label{holtdefs-lift}\<close>
+subsubsection "Registering Record Types as BNF"
 
 text\<open>
-**todo**
+As described in Section~\ref{holbasic-bnf-register} the type constructor \<open>prod\<close> for pairs is a BNF.
+Due to composability of BNFs this is also true for every tuple type and the BNF property can be
+lifted to the type copy for the record scheme from the underlying tuple type for the components
+using the command \<^theory_text>\<open>copy_bnf\<close> (see Section~\ref{holbasic-quotlift-bnf}). As described in
+Section~\ref{holtdefs-sub-bnf} the type copy must before be registered as quotient using the
+command \<^theory_text>\<open>setup_lifting\<close>.
+
+Together, a record type defined by 
+\<open>record ('a\<^sub>1,\<dots>,'a\<^sub>m) rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots> fname\<^sub>n :: "ftype\<^sub>n"\<close> is
+registered as BNF by the command sequence
+@{theory_text[display]
+\<open>setup_lifting type_definition_rname_ext
+copy_bnf ('a\<^sub>1,\<dots>,'a\<^sub>m, 'more) rname_ext\<close>}
+Note the additional type parameter \<open>'more\<close> for the more part of the record type scheme. Its name
+may be arbitrarily selected, it must only be distinct from the \<open>'a\<^sub>1,\<dots>,'a\<^sub>m\<close>.
+
+If a polymorphic component type \<open>ftype\<^sub>i\<close> is not a registered BNF it is treated as BNF with all type
+parameters as dead (see Section~\ref{holbasic-bnf-natural}). Every type parameter \<open>'a\<^sub>j\<close> of the
+record type occurring on a dead parameter position in an \<open>ftype\<^sub>i\<close> is registered as dead by the
+\<^theory_text>\<open>copy_bnf\<close> command. Since the more part always consists directly of the corresponding type
+parameter, that parameter is always registered as live.
+
+After registering the record type scheme \<open>rname_ext\<close> as BNF the record type \<open>('a\<^sub>1,\<dots>,'a\<^sub>m) rname\<close> is
+immediately recognised as BNF because it is a synonym for the instantiation
+\<open>('a\<^sub>1,\<dots>,'a\<^sub>m, unit) rname_ext\<close>. Extensions of \<open>rname\<close> (see Section~\ref{holtdefs-record-def}) are
+usually not recognised as BNF, because they instantiate the more part differently, for them the
+\<^theory_text>\<open>copy_bnf\<close> command must be applied separately to the extended type scheme.
+
+The polymorphic example record type \<open>('a, 'b) recrdp\<close> defined in Section~\ref{holtdefs-record-def}
+is registered as (quotient and) BNF by
+@{theory_text[display]
+\<open>setup_lifting type_definition_recrdp_ext
+copy_bnf ('a, 'b, 'more) recrdp_ext\<close>}
+The type parameters \<open>'b\<close> and \<open>'more\<close> are registered as live, whereas \<open>'a\<close> is registered as dead
+because the second field has type \<open>'a set\<close> which is not a BNF.
 \<close>
+
+subsubsection "Subtypes and Quotients of Record Types"
+
+text\<open>
+Defining a subtype (see Section~\ref{holtdefs-sub}) of a record type \<open>rname\<close> is straightforward. If
+this subtype shall be registered as quotient using \<^theory_text>\<open>setup_lifting\<close> the record type should be
+registered as BNF before, so that the relator \<open>rel_rname_ext\<close> is defined for it and known to HOL.
+Only then full transfer support is available for the subtype and no warning is issued by
+\<^theory_text>\<open>setup_lifting\<close> (see Section~\ref{holbasic-quotlift-setup}).
+
+If, however, the record type is registered as BNF with dead parameters (see above), the relator
+cannot be used by \<^theory_text>\<open>setup_lifting\<close>. Then \<^theory_text>\<open>setup_lifting\<close> will still warn about not finding the
+relator, although it has been defined by \<^theory_text>\<open>copy_bnf\<close>.
+
+Note that due to the type parameter for the more part the record type scheme is always
+polymorphic, even if the defined record type has no type parameters. Therefore the \<^theory_text>\<open>setup_lifting\<close>
+command always expects the relator for \<open>rel_rname_ext\<close> for subtypes of arbitrary record types.
+
+Since a quotient type definition includes the \<^theory_text>\<open>setup_lifting\<close> command (see
+Section~\ref{holtdefs-quot-quot}) a record type \<open>rname\<close> should be registered as BNF
+before a quotient type is defined for it. Additionally, the mapper \<open>map_rname_ext\<close>, introduced when
+registering \<open>rname\<close> as BNF should be registered as functor (see Section~\ref{holbasic-bnf-register})
+so that the \<^theory_text>\<open>quotient_type\<close> command does not signal a warning about an undefined map function.
+
+The polymorphic example record type \<open>('a, 'b) recrdp\<close> has a dead type parameter when registered
+as BNF (see above), therefore subtypes and quotient types for it cannot provide full transfer
+support.\<close>
+
+text_raw\<open>\cbend\<close>
 
 end

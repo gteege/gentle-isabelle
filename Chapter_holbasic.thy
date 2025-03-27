@@ -78,7 +78,59 @@ By partial application (see Section~\ref{theory-terms-multargs}) the first argum
 can be fixed to yield the unary predicate \<open>(R x)\<close> on the second argument. For operators this must be
 done using the operator name in the form \<open>((op) x)\<close>, partial application cannot be written by
 omitting an argument on one side of the infix operator.
+\<close>
 
+text_raw\<open>\cbstart\<close>
+subsubsection "Relation Operations"
+
+text\<open>
+HOL provides the composition operation for relations. It is defined as the function
+@{text[display]
+\<open>relcompp :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> ('b\<Rightarrow>'c\<Rightarrow>bool) \<Rightarrow> ('a\<Rightarrow>'c\<Rightarrow>bool) \<equiv>
+  \<lambda>R\<^sub>1 R\<^sub>2 a c. \<exists>b. R\<^sub>1 a b \<and> R\<^sub>2 b c\<close>}\index{relcompp (constant)}
+The quantifier \<open>\<exists>\<close> and the boolean operator \<open>\<and>\<close> have the usual meaning, for more information about
+them see Section~\ref{holtypes-bool-funcs}. HOL also provides the operator name \<open>OO\<close> (two capital
+letters O) for infix notation, as in \<open>R\<^sub>1 OO R\<^sub>2\<close>.
+
+HOL provides the converse of a relation, defined as the function
+@{text[display]
+\<open>conversep :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> ('b\<Rightarrow>'a\<Rightarrow>bool) \<equiv>
+  \<lambda>R b a. R a b\<close>}\index{conversep (constant)}
+with the alternative notation \<open>R\<^sup>-\<^sup>1\<^sup>-\<^sup>1\<close> for \<open>conversep R\<close>. Note that although the superscript is
+applied twice it denotes only a single conversion. The single superscript is used for the conversion
+of a different form of relations (see Section~\ref{holbasic-tuples-rel}).
+
+HOL provides functions for the domain and range predicates of a relation:
+@{text[display]
+\<open>Domainp :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> ('a\<Rightarrow>bool) \<equiv> \<lambda>R a. \<exists>b. R a b
+Rangep :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> ('b\<Rightarrow>bool) \<equiv> \<lambda>R b. \<exists>a. R a b\<close>}
+\index{Domainp (constant)}\index{Rangep (constant)}
+
+HOL provides predicates for typical properties of relations:
+@{text[display]
+\<open>left_total :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv> \<lambda>R. \<forall>x. \<exists>y. R x y
+left_unique :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv>
+  \<lambda>R. \<forall>x y z. R x z \<longrightarrow> R y z \<longrightarrow> x = y
+right_total :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv> \<lambda>R. \<forall>y. \<exists>x. R x y
+right_unique :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv>
+  \<lambda>R. \<forall>x y z. R x y \<longrightarrow> R x z \<longrightarrow> y = z
+bi_total :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv>
+  \<lambda>R. left_total R \<and> right_total R
+bi_unique ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv>
+  \<lambda>R. left_unique R \<and> right_unique R\<close>}
+\index{left-total@left$\_$total (constant)}\index{left-unique@left$\_$unique (constant)}
+\index{right-total@right$\_$total (constant)}\index{right-unique@right$\_$unique (constant)}
+\index{bi-total@bi$\_$total (constant)}\index{bi-unique@bi$\_$unique (constant)}
+These predicates test whether a relation \<open>R\<close> is a function (\<open>right_unique\<close>), surjective (\<open>right_total\<close>),
+injective (\<open>left_unique\<close>), total (\<open>left_total\<close>), an injective function (\<open>bi_unique\<close>), or surjective
+and total (\<open>bi_total\<close>). \<open>R\<close> is a bijection if \<open>bi_total R \<and> bi_unique R\<close>. 
+\cbend\<close>
+
+text_raw\<open>\cbstart\<close>
+subsubsection "Relations As Set-Valued Functions"
+text_raw\<open>\cbend\<close>
+
+text\<open>
 Since the unary predicate \<open>(R x)\<close> is equivalent to a set, every binary relation of type
 \<open>t\<^sub>1 \<Rightarrow> t\<^sub>2 \<Rightarrow> bool\<close> is equivalent to a set-valued function of type \<open>t\<^sub>1 \<Rightarrow> (t\<^sub>2 set)\<close>. It maps every
 value of type \<open>t\<^sub>1\<close> to the set of related values of type \<open>t\<^sub>2\<close>. HOL extends the convention described
@@ -122,6 +174,14 @@ the same semantics but for operands of a specific type, then it is possible to d
 types. An example is the relation \<open>iff\<close>\index{iff (constant)} with operator name \<open>(\<longleftrightarrow>)\<close>\index{<-->@\<open>\<longleftrightarrow>\<close> (operator)} which is equal to \<open>(=)\<close> but only
 defined for operands of type \<open>bool\<close>. Therefore for the term \<open>term\<^sub>1 \<longleftrightarrow> term\<^sub>2\<close> HOL automatically
 derives that \<open>term\<^sub>1\<close> and \<open>term\<^sub>2\<close> have type \<open>bool\<close>.
+
+\cbstart
+There is also a restricted form of equality
+@{text[display]
+\<open>eq_onp :: ('a \<Rightarrow> bool) \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> bool\<close>}\index{eq-onp@eq$\_$onp (constant)}
+which can only be used to compare values which satisfy a given predicate. Thus \<open>eq_onp P x y\<close> will
+only be \<open>True\<close> if \<open>x\<close> and \<open>y\<close> are equal and additionally \<open>P x\<close> holds.
+\cbend 
 \<close>
 
 subsection "The Ordering Relations"
@@ -145,15 +205,15 @@ functions
 @{text[display]
 \<open>Min :: 'a set \<Rightarrow> 'a
 Max :: 'a set \<Rightarrow> 'a\<close>}\index{Min (constant)}\index{Max (constant)}
-for the minimum or maximum of all values in a set.
+for the minimum or maximum of all values in a set. \cbstart The value of \<open>Min\<close> and \<open>Max\<close> is
+underspecified if applied to an empty or infinite set.
 
-All these functions are polymorphic and can be applied to terms of arbitrary type. Even if the
-values of a type are not ordered, an application of an ordering relation or minimum/maximum
-function to them is a correct term. However, in that case the resulting value is underspecified, no
-information is available about it. Also, the value of \<open>Min\<close> and \<open>Max\<close> is underspecified if applied
-to an empty or infinite set.
+All these functions are polymorphic but are not available for arbitrary types. They are overloaded
+only for those types which have ordered values. However, this is the case for most basic types
+introduced by HOL and described in Chapter~\ref{holtypes}. If an ordering function is used for a
+type for which it is not available an error message of the form ``No type arity ...'' is signaled.
 
-Moreover, these are only syntactic definitions, no rules about orderings are implied by them. For
+Basically, \cbend these are only syntactic definitions, no rules about orderings are implied by them. For
 some of its predefined types, such as type \<open>nat\<close>, HOL provides more specific specifications by
 overloading.
 
@@ -191,7 +251,8 @@ HOL does not provide the six alternative names automatically. To make them avail
 must be used on theory level. It is available after importing the theory \<^theory>\<open>Main\<close> (see
 Section~\ref{system-invoke-theory}).
 
-The lattice operations and constants are polymorphic but are not available for arbitrary types.
+\cbstart
+Like the ordering functions (see Section~\ref{holbasic-equal-order}) the \cbend lattice operations and constants are polymorphic but are not available for arbitrary types.
 They are overloaded only for those types which have a corresponding structure. For example, type
 \<open>nat\<close> has the \<open>bot\<close> value (which is equal to \<open>0\<close>), but no \<open>top\<close> value. If a lattice operation or
 constant is used for a type for which it is not available an error message of the form
@@ -256,9 +317,7 @@ values\index{least value operator}\index{greatest value operator} can be denoted
 GREATEST x. bterm\<close>}\index{LEAST (binder)}\index{GREATEST (binder)}
 Only a single variable with an optional type specification is useful to be specified.
 
-If the values satisfying the predicate are not ordered the value denoted by such a term is
-underspecified. The operators use the ordering relations \<open>(\<le>)\<close> and \<open>(\<ge>)\<close> (see
-Section~\ref{holbasic-equal-order}) which are applicable to values of arbitrary type. The operators 
+\cbdelete The operators 
 are defined using \<open>THE\<close> to return the value \<open>x\<close> which satisfies the predicate and \<open>x \<le> y\<close> or
 \<open>x \<ge> y\<close> holds, respectively, for all values \<open>y\<close> which also satisfy the predicate.
 
@@ -347,6 +406,10 @@ syntax.
 Values for \<open>n\<close>-tuples of type \<open>t\<^sub>1 \<times> \<dots> \<times> t\<^sub>n\<close> are denoted in inner syntax as terms of the form
 \<open>(term\<^sub>1, \<dots>, term\<^sub>n)\<close> where \<open>term\<^sub>i\<close> is a term of type \<open>t\<^sub>i\<close> and the parentheses\index{parentheses} and the comma\index{comma} belong
 to the syntax.
+
+\cbstart The selector function \<open>fst\<close> can be used to access the first component of a tuple value, the
+selector function \<open>snd\<close> can be used to access the remaining tuple after removing the first component
+(which yields the single second component if applied to a pair) (see Section~\ref{holtypes-tup-destrs}).\cbend
 \<close>
 
 subsection "Function Argument Tuples"
@@ -377,7 +440,10 @@ usual form of representing relations in mathematics.
 
 HOL extends the convention described in Section~\ref{holbasic-pred-set} of providing relations
 named \<open>namep\<close> or \<open>nameP\<close> also as set-valued functions named \<open>name\<close> by alternatively using a tuple
-set named \<open>name\<close>.
+set named \<open>name\<close>. \cbstart Moreover it provides the relation operations (see
+Section~\ref{holbasic-pred-rel}) for binary relations as tuple sets: composition as function
+\<open>relcomp\<close> with operator name \<open>O\<close> (a single capital O), and conversion as function \<open>converse\<close> with
+alternative notation \<open>R\<^sup>-\<^sup>1\<close> for \<open>converse R\<close>.\cbend
 \<close>
 
 section "Inductive Definitions"
@@ -415,7 +481,7 @@ An example is the following inductive definition for an evenness predicate\index
 subsubsection "Alternative Rule Forms"
 
 text\<open>
-As derivation rules specified in theorems (see Section~\ref{theory-theorem-spec}) the explicit
+As for derivation rules specified in theorems (see Section~\ref{theory-theorem-spec}) the explicit
 bindings of the variables \<open>x\<^sub>i\<^sub>,\<^sub>1, \<dots>, x\<^latex>\<open>$_{i,p_i}$\<close>\<close> are optional, variables occurring free in the assumptions
 or the conclusion are always automatically bound. As usual, types may be specified for (some of)
 the variables, so explicit bindings can be used as a central place for specifying types for the
@@ -447,6 +513,10 @@ Using this form the example can be written as
 @{theory_text[display]
 \<open>inductive evn :: "nat \<Rightarrow> bool" where
   zero: "evn(0)" | step: "evn(n) \<Longrightarrow> evn(n+2)"\<close>}\index{evn (example constant)}
+
+The fact set \<open>name.intros\<close> together with other facts introduced by an inductive definition can be
+displayed using the ``Print Context'' tab in the Query panel\index{panel!query $\sim$} as described in
+Section~\ref{theory-theorem-search}.
 
 Note that the syntax of the defining rules only allows to specify when the defined predicate is
 \<open>True\<close>, not when it is \<open>False\<close>. In particular, a rule conclusion may not have the form of a negated
@@ -832,13 +902,15 @@ for all values.
 
 HOL provides the induction rules with elimination (see Section~\ref{case-induction-elim})
 
-@{text\<open>wfP_induct_rule:\<close>}\vspace{-2ex}@{thm[display,indent=2] wfP_induct_rule}\index{wfP-induct-rule@wfP$\_$induct$\_$rule (fact name)}
+\cbstart
+@{text\<open>wfp_induct_rule:\<close>}\vspace{-2ex}@{thm[display,indent=2] wfp_induct_rule}\index{wfp-induct-rule@wfp$\_$induct$\_$rule (fact name)}
+\cbend
 @{text\<open>wf_induct_rule:\<close>}\vspace{-2ex}@{thm[display,indent=2] wf_induct_rule}\index{wf-induct-rule@wf$\_$induct$\_$rule (fact name)}
 
 Their major premise is well-foundedness of the relation \<open>?r\<close>. The single case corresponds to the
 induction principle.
 \<close>
-
+thm wf_induct_rule
 subsection "The Accessible Part of a Relation"
 text_raw\<open>\label{holbasic-wellfounded-accp}\<close>
 
@@ -1280,7 +1352,9 @@ text_raw\<open>\label{holbasic-recursive-rules}\<close>
 
 text\<open>
 HOL automatically creates and proves some additional rules from a recursive definition and its
-proof. The domain predicate is used in these rules to exclude underspecified cases.
+proof. The domain predicate is used in these rules to exclude underspecified cases. The rules can be
+displayed using the ``Print Context'' tab in the Query panel\index{panel!query $\sim$} as described in
+Section~\ref{theory-theorem-search}.
 \<close>
 
 subsubsection "Simplification Rules"
@@ -1456,7 +1530,10 @@ For the faculty function defined as above the induction rule \<open>fac.induct\<
 To use the rule with the proof methods \<open>induct\<close> and \<open>induction\<close> (see
 Section~\ref{case-induction-naming}) it must always be specified explicitly in the form
 @{text[display]
-\<open>induct \<dots> rule: name.induct\<close>}\<close>
+\<open>induct \<dots> rule: name.induct\<close>}
+
+All these rules can be displayed using the ``Print Context'' tab in the Query panel\index{panel!query $\sim$} as described in
+Section~\ref{theory-theorem-search}, if the curser is positioned after the termination proof.\<close>
 
 subsection "Mutual Recursion"
 text_raw\<open>\label{holbasic-recursive-mutual}\<close>
@@ -1494,5 +1571,1726 @@ measure function used in a termination proof must be defined on this sum type.
 A termination proof can use the name of either defined function to refer to the mutual recursive
 definition.
 \<close>
+
+text_raw\<open>\cbstart\<close>
+section "Functors"
+text_raw\<open>\label{holbasic-functor}\<close>
+
+text\<open>
+The content of this and the following section are not required for understanding most of the
+remaining chapters and may be skipped upon first reading. However, some of the concepts in the
+remaining chapters are based on functors and these two sections may be useful for fully
+understanding these concepts.
+
+A type constructor such as \<open>set\<close> (see Section~\ref{theory-terms-types}) can be seen as a mapping
+from types to types, mapping an arbitrary type \<open>T\<close> to the type \<open>T set\<close> having as values sets of
+values of type \<open>T\<close>. However, the mapping does not specify any details about the values of \<open>T\<close>. From
+category theory the concept of a ``functor''\index{functor} can be used to extend type constructors
+in that direction.
+
+A functor for \<open>set\<close> additionally maps functions on the values of \<open>T\<close> to functions on the values of
+\<open>T set\<close>.\<close>
+
+subsection "Mappers"
+text_raw\<open>\label{holbasic-functor-mapper}\<close>
+
+text\<open>
+For a type constructor \<open>C\<close> such a mapping can be specified to lead from functions on a type parameter
+\<open>'a\<close> to functions on the polymorphic type \<open>'a C\<close> (see Section~\ref{theory-terms-types}). Such a
+mapping is itself a function of the polymorphic type \<open>('a \<Rightarrow> 'a) \<Rightarrow> ('a C \<Rightarrow> 'a C)\<close>. Such functions
+are called ``mappers''\index{mapper} or ``mapper functions''\index{mapper function}\index{function!mapper $\sim$}
+for the type constructor \<open>C\<close>. A mapper is said to ``lift''\index{lifting} functions on \<open>'a\<close> to functions on \<open>'a C\<close>.
+
+More generally, a mapper may have the type \<open>('a \<Rightarrow> 'b) \<Rightarrow> ('a C \<Rightarrow> 'b C)\<close> and lift functions between
+two types to functions between the corresponding types constructed by \<open>C\<close>. Since the type constructor
+\<open>C\<close> is directly determined by the mapper's type, a functor may be fully specified by the mapper
+without explicitly naming the type constructor.
+
+To be a mapper for a functor, \<open>m\<close> must satisfy two additional properties: it must be compatible with
+function composition and with the identity function. This may be expressed by the two laws
+@{text[display]
+\<open>comp: (m f) \<circ> (m g) = m (f \<circ> g)
+id: m id = id\<close>}\index{comp (fact name)}\index{id (fact name)}
+where \<open>\<circ>\<close>\index{/comp@\<open>\<circ>\<close> (operator)} denotes function composition (see Section~\ref{holtypes-func-funcs})
+and \<open>id\<close>\index{id (constant)} denotes the (polymorphic) identity function\index{identity function}
+\index{function!identity $\sim$} (see Section~\ref{holtypes-func-values}).
+
+These properties allow to lift an arbitrary term built from function applications by lifting the
+individual functions and building the corresponding term from the results. For this reason functors
+provide a versatile basic tool for transferring terms between types.
+
+As an example the function \<open>image :: ('a \<Rightarrow> 'b) \<Rightarrow> 'a set \<Rightarrow> 'b set\<close>\index{image (constant)} (see Section~\ref{holtypes-set-funcs})
+maps every function \<open>f\<close> to \<open>image f\<close> which returns for a set \<open>A\<close> of members of type \<open>'a\<close> the set of
+\<open>f\<close>-values of these members, i.e., \<open>image f\<close> applies \<open>f\<close> to all members of its argument sets. \<open>image\<close>
+is a mapper for the type constructor \<open>set\<close>, because the facts \<open>comp\<close> and \<open>id\<close> are satisfied for it.
+Therefore \<open>set\<close> is a functor with \<open>image\<close> as its mapper. \<open>image\<close> lifts every function \<open>f :: 'a \<Rightarrow> 'b\<close>
+to a function of type \<open>'a set \<Rightarrow>'b set\<close>.
+
+Not every function with the type of a mapper is a mapper, for example the function \<open>\<lambda>f. (\<lambda>A. {})\<close>
+which maps every function \<open>f\<close> to the constant function returning the empty set is not a mapper
+because it does not satisfy the law \<open>id\<close>.
+
+Mappers are not unique for type constructors. For example, the function \<open>\<lambda>f. id\<close>
+which maps every function to the identity function is a (trivial) mapper for all type constructors.
+
+There is a second kind of mapper type for type constructors \<open>C\<close>. It has the form
+\<open>('b \<Rightarrow> 'a) \<Rightarrow> 'a C \<Rightarrow> 'b C\<close> (i.e., the direction of \<open>'a\<close> and \<open>'b\<close> is reversed). Mappers of this
+type are called ``contravariant mappers''\index{mapper!contravariant $\sim$}. To distinguish both
+the other kind of mappers is also called ``covariant mappers''\index{mapper!covariant $\sim$}. The
+law \<open>comp\<close> for a contravariant mapper \<open>m\<close> has the slightly different form
+@{text[display]
+\<open>comp: (m f) \<circ> (m g) = m (g \<circ> f)\<close>}
+
+As an example, the function \<open>vimage\<close>\index{vimage (constant)} (see Section~\ref{holtypes-set-funcs})
+which maps every function to its reverse image on sets is a contravariant mapper
+for \<open>set\<close>.
+
+Often the intended mapper which causes a type constructor \<open>C\<close> to be a functor is assumed to be known
+implicitly, then \<open>C\<close> is simply said to be a functor without explicitly specifying the mapper.
+\<close>
+
+subsection "Multivariate Functors"
+text_raw\<open>\label{holbasic-functor-multi}\<close>
+
+text\<open>
+The concept of functors can be extended to type constructors with more than one type parameters. For
+a type constructor \<open>C\<close> with \<open>n\<close> parameters the mapper type has the form
+@{text[display]
+\<open>('a\<^sub>1\<Rightarrow>'b\<^sub>1) \<Rightarrow> \<dots> \<Rightarrow> ('a\<^sub>n\<Rightarrow>'b\<^sub>n) \<Rightarrow> ('a\<^sub>1,\<dots>,'a\<^sub>n) C \<Rightarrow> ('b\<^sub>1,\<dots>,'b\<^sub>n) C\<close>}
+A corresponding mapper lifts \<open>n\<close> functions to a single function between the types constructed by \<open>C\<close>
+from the argument or result types, respectively.
+
+The functor laws are extended accordingly:
+@{text[display]
+\<open>comp: (m f\<^sub>1 \<dots> f\<^sub>n) \<circ> (m g\<^sub>1 \<dots> g\<^sub>n) = m (f\<^sub>1\<circ>g\<^sub>1) \<dots> (f\<^sub>n\<circ>g\<^sub>n)
+id: m id \<dots> id = id\<close>}
+In category theory the resulting functors are also called ``multivariate functors''
+\index{functor!multivariate $\sim$}\index{multivariate functor}.
+
+As an example consider the type constructor \<open>prod\<close>\index{prod (type)} (see Section~\ref{holtypes-tup}) for the type
+of pairs. It has two type parameters and the polymorphic type \<open>('a\<^sub>1, 'a\<^sub>2) prod\<close> may be
+abbreviated by \<open>'a\<^sub>1 \<times> 'a\<^sub>2\<close> (see Section~\ref{holbasic-tuples}). Therefore the mapper type for \<open>prod\<close>
+has the form \<open>('a\<^sub>1 \<Rightarrow> 'b\<^sub>1) \<Rightarrow> ('a\<^sub>2 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> ('a\<^sub>1,'a\<^sub>2) prod \<Rightarrow> ('b\<^sub>1,'b\<^sub>2) prod\<close>. A possible mapper
+is the function \<open>map_prod \<equiv> \<lambda>f\<^sub>1 f\<^sub>2. \<lambda>(x,y). (f\<^sub>1 x, f\<^sub>2 y)\<close>\index{map-prod@map$\_$prod (constant)} (see Section~\ref{holtypes-tup-funcs}).
+It applies \<open>f\<^sub>1\<close> to the first component of the pair \<open>(x,y)\<close> and \<open>f\<^sub>2\<close> to the second component. In this
+way it lifts \<open>f\<^sub>1\<close> and \<open>f\<^sub>2\<close> to a function on pairs. It can easily be verified that \<open>map_prod\<close> satisfies
+the functor laws and causes \<open>prod\<close> to be a functor.
+
+A mapper type for \<open>n\<close> parameters may also be contravariant in some parameters and covariant in the
+other parameters. Then the \<open>comp\<close> law must be modified accordingly, by reversing the function
+compositions for those parameters.
+
+As an example consider the type constructor \<open>fun\<close>\index{fun (type)} (see Section~\ref{theory-terms-functions}) for
+function types. It has two type parameters and the polymorphic type \<open>('a\<^sub>1, 'a\<^sub>2) fun\<close> may be
+abbreviated by \<open>'a\<^sub>1 \<Rightarrow> 'a\<^sub>2\<close>. Therefore a mapper type for \<open>fun\<close> may have the form
+\<open>('b\<^sub>1 \<Rightarrow> 'a\<^sub>1) \<Rightarrow> ('a\<^sub>2 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> ('a\<^sub>1,'a\<^sub>2) fun \<Rightarrow> ('b\<^sub>1,'b\<^sub>2) fun\<close>
+which is contravariant in the first parameter and covariant in the second. A possible mapper of this
+type is the function \<open>map_fun \<equiv> \<lambda>f\<^sub>1 f\<^sub>2. \<lambda>f. f\<^sub>2 \<circ> f \<circ> f\<^sub>1\<close>\index{map-fun@map$\_$fun (constant)} (see Section~\ref{holtypes-func-funcs}).
+It can easily be verified that it satisfies the functor laws and causes \<open>fun\<close> to be a functor.
+
+Similar to a partial function application (see Section~\ref{theory-terms-multargs}) some of the
+parameters of a type constructor with \<open>n\<close> parameters may be filled by specific constant types,
+resulting in a type constructor with the remaining type parameters only. If one of \<open>n\<close> parameters of
+a type constructor is filled by a constant type the resulting type constructor has \<open>n-1\<close> parameters.
+Whenever a type constructor is a functor all type constructors resulting from filling some parameters
+by constant types are also functors. The mappers for them are constructed by partially applying the
+original mapper to the identity function in the corresponding arguments.
+
+As an example the polymorphic type \<open>(nat, 'a) fun\<close> is equivalent to a type constructor with one
+parameter. For every type \<open>'a\<close> its values are the functions from natural numbers to result values of
+type \<open>'a\<close>. Since \<open>fun\<close> is a functor this type constructor is also a functor and its mapper is
+\<open>map_fun id\<close> which is \<open>\<lambda>f\<^sub>2. \<lambda>f. f\<^sub>2 \<circ> f \<circ> id\<close> and thus is equivalent to the function composition \<open>\<circ>\<close>.
+
+Even more generally an arbitrary polymorphic type expression built from several type constructors may be
+considered as a mapping from the type parameters to the resulting type instances and thus may
+satisfy the properties of a functor if combined with a corresponding mapper. Whenever all
+constructors used for the type are functors, then the resulting type is also a functor and the
+mapper can always be constructed from the mappers of the constructors. This property is called
+``composability''\index{functor!composability of $\sim$} of functors.
+
+As an example the polymorphic type expression \<open>('a\<^sub>1 set, 'a\<^sub>2) fun\<close> denotes a functor because \<open>set\<close> and \<open>fun\<close> are
+functors. The mapper is of type
+\<open>('b\<^sub>1 \<Rightarrow> 'a\<^sub>1) \<Rightarrow> ('a\<^sub>2 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> ('a\<^sub>1 set, 'a\<^sub>2) fun \<Rightarrow> ('b\<^sub>1 set, 'b\<^sub>2) fun\<close> and may be defined as
+\<open>\<lambda> f\<^sub>1 f\<^sub>2. map_fun (image f\<^sub>1) f\<^sub>2\<close> from the mappers \<open>image\<close> and \<open>map_fun\<close>.
+\<close>
+
+subsection "Registering Functors"
+text_raw\<open>\label{holbasic-functor-reg}\<close>
+
+text\<open>
+Functors are used by HOL for several purposes. Therefore HOL provides an outer syntax construct for
+``registering'' a functor, i.e., making known to HOL that a function is a mapper for a functor:
+@{theory_text[display]
+\<open>functor "term" \<proof>\<close>}\index{functor (keyword)}
+where \<open>term\<close> is a term for a function of a mapper type for a type constructor \<open>C\<close>. It is mainly an
+abbreviation for
+@{theory_text[display]
+\<open>theorem "c &&& i" \<proof>\<close>}
+where \<open>c\<close> and \<open>i\<close> are the propositions for the \<open>comp\<close> and \<open>id\<close> laws according to the mapper type.
+The proof must prove that \<open>term\<close> satisfies these laws and is thus a mapper for \<open>C\<close>.
+As proved facts the laws are automatically named \<open>C.comp\<close> and \<open>C.id\<close>. Using these names the facts
+may then be used in proofs of other theorems. The facts can be displayed using the ``Print Context''
+tab in the Query panel\index{panel!query $\sim$} as described in Section~\ref{theory-theorem-search}.
+
+If more than one mapper shall be registered for the same type constructor the fact name prefix may
+be specified explicitly in the form
+@{theory_text[display]
+\<open>functor pre: "term" \<proof>\<close>}
+resulting in the fact names \<open>pre.comp\<close> and \<open>pre.id\<close>.
+
+Both forms of the registration command provide the laws in two additional alternative forms named
+\<open>pre.compositionality\<close> and \<open>pre.identity\<close>.
+
+The registration works for arbitrary multivariate functors with arbitrary contravariant parameters. The
+corresponding forms of \<open>c\<close> and \<open>i\<close> are automatically determined from the type of the \<open>term\<close>. The
+registration does not work for arbitrary polymorphic type expressions built from several constructors because
+their functor property always follows from those of the single constructors.
+\<close>
+
+section "Bounded Natural Functors"
+text_raw\<open>\label{holbasic-bnf}\<close>
+
+text\<open>
+The most important use of functors in HOL is their special case of ``bounded natural functors''
+\index{bounded natural functor}\index{functor!bounded natural $\sim$} (BNF)\index{BNF}. It is
+closely related to the support of type definitions in HOL described in Chapter~\ref{holtdefs}.
+\<close>
+
+subsection "Natural Functors"
+text_raw\<open>\label{holbasic-bnf-natural}\<close>
+
+text\<open>
+HOL calls a single-parameter functor \<open>C\<close> with mapper \<open>m\<close> ``natural''\index{natural functor}
+\index{functor!natural $\sim$} if there is a function \<open>s\<close> of
+type \<open>'a C \<Rightarrow> 'a set\<close> which satisfies the laws
+@{text[display]
+\<open>set_map: s \<circ> (m f)  = (image f) \<circ> s
+map_cong0: (\<And>z. z \<in> s x \<Longrightarrow> f z = g z) \<Longrightarrow> m f x = m g x\<close>}\index{set-map@set$\_$map (fact name)}\index{map-cong0@map$\_$cong0 (fact name)}
+
+Note that \<open>set\<close> is also a single-parameter functor, thus \<open>s\<close> is a mapping from one functor type to
+another. In category theory such mappings are called ``natural transformation'' if they satisfy the
+law \<open>set_map\<close>. For this reason the functor \<open>C\<close> is called ``natural'' in HOL. The transformation \<open>s\<close>
+is usually called a ``set-function''\index{set-function}\index{function!set-} in HOL.
+\<close>
+
+subsubsection "Container Types"
+
+text\<open>
+Natural functors model container types\index{container type}\index{type!container $\sim$}
+such as lists or trees which are often used as data types in
+programming. They consist of a ``shape'' (the container) and a ``content'' (the contained values).
+The type of the contained values is specified by the functor's type parameter, the container shape
+is determined by the functor. Thus the same shape may be instantiated to have content of arbitrary
+type.
+
+In this view the set-function \<open>s\<close> returns the content of a container value as the set of the
+content values. The function \<open>m f\<close> replaces content values by applying a function \<open>f\<close> to them. The
+law \<open>set_map\<close> states that the content after applying \<open>f\<close> lifted by the mapper is the same as applying
+\<open>f\<close> to each value of the original content. The law \<open>map_cong0\<close> states that a function lifted by \<open>m\<close>
+has no effect on the shape and only affects the content: if \<open>f\<close> and \<open>g\<close> have the same effect on the
+content of \<open>x\<close> the lifted functions \<open>m f\<close> and \<open>m g\<close> already have the same effect on the whole
+container \<open>x\<close>.
+
+As an example consider the functor \<open>(nat,'a) fun\<close> with mapper \<open>\<circ>\<close> (see Section~\ref{holbasic-functor-multi}).
+Its values are functions from natural numbers to the values of \<open>'a\<close>. They can be viewed to be
+infinite containers of numbered values of \<open>'a\<close>. The common shape is the infinite sequence of
+slots numbered by natural numbers. Together with the set-function \<open>range :: ('a \<Rightarrow> 'b) \<Rightarrow> 'b set\<close>\index{range (constant)}
+(see Section~\ref{holtypes-func-funcs}), which maps every function to the set of all its possible
+result values, this is a natural functor. Viewed as a container the content of a function is the set
+of its possible result values, which is retrieved by \<open>range\<close>. It is easily verified that the laws
+\<open>set_map\<close> and \<open>map_cong0\<close> are satisfied.
+
+Another example is the functor \<open>set\<close> itself. Using the identity \<open>id\<close> as set-function, the laws
+are trivially satisfied, therefore \<open>set\<close> is a natural functor. The container shape is the set, the
+content consists of the set elements.
+\<close>
+
+subsubsection "Natural Multivariate Functors"
+
+text\<open>
+As for functors (see Section~\ref{holbasic-functor-multi}) the concept of natural functors can be
+extended to type constructors with more than one parameter. Then a separate set-function \<open>s\<^sub>i\<close> is
+required for every type parameter \<open>'a\<^sub>i\<close>. A multivariate functor \<open>C\<close> with \<open>n\<close> type parameters \<open>'a\<^sub>1,\<dots>,'a\<^sub>n\<close> is
+natural, if there are functions \<open>s\<^sub>i :: ('a\<^sub>1,\<dots>,'a\<^sub>n) C \<Rightarrow> 'a\<^sub>i set\<close> for \<open>i = 1,\<dots>,n\<close> satisfying the
+laws
+@{text[display]
+\<open>set_map: 
+  s\<^sub>1 \<circ> (m f\<^sub>1 \<dots> f\<^sub>n)  = (image f\<^sub>1) \<circ> s\<^sub>1
+  \<dots>
+  s\<^sub>n \<circ> (m f\<^sub>1 \<dots> f\<^sub>n)  = (image f\<^sub>n) \<circ> s\<^sub>n
+map_cong0:
+  \<lbrakk>\<And>z\<^sub>1. z\<^sub>1 \<in> s\<^sub>1 x \<Longrightarrow> f\<^sub>1 z = g\<^sub>1 z;
+   \<dots>;
+   \<And>z\<^sub>n. z\<^sub>n \<in> s\<^sub>n x \<Longrightarrow> f\<^sub>n z = g\<^sub>n z\<rbrakk>
+  \<Longrightarrow> (m f\<^sub>1 \<dots> f\<^sub>n) x = (m g\<^sub>1 \<dots> g\<^sub>n) x\<close>}
+\index{set-map@set$\_$map (fact name)}\index{map-cong0@map$\_$cong0 (fact name)}
+
+Seen as container type, a natural multivariate functor has content of different types corresponding to its
+type parameters. Every set-function \<open>s\<^sub>i\<close> retrieves the set of content values of type \<open>'a\<^sub>i\<close>. The
+function \<open>(m f\<^sub>1 \<dots> f\<^sub>n)\<close> lifted by the mapper selectively applies its \<open>n\<close> argument functions to the
+corresponding content values.
+
+As an example consider the multivariate functor \<open>prod\<close> with mapper \<open>map_prod\<close> (see Section~\ref{holbasic-functor-multi}).
+Using the functions \<open>\<lambda>(x,y). {x}\<close> and \<open>\<lambda>(x,y). {y}\<close> as set-functions, which return the singleton
+sets of the first or second component, respectively, \<open>prod\<close> is a natural (multivariate) functor. The type
+\<open>('a\<^sub>1, 'a\<^sub>2) prod\<close> is a container type, having as content a single value of type \<open>'a\<^sub>1\<close> and a single
+value of type \<open>'a\<^sub>2\<close>.
+
+As for functors the concept of natural functors can immediately be extended to arbitrary polymorphic
+type expressions. Like functors, natural functors are composable: if all type constructors used in a type
+expression are natural functors then the resulting type is also a natural functor and the
+set-functions can be constructed from those of the type constructors.
+\<close>
+
+subsubsection "Live and Dead Type Parameters"
+
+text\<open>
+The multivariate functor \<open>fun\<close> with mapper \<open>map_fun\<close> (see Section~\ref{holbasic-functor-multi}) is no
+natural functor because it has a contravariant type parameter. The definition of natural functors
+in HOL requires that all its type parameters must be covariant. However, if the first type parameter
+is instantiated by an arbitrary type, such as in \<open>(nat,'a) fun\<close> (see above), the resulting type
+expression always denotes a natural functor. 
+
+This situation is described by saying that \<open>fun\<close> is a natural functor with one ``dead''
+type parameter\index{type!parameter!dead $\sim$} (the first one). The second type parameter is
+called ``live''\index{type!parameter!live $\sim$}. In general a natural
+functor may have several dead and live type parameters. A set-function only exists for
+each live type parameter and the mapper lifts only functions for the live type parameters.
+
+Seen as container type, the dead type parameters contribute to the container shape, the live type
+parameters specify the types of content values. In the example \<open>(nat,'a) fun\<close> the type \<open>nat\<close>
+determines the shape as being an infinite sequence of numbered slots. If it is replaced by
+\<open>bool\<close> the type \<open>(bool,'a) fun\<close> is a container with only two slots for content values of type \<open>'a\<close>.
+
+A dead type parameter may also be covariant, then the corresponding values are also considered to be
+parts of the shape instead of being content. Whether a type parameter is live or dead is determined
+by the type of the mapper and by the number and types of the set-functions.
+
+If natural functors are composed all type parameters of a constructor used on a dead parameter
+position of another constructor become dead for the resulting type. As an example the type
+\<open>('a\<^sub>1 set, 'a\<^sub>2) fun\<close> (see Section~\ref{holbasic-functor-multi}) has the dead parameter \<open>'a\<^sub>1\<close> because
+\<open>'a\<^sub>1 set\<close> occurs on the position of the dead parameter of \<open>fun\<close>. The parameter \<open>'a\<^sub>2\<close> is live and the 
+corresponding set-function is \<open>range\<close>.
+\<close>
+
+subsection "Predicators and Relators"
+text_raw\<open>\label{holbasic-bnf-predrel}\<close>
+
+text\<open>
+There are two other useful functions for every natural functor \<open>C\<close> with mapper \<open>m\<close> and set-function
+\<open>s\<close>. These are called ``predicator''\index{predicator function}\index{function!predicator $\sim$}
+and ``relator''\index{relator function}\index{function!relator $\sim$}.
+\<close>
+
+subsubsection "The Predicator"
+
+text\<open>
+A predicator is a function \<open>p :: ('a \<Rightarrow> bool) \<Rightarrow> ('a C \<Rightarrow> bool)\<close>, i.e., it lifts predicates (see
+Section~\ref{holbasic-pred-pred}) on type \<open>'a\<close> to predicates on type \<open>'a C\<close>. It must satisfy the law
+@{text[display]
+\<open>pred_set: p P = (\<lambda>x. \<forall>v\<in>(s x). P v)\<close>}\index{pred-set@pred$\_$set (fact name)}
+which directly specifies a definition for \<open>p\<close>: for a container value \<open>x\<close> the lifted predicate \<open>p P\<close>
+is valid if the original predicate \<open>P\<close> is valid for all content values retrieved by \<open>s x\<close> (for the
+syntax see Section~\ref{holtypes-set-funcs}). Since \<open>p\<close> can be constructed in this way from the
+set-function \<open>s\<close>, a predicator is available for every natural functor.
+
+The predicator for \<open>(nat,'a) fun\<close> is the function \<open>\<lambda>P. \<lambda>f. \<forall>v\<in>(range f). P v\<close>. The lifted predicate
+tests the possible result values of \<open>f\<close> whether the predicate \<open>P\<close> is valid for all of them.
+
+For a natural multivariate functor the predicator has the type \<open>('a\<^sub>1\<Rightarrow>bool) \<Rightarrow>\<dots>\<Rightarrow> ('a\<^sub>n\<Rightarrow>bool) \<Rightarrow> (('a\<^sub>1,\<dots>,'a\<^sub>n) C \<Rightarrow> bool)\<close>.
+It lifts \<open>n\<close> predicates on the type parameters to a combined predicate on the functor type. The law
+\<open>pred_set\<close> is accordingly extended to apply to each set of content values the predicate corresponding
+to their type.
+
+The predicator for \<open>prod\<close> is the function \<open>pred_prod\<close>\index{pred-prod@pred$\_$prod (constant)} (see Section~\ref{holtypes-tup-funcs}).
+It lifts two predicates \<open>P\<^sub>1, P\<^sub>2\<close> on \<open>'a\<^sub>1\<close> and \<open>'a\<^sub>2\<close>, respectively, to the predicate on pairs of type
+\<open>('a\<^sub>1, 'a\<^sub>2) prod\<close> which tests the first component by \<open>P\<^sub>1\<close> and the second component by \<open>P\<^sub>2\<close>.
+
+Predicators are composable: if a type expression consists of composed natural functors, the
+predicators can be composed in the same way to yield a predicator for the resulting type. As example
+the predicator for the type \<open>('a\<^sub>1, ('a\<^sub>2, 'a3) prod) prod\<close> is \<open>\<lambda>P\<^sub>1 P\<^sub>2 P\<^sub>3. pred_prod P\<^sub>1 (pred_prod P\<^sub>2 P\<^sub>3)\<close>.
+\<close>
+
+subsubsection "The Relator"
+
+text\<open>
+A relator is a function \<open>r :: ('a \<Rightarrow> 'b \<Rightarrow> bool) \<Rightarrow> ('a C \<Rightarrow> 'b C \<Rightarrow> bool)\<close>, i.e., it lifts relations
+(see Section~\ref{holbasic-pred-rel}) between types \<open>'a\<close> and \<open>'b\<close> to relations between types \<open>'a C\<close>
+and \<open>'b C\<close>. It must satisfy the law
+@{text[display]
+\<open>in_rel: r R =
+  (\<lambda>x y. \<exists>z::('a\<times>'b) C. \<forall>(a,b)\<in>(s z). R a b
+                       \<and> (m fst) z = x \<and> (m snd) z = y)\<close>}\index{in-rel@in$\_$rel (fact name)}
+which specifies a definition for \<open>r\<close> using both \<open>s\<close> and \<open>m\<close> (for the inner syntax used here
+see Chapter~\ref{holtypes}).
+It tests two containers \<open>x :: 'a C\<close> and \<open>y :: 'b C\<close> whether they are related by the relation lifted
+from \<open>R :: 'a\<Rightarrow>'b\<Rightarrow>bool\<close>. For this it uses a container \<open>z\<close> of type \<open>('a\<times>'b) C\<close> where all contained
+values are pairs (see Section~\ref{holbasic-tuples}). Using the set-function \<open>s\<close> it retrieves these
+pairs and tests whether their components are related by \<open>R\<close>. Using the mapper \<open>m\<close> applied to the selector
+functions \<open>fst\<close> and \<open>snd\<close> for the components of a pair (see Section~\ref{holbasic-tuples}) it
+replaces every contained pair in \<open>z\<close> by its first or second component, respectively, which must
+result in the containers \<open>x\<close> and \<open>y\<close> tested for being related. Since \<open>r\<close> can be constructed in this
+way from \<open>s\<close> and \<open>m\<close>, a relator is available for every natural functor.
+
+The construction of the container \<open>z\<close> of type \<open>('a\<times>'b) C\<close> for the containers \<open>x\<close> and \<open>y\<close> of type
+\<open>'a C\<close> and \<open>'b C\<close> is a generalization of the well-known function ``zip'' in functional programming,
+which constructs the list of pairs of corresponding elements from two lists. Therefore this
+construction is called ``zip construction''\index{zip construction} in this introduction, \<open>z\<close> is
+called a ``zipped container'', and \<open>x\<close> and \<open>y\<close> are called ``unzipped containers''.
+
+Trivially, a relator \<open>r\<close> always lifts equality to equality: \<open>r (=)\<close> has type \<open>'a C \<Rightarrow> 'a C \<Rightarrow> bool)\<close>
+and relates two containers if they have the same shape and their content is the same.
+
+The relator for \<open>(nat,'a) fun\<close> is the function \<open>\<lambda>R. \<lambda>f g. \<forall>i::nat. R (f i) (g i)\<close>. The lifted
+relation tests for all natural numbers \<open>i\<close> whether the result values \<open>f i\<close> and \<open>g i\<close> are related
+by \<open>R\<close>.
+
+For a natural multivariate functor the relator has the type \<open>('a\<^sub>1\<Rightarrow>'b\<^sub>1\<Rightarrow>bool) \<Rightarrow>\<dots>\<Rightarrow> ('a\<^sub>n\<Rightarrow>'b\<^sub>n\<Rightarrow>bool) \<Rightarrow> (('a\<^sub>1,\<dots>,'a\<^sub>n) C \<Rightarrow> ('b\<^sub>1,\<dots>,'b\<^sub>n) C \<Rightarrow> bool)\<close>.
+It lifts \<open>n\<close> relations between types \<open>'a\<^sub>i\<close> and \<open>'b\<^sub>i\<close> to a combined relation between the functor types
+constructed from the \<open>'a\<^sub>i\<close> and \<open>'b\<^sub>i\<close>, respectively. The law \<open>in_rel\<close> is extended accordingly, using
+\<open>(m fst \<dots> fst)\<close> and \<open>(m snd \<dots> snd)\<close> to extract the unzipped containers \<open>x\<close> and \<open>y\<close> from the zipped
+container \<open>z\<close>.
+
+The relator for \<open>prod\<close> is the function \<open>rel_prod\<close> (see Section~\ref{holtypes-tup-funcs}).
+It lifts two relations \<open>R\<^sub>1, R\<^sub>2\<close> between \<open>'a\<^sub>1, 'b\<^sub>1\<close> and \<open>'a\<^sub>2, 'b\<^sub>2\<close>, respectively, to the relation
+between pairs of type \<open>('a\<^sub>1, 'a\<^sub>2) prod\<close> and \<open>('b\<^sub>1, 'b\<^sub>2) prod\<close> which compares the first components
+by \<open>R\<^sub>1\<close> and the second components by \<open>R\<^sub>2\<close>.
+
+Like predicators relators are composable: if a type expression consists of composed natural functors,
+the relators can be composed in the same way to yield a relator for the resulting type. As example
+the relator for the type \<open>('a\<^sub>1, ('a\<^sub>2, 'a3) prod) prod\<close> is \<open>\<lambda>R\<^sub>1 R\<^sub>2 R\<^sub>3. rel_prod R\<^sub>1 (rel_prod R\<^sub>2 R\<^sub>3)\<close>.
+\<close>
+
+subsubsection "Predicator and Relator for Functions"
+
+text\<open>
+Although \<open>fun\<close> has no set-function for its contravariant first type parameter, a
+predicator and relator can be defined for it. HOL provides the functions
+@{text[display]
+\<open>pred_fun :: ('p\<^sub>1 \<Rightarrow> bool) \<Rightarrow> ('p\<^sub>2 \<Rightarrow> bool) \<Rightarrow> ('p\<^sub>1, 'p\<^sub>2) fun \<Rightarrow> bool
+  \<equiv> \<lambda>p\<^sub>1 p\<^sub>2 f. \<forall>x. p\<^sub>1 x \<longrightarrow> p\<^sub>2 (f x)\<close>}\index{pred-fun@pred$\_$fun (constant)}
+and
+@{text[display]
+\<open>rel_fun :: ('p\<^sub>1 \<Rightarrow> 'q\<^sub>1 \<Rightarrow> bool) \<Rightarrow> ('p\<^sub>2 \<Rightarrow> 'q\<^sub>2 \<Rightarrow> bool)
+  \<Rightarrow> ('p\<^sub>1, 'p\<^sub>2) fun \<Rightarrow> ('q\<^sub>1, 'q\<^sub>2) fun \<Rightarrow> bool
+  \<equiv> \<lambda>r\<^sub>1 r\<^sub>2 f g. \<forall>x y. r\<^sub>1 x y \<longrightarrow> r\<^sub>2 (f x) (g y)\<close>}\index{rel-fun@rel$\_$fun (constant)}
+which lift predicates or relations, respectively, from argument and result type to the function
+type.
+
+As an example using the predicate \<open>evn\<close> from Section~\ref{holbasic-inductive-defrules}, the partial
+application \<open>pred_fun evn evn\<close> is the predicate of type \<open>(nat \<Rightarrow> nat) \<Rightarrow> bool\<close> which tests whether
+a function on natural numbers maps all even numbers to even numbers.
+
+As for the mapper \<open>map_fun\<close> the predicator and relator for an instantiation \<open>(T, 'a) fun\<close> such as
+\<open>(nat, 'a) fun\<close> (see Section~\ref{holbasic-functor-multi}) can be obtained by partial application.
+The predicator for \<open>(nat,'a) fun\<close> (see above) is equal to \<open>pred_fun (\<lambda>_. True)\<close>, the relator for
+\<open>(nat,'a) fun\<close> (see above) is equal to \<open>rel_fun (=)\<close>. Note that these functions are also polymorphic
+for the argument type, so they can be used for functions of arbitrary types \<open>'p\<^sub>1 \<Rightarrow> 'p\<^sub>2\<close>.
+
+Since functions with multiple arguments in curried form (see Section~\ref{holbasic-tuples-funarg})
+have functions as intermediate result values the lifting can be iterated over multiple arguments.
+For example, a relation \<open>r\<close> on the result type \<open>t\<close> can be lifted to binary functions of type
+\<open>t\<^sub>1 \<Rightarrow> t\<^sub>2 \<Rightarrow> t\<close> by \<open>rel_fun (=) (rel_fun (=) r)\<close> which is equivalent to the relation on functions
+\<open>\<lambda>f g. \<forall>x y. r (f x y) (g x y))\<close>.
+\<close>
+
+subsection "Bounded Natural Functors"
+text_raw\<open>\label{holbasic-bnf-bounded}\<close>
+
+text\<open>
+A natural functor is called ``bounded''\index{bounded natural functor}\index{functor!bounded natural $\sim$},
+if the size of its content is restricted. The shape is not
+arbitrarily ``elastic'' to admit content value sets of arbitrary large cardinality. For a multivariate
+functor to be bounded, the content sets for all live type parameters must be bounded. In this
+introduction (and also in other HOL documentation) bounded natural functors are usually abbreviated
+as BNF.
+
+The natural functor \<open>set\<close> (see Section~\ref{holbasic-bnf-natural}) is not bounded. Depending on
+the type substituted for the type parameter \<open>'a\<close>, a container value of type \<open>'a set\<close> may have
+arbitrary large cardinality, because the universal set \<open>UNIV\<close> (see Section~\ref{holtypes-set-values})
+always contains all values of type \<open>'a\<close>.
+
+The natural functor \<open>prod\<close> is bounded, because every container value has only two content values,
+independent of their types. The natural functor \<open>(nat, 'a) fun\<close> is bounded, because every container
+has countably many content values, even if \<open>'a\<close> is instantiated by a type with more values, such as
+the type of real numbers.
+
+More generally, the bound may not depend on the live type parameters, but it may depend on the dead
+type parameters, because they contribute to the shape instead of the content. Therefore the natural
+functor \<open>fun\<close> with one dead and one live type parameter is bounded by the cardinality of the
+function argument type which is specified by the dead type parameter.
+
+There is a second requirement for a bounded natural functor, stated as the law
+@{text[display]
+\<open>(r R\<^sub>1\<dots>R\<^sub>n) OO (r S\<^sub>1\<dots>S\<^sub>n) \<le> r (R\<^sub>1 OO S\<^sub>1) \<dots> (R\<^sub>n OO S\<^sub>n)\<close>}
+where \<open>r\<close> is the relator (see Section~\ref{holbasic-bnf-predrel}) of a natural functor
+with \<open>n\<close> live type parameters. The operator \<open>OO\<close> is relation composition (see
+Section~\ref{holbasic-pred-rel}), the ordering \<open>\<le>\<close> on relations is the usual ``stronger as''
+ordering (see Section~\ref{holtypes-func-funcs}). The other direction \<open>\<ge>\<close> of the ordering is
+automatically satisfied, together the law states distributivity of the relator \<open>r\<close> with respect to
+relation composition. Therefore the law is also called ``subdistributivity of the relator''.
+
+BNFs are composable: Whenever in a type expression all type constructors occurring on live type
+parameter positions are bounded, then the type denoted by the expression is bounded as well. The type
+\<open>('a\<^sub>1 set, 'a\<^sub>2) fun\<close> (see Section~\ref{holbasic-bnf-natural}) is a BNF because
+the constructor \<open>set\<close>, which is not bounded, occurs on the position of the dead parameter of \<open>fun\<close>.
+\<close>
+
+subsubsection "Cardinalities"
+
+text\<open>
+HOL represents cardinalities\index{cardinality} by specific binary ordering relations of type \<open>('a\<times>'a) set\<close> (see
+Section~\ref{holbasic-tuples-rel}). The predicate \<open>card_order :: ('a\<times>'a) set \<Rightarrow> bool\<close>\index{card-order@card$\_$order (constant)}
+determines such relations. The predicate \<open>regularCard :: ('a\<times>'a) set \<Rightarrow> bool\<close>\index{regularCard (constant)}
+test the specific property of being ``regular'', the predicate \<open>cinfinite :: ('a\<times>'a) set \<Rightarrow> bool\<close>\index{cinfinite (constant)}
+tests a cardinality for being infinite.
+
+The cardinality of the natural numbers, usually denoted by \<open>\<aleph>\<^sub>0\<close> in mathematics, corresponds
+to the ordering \<open>(\<le>)\<close> (see Section~\ref{holbasic-equal-order}) on type \<open>nat\<close>, HOL defines the
+constant name \<open>natLeq\<close>\index{natLeq (constant)} for it. The function \<open>card_suc\<close>\index{card-suc@card$\_$suc (constant)}
+maps a cardinality to the next higher cardinality. The cardinality of a set can be determined
+by the function \<open>card_of :: 'a set \<Rightarrow> ('a\<times>'a) set\<close>\index{card-of@card$\_$of (constant)} and
+cardinalities can be compared by \<open>ordLess2 :: ('a\<times>'a) set \<Rightarrow> ('a\<times>'a) set \<Rightarrow> bool\<close>\index{ordLess2 (constant)}
+for being strictly ranked. The syntax \<open>|A|\<close> for \<open>card_of A\<close> and the operator name
+\<open>(<o)\<close>\index{/ordless2@\<open><o\<close> (operator)} for \<open>ordLess2\<close> are available after using the command
+@{theory_text[display]
+\<open>unbundle cardinal_syntax\<close>}\index{cardinal_syntax@cardinal$\_$syntax (bundle)}
+on theory level, which is available after importing the theory \<^theory>\<open>Main\<close> (see
+Section~\ref{system-invoke-theory}).
+
+The theories \<^theory>\<open>HOL.BNF_Cardinal_Order_Relation\<close> and  \<^theory>\<open>HOL.BNF_Cardinal_Arithmetic\<close>
+introduce many rules which can be used to prove goals about cardinalities.
+\<close>
+
+subsection "Registering Bounded Natural Functors"
+text_raw\<open>\label{holbasic-bnf-register}\<close>
+
+text\<open>
+Some type definition mechanisms in HOL, as described in Chapter~\ref{holtdefs}, require the
+information whether a type constructor is a BNF. Therefore HOL supports
+registering BNFs (i.e., adding them to internal HOL data structures so that they can be retrieved
+by HOL mechanisms). In most cases this need not be done explicitly, because
+the type definition mechanisms automatically register newly defined types as bounded natural
+functor, if applicable.
+\<close>
+
+subsubsection "The \<^theory_text>\<open>bnf\<close> Command"
+
+text\<open>
+A polymorphic type with \<open>n\<close> type parameters is registered as BNF using the
+outer syntax command
+@{theory_text[display]
+\<open>bnf name: "type" 
+  map: "term" sets: "term\<^sub>1" \<dots> "term\<^sub>m" bd: "bterm" \<proof>\<close>}\index{bnf (keyword)}
+\index{map: (keyword)}\index{sets: (keyword)}\index{bd: (keyword)}
+where \<open>term\<close> is a function of a mapper type for the \<open>type\<close>, the \<open>term\<^sub>i\<close> are set functions for the
+\<open>type\<close> and \<open>bterm\<close> is an infinite regular cardinality which is strictly larger than that of all sets
+returned by the set functions. As usual, the terms need not be quoted, if they consist of a single
+identifier. The \<open>map:\<close>, \<open>sets:\<close>, and \<open>bd:\<close> are keywords and are part of the command syntax.
+
+The type is registered with \<open>m\<close> live type parameters, the remaining parameters are considered dead.
+The live type parameters are determined from the types of the set functions, the type of the mapper
+function must match exactly, otherwise an error is signaled.
+
+The command generates \<open>7+2*m\<close> goals which must be proved in the \<open>\<proof>\<close>. These are the two functor
+laws \<open>comp\<close> and \<open>id\<close> (see Section~\ref{holbasic-functor-mapper}), the law \<open>map_cong0\<close> and \<open>m\<close> laws
+\<open>set_map\<close> for a natural functor (see Section~\ref{holbasic-bnf-natural}), \<open>m\<close> laws of the form
+\<open>|term\<^sub>i| <o bterm\<close> for the cardinality bound, the goals \<open>card_order bterm\<close>, \<open>regularCard bterm\<close>,
+and \<open>cinfinite bterm\<close>, and the law for the subdistributivity of the (automatically constructed)
+relator (see Section~\ref{holbasic-bnf-bounded}).
+
+After the proof of these facts is completed HOL uses them to construct and automatically prove
+about 40 other named facts. They can be displayed using the ``Print Context'' tab in the Query
+panel\index{panel!query $\sim$} as described in Section~\ref{theory-theorem-search}, if the cursor
+is positioned after the proof of the \<^theory_text>\<open>bnf\<close> command.
+
+All fact names use the \<open>name\<close> specified in the \<open>bnf\<close> command as prefix. In some cases \<open>name\<close> may be
+omitted and is automatically constructed from the \<open>type\<close>. This is possible if the \<open>type\<close> is a
+single type constructor \<open>C\<close> applied to type variables, then \<open>C\<close> is used as prefix.
+
+As an example, the natural multivariate functor \<open>prod\<close> (see Section~\ref{holbasic-bnf-natural}) can be
+registered as a BNF using the command
+@{theory_text[display]
+\<open>bnf myprod: "('a, 'b) prod" 
+  map: map_prod sets: "\<lambda>(x,y).{x}" "\<lambda>(x,y).{y}" bd: natLeq \<proof>\<close>}
+Since both set functions return finite sets (singletons) the cardinality \<open>natLeq\<close> of the natural
+numbers can be used as strictly larger infinite bound. A name must be specified because HOL already
+registers this type as BNF under its type name \<open>prod\<close>.
+
+The natural functor \<open>(nat,'a) fun\<close> (see Section~\ref{holbasic-bnf-natural}) can be registered as a
+BNF by
+@{theory_text[display]
+\<open>bnf natfun: "((nat, 'a) fun)"
+  map: "(\<circ>) :: ('b \<Rightarrow> 'c) \<Rightarrow> ((nat, 'b) fun) \<Rightarrow> ((nat, 'c) fun)"
+  sets: "range :: ((nat, 'a) fun) \<Rightarrow> 'a set"
+  bd: "card_suc natLeq" \<proof>\<close>}
+The types for the mapper and set function must be specified to restrict the general functions
+\<open>(\<circ>)\<close> and \<open>range\<close> to the specific functions on natural numbers. The cardinality of the content set
+is not larger than that of the natural numbers, therefore its successor \<open>card_suc natLeq\<close> can be
+used as strictly larger bound.
+
+For an example that registers \<open>fun\<close> as a BNF with one dead and one live parameter
+including the proof see \<^cite>\<open>"Section 6.2, introductory examples" in datatypes\<close>
+\<close>
+
+subsubsection "Registering Relator and Predicator"
+
+text\<open>
+If required, HOL automatically constructs the relator and predicator
+(see Section~\ref{holbasic-bnf-predrel}) for a registered bounded natural functor, using names of the 
+form \<open>pred_name\<close> and \<open>rel_name\<close>. However, it is also possible to define these as named functions and add
+them to the registration, so that they can be used by HOL. This is done by an extended \<^theory_text>\<open>bnf\<close>
+command of the form
+@{theory_text[display]
+\<open>bnf \<dots> rel: "rterm" pred: "pterm" \<proof>\<close>}\index{rel: (keyword)}\index{pred: (keyword)}
+where \<open>rterm\<close> is a term for the relator and \<open>pterm\<close> is a term for the predicator. The predicator
+is optional, the relator may only be omitted together with the predicator.
+
+In this extended form the command generates the additional goals \<open>in_rel\<close> and \<open>pred_set\<close> which must
+be proved to show that the specified functions actually correspond to the definition of a relator
+or predicator, respectively.
+
+As an example \<open>prod\<close> can be registered together with its relator and predicator by
+@{theory_text[display]
+\<open>bnf myprod: "('a, 'b) prod" 
+  map: map_prod sets: "\<lambda>(x,y).{x}" "\<lambda>(x,y).{y}" bd: natLeq
+  rel: rel_prod pred: pred_prod \<proof>\<close>}
+\<close>
+
+subsubsection "Registering the Mapper Function"
+
+text\<open>
+The command \<^theory_text>\<open>bnf name: "type" map: "term" \<dots>\<close> does not register the \<open>term\<close> specified for the mapper
+function as a functor (see Section~\ref{holbasic-functor-reg}). This may cause problems when HOL
+needs only the functor property of \<open>type\<close> later. An example is the definition of a quotient type
+(see Section~\ref{holtdefs-quot}). It signals a warning if a quotient type is defined for a type
+that has not been registered as a functor.
+
+To make a registered BNF known as a functor it must explicitly be registered as functor in the form
+@{theory_text[display]
+\<open>functor "term" \<proof>\<close>}
+where \<open>term\<close> denotes the mapper function specified in the \<^theory_text>\<open>bnf\<close> command.
+
+Although the \<^theory_text>\<open>bnf\<close> command does not register the type as functor, it provides the facts \<open>comp\<close> and
+\<open>id\<close> which must be proved for the \<open>functor\<close> command, named \<open>map_comp\<close> and \<open>map_id0\<close> prefixed by the
+\<open>name\<close> specified in the \<^theory_text>\<open>bnf\<close> command. Therefore it is easiest to register a type as functor after
+registering it as BNF, reusing the facts provided by the \<^theory_text>\<open>bnf\<close> command for the proof of the
+\<^theory_text>\<open>functor\<close> command. After type \<open>prod\<close> has been registered as BNF as above it can be registered as
+functor using
+@{theory_text[display]
+\<open>functor map_prod
+  using myprod.map_comp by fastforce (simp add: myprod.map_id0)\<close>}\<close>
+
+subsubsection "Displaying Registered Bounded Natural Functors"
+
+text\<open>
+All registered BNFs can be displayed by the command
+@{theory_text[display]
+\<open>print_bnfs\<close>}\index{print-bnfs!print$\_$bnfs (keyword)}
+It prints a list of short descriptions of all BNFs which have been registered
+at the position of the command to the Output panel\index{panel!output $\sim$} (see
+Section~\ref{system-jedit-output}).
+\<close>
+
+section "Transfer"
+text_raw\<open>\label{holbasic-transfer}\<close>
+
+text\<open>
+This section describes the transfer mechanism in detail and is only intended for the interested
+reader. Usually the transfer mechanism can be used without knowing the details, as described in
+Section~\ref{holbasic-quotlift-lift}.
+
+The relator \<open>rel_fun\<close> for the function type (see Section~\ref{holbasic-bnf-predrel}) lifts a relation
+\<open>R\<^sub>a\<close> between two argument types and a relation \<open>R\<^sub>r\<close> between two result types to a relation between
+the corresponding function types. It is defined in a way that the following law is valid:
+@{text[display]
+\<open>\<lbrakk>(rel_fun R\<^sub>a R\<^sub>r) f g; R\<^sub>a x y\<rbrakk> \<Longrightarrow> R\<^sub>r (f x) (g y)\<close>}
+It states that if two functions
+\<open>f\<close> and \<open>g\<close> are related by \<open>rel_fun R\<^sub>a R\<^sub>r\<close> and the arguments \<open>x\<close> and \<open>y\<close> are related by \<open>R\<^sub>a\<close> then
+the function results are related by \<open>R\<^sub>r\<close>.
+
+Thus it is possible to replace the function application term \<open>(f x)\<close> by \<open>(g y)\<close> and to repeat this
+for enclosing function applications in a complex term while changing the overall result value to a
+related one. If that is done for the body of a lambda term  (see Section~\ref{theory-terms-lambda})
+the resulting lambda term is also related (as function) to the original one.
+
+In Isabelle terms of the inner syntax are always built from function applications and lambda terms
+(all other binder syntax forms are defined as specific combinations of both). Thus the replacement
+schema described above can be used for arbitrary terms. By replacing all constants (for values and functions)
+occurring in a term by related ones, a new term results which usually has another type, but its
+value is related to that of the original term. This is called ``transfer''\index{transfer}: the
+term is ``transferred'' from a type to a different target type.
+
+In this context the relations used for the transfer between corresponding types are called
+``transfer relations''\index{transfer!relation}\index{relation!transfer $\sim$}.
+
+As an example consider a relation \<open>rnb\<close> between type \<open>bool\<close> and the target type \<open>nat\<close> which relates
+\<open>True\<close> with \<open>1\<close> and \<open>False\<close> with \<open>0\<close>. Then \<open>(rel_fun rnb rnb)\<close> is a transfer relation between
+operations on \<open>bool\<close> and operations on \<open>nat\<close>. It can easily be verified that it relates the boolean
+conjunction \<open>\<and>\<close> with multiplication \<open>*\<close> and the boolean disjunction \<open>\<or>\<close> with the maximum function
+\<open>max\<close> (see Section~\ref{holbasic-equal-order}). Then the boolean term \<open>False \<or> (True \<and> False)\<close> can
+be transferred to the term \<open>max 0 (1 * 0)\<close>.
+
+Note that this is an artificial example, transfer is not intended to relate types such as \<open>nat\<close> and
+\<open>bool\<close>.
+\<close>
+
+subsection "Transfer Rules"
+text_raw\<open>\label{holbasic-transfer-rules}\<close>
+
+text\<open>
+To transfer a term a replacement must be found for every constant occurring in it. This is done
+with the help of simple theorems of the form
+@{text[display]
+\<open>R term term'\<close>}
+where \<open>R\<close> is a transfer relation applied to the two terms. It states that \<open>term\<close> and \<open>term'\<close> are 
+related by \<open>R\<close>. In this context such theorems are called ``transfer rules''
+\index{transfer!rule}\index{rule!transfer $\sim$}.
+
+To find a replacement for a constant it is matched with the \<open>term'\<close> of every known transfer rule.
+A match yields both the \<open>term\<close> for the replacement and the transfer relation \<open>R\<close> which is needed for
+determining the arguments relation for the next enclosing function application. Backtracking is
+used to determine a consistent set of transfer rules for all constants in a term. If for atleast
+one constant no transfer rule matches the term cannot be transferred.
+
+Note that HOL always matches constants with the second relation argument term, thus the transfer
+rules are applied ``from right to left''. The target type is always the left argument type of the
+transfer relation.
+\<close>
+
+subsubsection "Transfer Rules for Functions"
+
+text\<open>
+In a transfer rule for functions the transfer relation \<open>R\<close> is constructed with the help of \<open>rel_fun\<close>,
+so the rule has the form
+@{text[display]
+\<open>(rel_fun R\<^sub>a R\<^sub>r) term term'\<close>}
+
+As an alternative syntax HOL provides the operator name \<open>(===>)\<close>\index{/rel-fun@\<open>===>\<close> (operator)}
+for \<open>rel_fun\<close> so that the rule can be specified as
+@{text[display]
+\<open>(R\<^sub>a ===> R\<^sub>r) term term'\<close>}
+The operator name \<open>(===>)\<close> is only available after using the command
+@{theory_text[display]
+\<open>unbundle lifting_syntax\<close>}\index{lifting_syntax@lifting$\_$syntax (bundle)}
+on theory level.
+
+This syntax is intended to make the term for the relation syntactically resemble the (function) types
+of \<open>term :: T\<^sub>a\<Rightarrow>T\<^sub>r\<close> and \<open>term' :: T\<^sub>a'\<Rightarrow>T\<^sub>r'\<close>: \<open>R\<^sub>a\<close> is the transfer relation between the argument
+types \<open>T\<^sub>a\<close> and \<open>T\<^sub>a'\<close>, \<open>R\<^sub>r\<close> is the transfer relation between the result types \<open>T\<^sub>r\<close> and \<open>T\<^sub>r'\<close>.
+
+If the functions have types of the form \<open>T\<^sub>a\<^sub>,\<^sub>1\<Rightarrow>\<dots>\<Rightarrow>T\<^sub>a\<^sub>,\<^sub>n\<Rightarrow>T\<^sub>r\<close> with \<open>n\<close> arguments the relator \<open>rel_fun\<close>
+can be iterated as described in Section~\ref{holbasic-bnf-predrel}, yielding a transfer rule of the
+form
+@{text[display]
+\<open>(R\<^sub>a\<^sub>,\<^sub>1 ===> \<dots> ===> R\<^sub>a\<^sub>,\<^sub>n ===> R\<^sub>r) term term'\<close>}
+\<close>
+
+subsubsection "Example"
+
+text\<open>
+For transferring from \<open>bool\<close> to \<open>nat\<close> the transfer relation \<open>rnb\<close> can be defined inductively (see
+Section~\ref{holbasic-inductive}) as
+@{theory_text[display]
+\<open>inductive rnb :: "nat \<Rightarrow> bool \<Rightarrow> bool"
+where "rnb 1 True" | "rnb 0 False"\<close>}\index{rnb (example constant)}
+
+Then the defining rules are transfer rules which can be used to replace the value constants \<open>True\<close>
+and \<open>False\<close>. The transfer rules for replacing the boolean operations \<open>\<and>\<close> and \<open>\<or>\<close> are
+@{text[display]
+\<open>(rnb ===> rnb ===> rnb) (*) (\<and>)
+(rnb ===> rnb ===> rnb) max (\<or>)\<close>}
+With all four rules together the term \<open>False \<or> (True \<and> False)\<close> can be transferred to the term
+\<open>max 0 (1 * 0)\<close>.
+\<close>
+
+subsubsection "Relating by Equality"
+
+text\<open>
+A specific case occurs if the equality relation \<open>(=)\<close> (see Section~\ref{holbasic-equal-eq}) is used
+as transfer relation. It is polymorphic, but always relates a type with itself and also every value
+with the same value. Thus the transfer rule \<open>(R\<^sub>a ===> (=)) f g\<close> states that if \<open>x\<close> and \<open>y\<close> are
+related by \<open>R\<^sub>a\<close> then \<open>(f x) = (g y)\<close>. If \<open>(g y)\<close> is transferred using this rule, the value of this
+term remains unchanged. More generally, an arbitrary term can be transferred with preserving its
+value if the outermost function or operator is replaced using a transfer relation of the form
+\<open>A ===> (=)\<close>.
+
+If transfer is applied in this way to formulas (terms of type \<open>bool\<close>, see
+Section~\ref{theory-prop-formulas}), their truth value is preserved by the transfer. This makes
+transfer to a very powerful tool for constructing proofs: to prove a formula about values of one or
+more types it is transferred to a formula about values of target types related by transfer relations,
+then this formula is proved. Often this proof already exists and can thus be reused.
+
+Transfer can be extended to arbitrary propositions involving meta operators using the equivalence
+of derivation rules and boolean terms described in Section~\ref{holtypes-bool-rules}.
+\<close>
+
+subsubsection "Transferring Equations"
+
+text\<open>
+If the term to be transferred is an equation of two terms the outermost operator is the equality as
+a binary predicate on the type of both terms. It can be replaced by the equality on a related type
+if the transfer rule
+@{text[display]
+\<open>(R\<^sub>a ===> R\<^sub>a ===> (=)) (=) (=)\<close>}
+is valid. The first occurrence of \<open>(=)\<close> states that the related functions preserve their values,
+the second and third occurrences denote the related instances of equality on the target type and the
+original type.
+
+For the example relation \<open>rnb\<close> the corresponding transfer rule
+@{text[display]
+\<open>(rnb ===> rnb ===> (=)) (=) (=)\<close>}
+together with the four transfer rules above can be used to transfer the equation \<open>(False \<or> (True \<and>
+False)) = False\<close> to the equation \<open>max 0 (1 * 0) = 0\<close> while preserving the validity of the equations.
+\<close>
+
+subsubsection "Transferring Propositions with Variables"
+
+text\<open>
+If a proposition contains universally bound variables it has the form \<open>\<And> x\<^sub>1 \<dots> x\<^sub>n. P\<close> (see
+Section~\ref{theory-prop-bind}). This is equivalent to the formula \<open>\<forall> x\<^sub>1 \<dots> x\<^sub>n. P\<close>, as described in
+Section~\ref{holtypes-bool-rules}. Here the outermost operator is the quantifier \<open>\<forall>\<close> which also
+corresponds to a function (see Section~\ref{holtypes-bool-funcs}) and can be replaced for transfer.
+
+HOL has a predefined transfer rule which replaces \<open>\<forall>\<close> on a type by \<open>\<forall>\<close> on any target type. However,
+this is only valid if the transfer relation \<open>R\<close> between both types is bi-total. Therefore the
+property \<open>bi_total R\<close> (see Section~\ref{holbasic-pred-rel}) must be provided as a fact, only then
+the transfer rule can be used.
+
+If the relation is only total on the original type the quantifier \<open>\<forall>\<close> must be replaced by a bounded
+quantifier over the domain of \<open>R\<close>, i.e., only the values of the target type which are related with a
+value in the original type. It has the form \<open>\<forall> x. Domainp R x \<longrightarrow> \<dots>\<close> which restricts \<open>x\<close> to the
+domain of \<open>R\<close> (see Section~\ref{holbasic-pred-rel}). HOL has a predefined transfer rule for this
+replacement, to be used the property \<open>right_total R\<close> must be provided as a fact. If \<open>R\<close> is not
+right-total the (unbounded) quantifier \<open>\<forall>\<close> cannot be transferred.
+
+HOL uses facts of the form
+@{text[display]
+\<open>Domainp R = (\<lambda>x. \<dots>)\<close>}
+specifying the domain as an explicit predicate. If available, the explicit predicate is used instead
+of \<open>Domainp R\<close> in a transferred term.
+
+Note that the example relation \<open>rnb\<close> is right-total, but not bi-total. Therefore the additional
+rules
+@{text[display]
+\<open>right_total rnb
+Domainp rnb = (\<lambda>n. n\<le>1)\<close>}
+can be used to transfer the proposition
+@{text[display]
+\<open>\<And> a b c. (a \<or> (b \<and> c)) = ((a \<or> b) \<and> (a \<or> c))\<close>}
+to the proposition
+@{text[display]
+\<open>\<And> a b c. \<lbrakk>a \<le> 1; b \<le> 1; c \<le> 1\<rbrakk> \<Longrightarrow>
+  max a (b * c) = max a b * max a c\<close>}
+\<close>
+
+subsection \<open>The {\sl transfer} Method\<close>
+text_raw\<open>\label{holbasic-transfer-method}\<close>
+
+text\<open>
+HOL supports transfer by the proof method
+@{theory_text[display]
+\<open>transfer\<close>}\index{transfer (method)}
+The method only affects the first goal, by transferring it. The method uses the dynamic fact set
+(see Section~\ref{theory-theorem-named}) \<open>transfer_rule\<close> for matching the constants in the goal.
+If no consistent set of matches for all constants can be found in \<open>transfer_rule\<close> the goal will be
+partially transferred with additional goals for the replacement of the unmatched constants.
+
+Facts in \<open>transfer_rule\<close> may have additional assumptions, i.e., they may be genuine derivation rules
+with a transfer relation application as conclusion. However, a constant only matches such a rule
+successfully if all goals resulting from the assumptions can be proved by applying other rules in
+\<open>transfer_rule\<close> (which need not have transfer relation applications as conclusions).
+
+Typical assumptions in transfer rules are properties such as \<open>right_total\<close> or \<open>bi_unique\<close> (see
+Section~\ref{holbasic-pred-rel}) for the transfer relation. Thus facts stating these properties for
+specific relations must also be added to the \<open>transfer_rule\<close> set to be used for transfer.
+
+HOL uses another dynamic fact set \<open>transfer_domain_rule\<close> for explicit specifications of the domain
+of transfer relations. 
+
+Note that the \<open>transfer\<close> method has no arguments, its effect is fully determined by the facts in the
+sets \<open>transfer_rule\<close> and \<open>transfer_domain_rule\<close>. Usually these sets are populated automatically by
+HOL (see Section~\ref{holbasic-quotlift}) so that the \<open>transfer\<close> method is applicable for goals
+about values of certain types.
+\<close>
+
+subsubsection "Example"
+
+text\<open>
+The \<open>transfer\<close> method can be applied to the example using the transfer relation \<open>rnb\<close> as follows.
+
+In the definition of \<open>rnb\<close> the defining rules are directly added to the \<open>transfer_rule\<close> set:
+@{theory_text[display]
+\<open>inductive rnb :: "nat \<Rightarrow> bool \<Rightarrow> bool"
+where [transfer_rule]: "rnb 1 True"
+    | [transfer_rule]: "rnb 0 False"\<close>}\index{rnb (example constant)}
+The transfer rules for the operations and the equality must be added and proved as theorems:
+@{theory_text[display]
+\<open>unbundle lifting_syntax
+theorem [transfer_rule]: "(rnb ===> rnb ===> rnb) (*) (\<and>)"
+  using rnb.simps by fastforce
+theorem [transfer_rule]: "(rnb ===> rnb ===> rnb) max (\<or>)"
+  using rnb.simps by fastforce
+theorem [transfer_rule]: "(rnb ===> rnb ===> (=)) (=) (=)"
+  using rnb.simps by fastforce\<close>}
+Then it is possible to use \<open>transfer\<close> on goals without variables:
+@{theory_text[display]
+\<open>theorem "(False \<or> (True \<and> False)) = False"
+  apply(transfer) by simp\<close>}
+Here the \<open>transfer\<close> method replaces the goal by the transferred goal
+@{text[display]
+\<open>max 0 (1 * 0) = 0\<close>}
+which can be proved (like the original goal) by \<open>simp\<close>.
+
+For goals with variables the fact that \<open>rnb\<close> is right-total must be added to the \<open>transfer_rule\<close> set:
+@{theory_text[display]
+\<open>theorem [transfer_rule]: "right_total rnb"
+  using rnb.simps right_total_def by metis\<close>}
+This fact allows to replace the quantifier \<open>\<forall>\<close> and makes it possible to use \<open>transfer\<close> on goals
+with variables:
+@{theory_text[display]
+\<open>theorem "(a \<or> (b \<and> c)) = ((a \<or> b) \<and> (a \<or> c))" apply(transfer)
+  using rnb.simps by fastforce\<close>}
+Here the \<open>transfer\<close> method replaces the goal by the transferred goal
+@{text[display]
+\<open>\<And>a b c. \<lbrakk>Domainp rnb a; Domainp rnb b; Domainp rnb c\<rbrakk> \<Longrightarrow>
+  max a (b * c) = max a b * max a c\<close>}
+which can be proved using \<open>fastforce\<close>.
+
+The domain predicate for \<open>rnb\<close> can be made explicit by using the dynamic fact set
+\<open>transfer_domain_rule\<close>:
+@{theory_text[display]
+\<open>theorem [transfer_domain_rule]: "Domainp rnb = (\<lambda>n. n\<le>1)"
+  using rnb.simps by force\<close>}
+Then the \<open>transfer\<close> method in
+@{theory_text[display]
+\<open>theorem "(a \<or> (b \<and> c)) = ((a \<or> b) \<and> (a \<or> c))" apply(transfer)
+  using le_eq_less_or_eq by fastforce\<close>}
+replaces the goal by the transferred goal
+@{text[display]
+\<open>\<And>a b c. \<lbrakk>a \<le> 1; b \<le> 1; c \<le> 1\<rbrakk> \<Longrightarrow>
+  max a (b * c) = max a b * max a c\<close>}
+which can be proved by \<open>fastforce\<close> using the additional fact \<open>le_eq_less_or_eq\<close>.
+\<close>
+
+subsection "Polymorphic Types"
+text_raw\<open>\label{holbasic-transfer-poly}\<close>
+
+text\<open>
+Assume we have a target type \<open>T\<close>, related by a transfer relation \<open>R\<close> to a type \<open>T'\<close> for transfer
+from \<open>T'\<close> to \<open>T\<close>. It may happen that a term containing subterms of type \<open>T'\<close> also contains subterms
+of a type \<open>T' C\<close> where \<open>C\<close> is a type constructor applied to \<open>T'\<close>, such as \<open>T' set\<close>. Then these
+subterms must also be transferred, which requires a transfer relation between \<open>T' C\<close> and a
+corresponding target type. A natural candidate is the type \<open>T C\<close>. The transfer relation between
+\<open>T C\<close> and \<open>T' C\<close> can be constructed from \<open>R\<close> by using a relator \<open>rel_C\<close> (see
+Section~\ref{holbasic-bnf-predrel}) for \<open>C\<close> as the lifted relation \<open>rel_C R\<close>.
+
+Whenever \<open>C\<close> is a natural functor (see Section~\ref{holbasic-bnf-natural}) such a relator is
+available and transfer can immediately be applied to all instances of the polymorphic type \<open>'a C\<close>,
+if \<open>'a\<close> is instantiated by a type related by a transfer relation to a target type.
+
+Using the example transfer relation \<open>rnb\<close>, the relation \<open>rel_set rnb\<close> relates the target type
+\<open>nat set\<close> with the type \<open>bool set\<close> and can be used to specify corresponding transfer rules.
+\<close>
+
+subsubsection "Multivariate Functors"
+
+text\<open>
+As usual, this can be extended to multivariate natural functors \<open>C\<close> with \<open>n\<close> type parameters. An
+instance \<open>(T\<^sub>1',\<dots>,T\<^sub>n') C\<close> is related to a corresponding target type by the transfer relation
+\<open>(rel_C R\<^sub>1 \<dots> R\<^sub>n)\<close> where \<open>R\<^sub>i\<close> is the transfer relation relating \<open>T\<^sub>i'\<close> to a target type \<open>T\<^sub>i\<close>. If a
+parameter \<open>T\<^sub>i'\<close> of \<open>C\<close> is not to be transferred, the equality \<open>(=)\<close> is used as \<open>R\<^sub>i\<close> and \<open>T\<^sub>i\<close> is the
+same as \<open>T\<^sub>i'\<close>.
+
+Note that lifting transfer relations \<open>R\<^sub>a\<close> and \<open>R\<^sub>r\<close> between argument and result types to a function
+type as \<open>(rel_fun R\<^sub>a R\<^sub>r)\<close> or \<open>(R\<^sub>a ===> R\<^sub>r)\<close>, which is the basis of the transfer mechanism, is a special
+application of this.
+
+Since relators can be composed according to the structure of a type expression (see
+Section~\ref{holbasic-bnf-predrel}) it is possible to systematically construct relators and thus
+transfer relations for arbitrary types which are composed from natural functors.
+\<close>
+
+subsubsection "Transferring Polymorphic Functions"
+
+text\<open>
+A function with a type instance \<open>T' C\<close> as argument or result type is often itself polymorphic and
+defined for the polymorphic type \<open>'a C\<close>, i.e., for arbitrary types as parameters. Then it
+is not possible to specify a transfer rule for the function in the way described above, because no
+common transfer relation for the type parameter is available (other than trivial polymorphic
+relations like \<open>=\<close>).
+
+However, there are polymorphic functions for which the definition does not depend on the type
+parameter(s) at all. An example is the function \<open>image\<close> (see Section~\ref{holbasic-functor-mapper}).
+For a function \<open>f :: 'a \<Rightarrow> 'b\<close> and a set \<open>A\<close> of argument values \<open>image f A\<close> is the set of result
+values of \<open>f\<close> applied to all values in \<open>A\<close>. This definition is completely independent of the actual
+types substituted for the type parameters \<open>'a\<close> and \<open>'b\<close>.
+
+Such functions are called ``parametrically polymorphic''\index{parametrically polymorphic function}
+\index{function!parametrically polymorphic $\sim$}. Polymorphic functions with a direct, inductive, or
+recursive definition are usually parametrically polymorphic, whereas functions defined by overloading
+(see Section~\ref{theory-overload-true}) are usually not, because different definitions may be used
+for different type parameters.
+
+Since parametrically polymorphic functions work in the same way for all values of its type
+parameters it is possible to replace these values in the argument in arbitrary ways and they will be
+replaced in the result in related ways. Therefore it is possible to specify a transfer rule for
+the function using \<^emph>\<open>all possible relations\<close> on \<^emph>\<open>all possible types\<close> substituted for the type
+parameters, i.e., the transfer relations for the type parameters occur as universally bound
+variables in the transfer rule.
+
+An example is the transfer rule
+@{theory_text[display]
+\<open>theorem image_transfer [transfer_rule]:
+  "\<And>R\<^sub>1 R\<^sub>2. ((R\<^sub>1 ===> R\<^sub>2) ===> rel_set R\<^sub>1 ===> rel_set R\<^sub>2) image image"
+  by (simp add: rel_fun_def rel_set_def) blast\<close>}
+which is provided by HOL. It states that for the function \<open>image\<close> an instance for an element type \<open>T\<close>
+is always related to an instance of \<open>image\<close> for any other element type. Thus transfer will syntactically
+preserve occurrences of \<open>image\<close> although its type instance is transferred. Note how
+the relation \<open>((R\<^sub>1 ===> R\<^sub>2) ===> rel_set R\<^sub>1 ===> rel_set R\<^sub>2)\<close> is constructed according to the structure
+of the type expression \<open>('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('a\<^sub>1 set) \<Rightarrow> ('a\<^sub>2 set)\<close> for the type of \<open>image\<close> from the
+corresponding relators. The type parameters \<open>'a\<^sub>1\<close> and \<open>'a\<^sub>2\<close> are replaced by the universally bound
+variables \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close> for the arbitrary relations.
+
+Such transfer rules for a single polymorphic function are called ``parametricity rules''
+\index{parametricity rule}\index{rule!parametricity $\sim$}
+because they are equivalent to the proposition that the function is parametrically polymorphic.
+HOL provides such parametricity rules for most of the predefined polymorphic functions, such as
+most functions for sets described in Section~\ref{holtypes-set-funcs}.
+
+Normal transfer rules between two polymorphic functions may be specified using universally bound
+variables in the same way if both functions are parametrically polymorphic.
+
+Some parametrically polymorphic functions are independent of the type parameters but cannot be
+related by arbitrary relations. Then their parametricity rule has additional assumptions which
+restrict the transfer relation. An example is the equality as a polymorphic function. It can only
+be transferred by bi-unique transfer relations, otherwise it would identify values in one type which
+are different in the other. The corresponding parametricity rule provided by HOL is
+@{theory_text[display]
+\<open>theorem eq_transfer [transfer_rule]:
+  "bi_unique R \<Longrightarrow> (R ===> R ===> (=)) (=) (=)"
+  by (auto simp add: bi_unique_def rel_fun_def)\<close>}\index{eq-transfer@eq$\_$transfer (fact name)}
+\<close>
+
+section "Quotients and Lifting"
+text_raw\<open>\label{holbasic-quotlift}\<close>
+
+text\<open>
+Assume a relation (see Section~\ref{holbasic-pred-rel}) \<open>R :: T \<Rightarrow> T' \<Rightarrow> bool\<close> between types \<open>T\<close> and
+\<open>T'\<close> which is right-total and right-unique. This implies the existence of a surjective function
+\<open>abs_T' :: T \<Rightarrow> T'\<close>\index{abs-@abs$\_$ (constant name prefix)} mapping every value of \<open>T\<close> to the
+single value of \<open>T'\<close> which is related by \<open>R\<close>.
+
+Since \<open>R\<close> need not be left-unique \<open>abs_T'\<close> need not be injective and gives rise to the definition
+of the equivalence relation \<open>E :: T \<Rightarrow> T \<Rightarrow> bool\<close> which relates all values mapped by \<open>abs_T'\<close> to a
+common value in \<open>T'\<close>. Since \<open>R\<close> need not be left-total \<open>abs_T'\<close> is underspecified (see
+Section~\ref{theory-terms-consts}) for all values of \<open>T\<close> which are not related to a value of \<open>T'\<close> by
+\<open>R\<close>. This gives rise to the definition of the set \<open>D :: T set\<close> of all values in \<open>T\<close> which are
+related to a value of \<open>T'\<close>. The set \<open>D\<close> is the domain of \<open>R\<close>, represented as a set. Also,
+\<open>E\<close> is in general a partial equivalence relation and does not relate values outside of \<open>D\<close>, not even
+with themselves (which is the case for the values in \<open>D\<close> since as an equivalence relation \<open>E\<close> must
+be reflexive).
+
+The predicate \<open>reflp\<close>\index{reflp (constant)} (see Section~\ref{holtypes-rel-funcs}) may be used to specify that \<open>E\<close> is
+reflexive on the whole type \<open>T\<close>, thus the proposition \<open>reflp E\<close> is equivalent to the proposition
+\<open>left_total R\<close> and also to \<open>D = (UNIV ::T)\<close> where \<open>(UNIV ::T)\<close> is the universal set of type \<open>T\<close> (see
+Section~\ref{holtypes-set-values}).
+\<close>
+
+subsection "Abstract and Raw Types"
+text_raw\<open>\label{holbasic-quotlift-absraw}\<close>
+
+text\<open>
+In this situation the values of type \<open>T'\<close> are considered to be ``more abstract'' than those of \<open>T\<close>
+because there may be several distinct related values in \<open>T\<close> so that they may represent more details
+and there may be values in \<open>T\<close> which have no related values in \<open>T'\<close> at all. Therefore the type \<open>T'\<close>
+is called an ``abstract type''\index{abstract type}\index{type!abstract $\sim$} and \<open>T\<close> is called
+its associated ``raw type''\index{raw type}\index{type!raw $\sim$}. Usually, in HOL for an abstract type
+only one relation \<open>R\<close> is considered and thus only one associated raw type, whereas \<open>T\<close> may be the
+raw type for several abstract types.
+
+The function \<open>abs_T'\<close> which maps values of the raw type to values of the abstract type is called
+``abstraction function''\index{abstraction!function}\index{function!abstraction $\sim$} in this context.
+
+The interrelation between \<open>R\<close>, \<open>abs_T'\<close> and \<open>E\<close> can be formally described by the laws
+@{theory_text[display]
+\<open>E v\<^sub>1 v\<^sub>2 = (E v\<^sub>1 v\<^sub>1 \<and> E v\<^sub>2 v\<^sub>2 \<and> abs_T' v\<^sub>1 = abs_T' v\<^sub>2)
+R v v' = E v v \<and> abs_T' v = v'))\<close>}
+where \<open>E v v\<close> is equivalent to the property that \<open>v\<close> has a related value in \<open>T'\<close>, i.e., \<open>v \<in> D\<close>.
+
+Note that the relation \<open>R\<close> can also be used as transfer relation (see Section~\ref{holbasic-transfer}).
+Then terms are transferred from the abstract type to the raw type.
+\<close>
+
+subsubsection "Example"
+
+text\<open>
+The relation \<open>rnb\<close> used as example in Section~\ref{holbasic-transfer} is right-total and
+right-unique. In this case \<open>bool\<close> is the abstract type and \<open>nat\<close> is the raw type. If defined as
+above the function \<open>abs_bool\<close> maps \<open>0\<close> to \<open>False\<close> and \<open>1\<close> to \<open>True\<close> and is underspecified for all
+other natural numbers. Thus the equivalence classes are trivially \<open>{0}\<close> and \<open>{1}\<close> (because \<open>rnb\<close> is
+also left-unique) and the corresponding equivalence relation \<open>E\<close> is the relation \<open>rnbE\<close> which can be
+defined inductively (see Section~\ref{holbasic-inductive}) as
+@{theory_text[display]
+\<open>inductive rnbE :: "nat \<Rightarrow> nat \<Rightarrow> bool"
+where "rnbE 1 1" | "rnbE 0 0"\<close>}\index{rnbE (example constant)}
+It is partial in the sense that it only relates values in the set defined as
+@{theory_text[display]
+\<open>definition rnbD :: "nat set"
+where "rnbD \<equiv> {0,1}"\<close>}\index{rnbD (example constant)}
+which are the only values in \<open>nat\<close> related to values in \<open>bool\<close> by \<open>rnb\<close>. Using the restricted
+equality \<open>eq_onp\<close> (see Section~\ref{holbasic-equal-eq}) \<open>rnbE\<close> can also be represented as
+\<open>eq_onp (\<lambda>x. x \<in> rnbD)\<close>.
+
+Alternatively consider the relation \<open>rnb2\<close> which relates all natural numbers which are not \<open>0\<close> to
+\<open>True\<close>. Then \<open>abs_bool\<close> is fully specified (because \<open>rnb2\<close> is left-total), it maps \<open>0\<close> to \<open>False\<close>
+and all other numbers to \<open>True\<close>. The equivalence classes of \<open>rnb2E\<close> are \<open>{0}\<close> and the set of all
+numbers greater \<open>0\<close>, the set \<open>rnb2D\<close> contains all natural numbers.
+\<close>
+
+subsection "Quotient Theorems"
+text_raw\<open>\label{holbasic-quotlift-quot}\<close>
+
+text\<open>
+Note that there is a 1-to-1 relation between the equivalence classes of \<open>E\<close> and the values of \<open>T'\<close>. 
+Therefore an abstract type is also called a ``quotient''\index{quotient} of its raw type, because
+in algebra, the notion of a ``quotient'' is used for sets of equivalence classes.
+\<close>
+
+subsubsection "Representation Values"
+
+text\<open>
+Since \<open>R\<close> is right-total every abstract value \<open>v'\<close> in \<open>T'\<close> has at least one related value in \<open>T\<close>.
+Thus it is possible to select one of these values as ``representation value''\index{representation!value}
+for \<open>v'\<close>. A ``representation function''\index{representation!function}\index{function!representation $\sim$}
+\<open>rep_T' :: T' \<Rightarrow> T\<close>\index{rep-@rep$\_$ (constant name prefix)}
+maps every value of \<open>T'\<close> to a selected representation value.
+
+Due to its definition \<open>abs_T'\<close> maps each representation value back to its abstract value, i.e.,
+the law \<open>abs_T' (rep_T' v') = v'\<close> holds for every abstract value \<open>v'\<close>. Moreover, \<open>E (rep_T' v')
+(rep_T' v')\<close> holds because \<open>E\<close> is reflexive on the image of \<open>rep_T'\<close>. The functions \<open>abs_T'\<close> and
+\<open>rep_T'\<close> are called ``morphisms'' of the quotient \<open>T'\<close>\index{quotient!morphisms of a $\sim$}
+\index{morphisms!of a quotient}.
+
+In the \<open>rnb\<close> example the only possible representation function \<open>rep_bool\<close> maps \<open>False\<close> to \<open>0\<close> and
+\<open>True\<close> to \<open>1\<close>. In the \<open>rnb2\<close> example \<open>rep_bool\<close> may map \<open>True\<close> to any number greater \<open>0\<close>, so there
+are infinitely many possible representation functions.
+\<close>
+
+subsubsection "The \<open>Quotient\<close> Predicate"
+
+text\<open>
+HOL provides the predicate
+@{text[display]
+\<open>Quotient :: (T\<Rightarrow>T\<Rightarrow>bool) \<Rightarrow> (T\<Rightarrow>T') \<Rightarrow> (T'\<Rightarrow>T) \<Rightarrow> (T\<Rightarrow>T'\<Rightarrow>bool) \<Rightarrow> bool\<close>}\index{Quotient (constant)}
+It is defined as the conjunction of the two laws about \<open>R\<close>, \<open>abs_T'\<close>, and \<open>E\<close> above and the two laws
+about \<open>rep_T'\<close>, so that \<open>Quotient E abs_T' rep_T' R\<close> states that \<open>T'\<close> is a quotient of \<open>T\<close> with the
+specified relations and morphisms.
+
+Theorems stating that \<open>Quotient\<close> holds for four specific arguments are called ``quotient theorems''
+\index{quotient!theorem}\index{theorem!quotient $\sim$}.
+
+The quotient theorem for the \<open>rnb\<close> example is
+@{theory_text[display]
+\<open>theorem qrnb: "Quotient rnbE abs_bool rep_bool rnb" \<proof>\<close>}\index{qrnb (example fact)}
+\<close>
+
+subsubsection "Unique Representation Values"
+
+text\<open>
+If \<open>R\<close> is also left-unique, every abstract value \<open>v'\<close> in \<open>T'\<close> has exactly one related value in \<open>T\<close>.
+Thus the representation function \<open>rep_T'\<close> is uniquely determined by \<open>R\<close> and has the set \<open>D\<close> as its
+image, thus the law \<open>rep_T' v' \<in> D\<close> holds for every abstract value \<open>v'\<close>.
+
+Also, since every abstract value in \<open>T'\<close> has only one single representation value in \<open>T\<close>, \<open>rep_T'\<close>
+is the inverse of \<open>abs_T'\<close> on the set \<open>D\<close>, i.e., the law \<open>v \<in> D \<Longrightarrow> rep_T' (abs_T' v) = v\<close> holds for
+every value \<open>v\<close> in the raw type.
+
+Note that together with the law \<open>abs_T' (rep_T' v') = v'\<close> (see above) these two laws uniquely
+determine the relation \<open>R\<close> and cause it to be right-total and bi-unique, i.e., they cause \<open>T'\<close> to
+be a quotient of \<open>T\<close> with the uniquely determined representation function \<open>rep_T'\<close>.
+
+Moreover, in this case the equivalence relation \<open>E\<close> can always be represented by \<open>eq_onp (\<lambda>x. x\<in>D)\<close>
+using the restricted equality described in Section~\ref{holbasic-equal-eq}.
+
+In the \<open>rnb\<close> example \<open>rnb\<close> is left-unique and the representation function \<open>rep_bool\<close> is uniquely
+determined.
+\<close>
+
+subsubsection "The \<open>type_definition\<close> Predicate"
+
+text\<open>
+For the case of a left-unique transfer relation \<open>R\<close> HOL provides the predicate
+@{text[display]
+\<open>type_definition :: (T'\<Rightarrow>T) \<Rightarrow> (T\<Rightarrow>T') \<Rightarrow> (T set) \<Rightarrow> bool\<close>}\index{type-definition@type$\_$definition (constant)}
+It is defined as the conjunction of the three laws about \<open>abs_T'\<close>, \<open>rep_T'\<close>, and \<open>D\<close> mentioned in the
+previous section, so that \<open>type_definition rep_T' abs_T' D\<close> states that \<open>T'\<close> is a quotient of \<open>T\<close>
+with unique representation function \<open>rep_T'\<close>. For an explanation of the predicate name see
+Section~\ref{holtdefs-sub-setup}.
+
+Theorems stating that \<open>type_definition\<close> holds for three specific arguments are called ``type-definition
+theorems''\index{type-definition theorem}\index{theorem!type-definition $\sim$}.
+
+The type-definition theorem for the \<open>rnb\<close> example is
+@{theory_text[display]
+\<open>theorem trnb: "type_definition rep_bool abs_bool rnbD" \<proof>\<close>}\index{trnb (example fact)}
+\<close>
+
+subsection "Polymorphic Quotients"
+text_raw\<open>\label{holbasic-quotlift-poly}\<close>
+
+text\<open>
+If the raw and abstract type are polymorphic types \<open>'a C\<close> and \<open>'a C'\<close> the transfer relation \<open>R\<close> is
+also polymorphic with type parameter \<open>'a\<close> and so are the equivalence relation \<open>E\<close> and the morphisms
+\<open>abs_C'\<close> and \<open>rep_C'\<close>.
+
+As described in Section~\ref{holbasic-transfer-poly}, if a relator \<open>rel_C\<close> is available for the raw
+type \<open>'a C\<close>, it is possible to construct a transfer relation between \<open>'a C\<close> and \<open>'b C\<close> from an
+arbitrary transfer relation \<open>R\<^sub>a\<close> between the type parameters \<open>'a\<close> and \<open>'b\<close> as \<open>rel_C R\<^sub>a\<close>. Composed
+(see Section~\ref{holbasic-pred-rel}) with \<open>R\<close> it yields the parameterized transfer relation
+\index{relation!transfer $\sim$!parameterized $\sim$}\index{parameterized!transfer relation}
+\index{parameterized!correspondence relation}
+\<open>pcr = \<lambda>R\<^sub>a. (rel_C R\<^sub>a) OO R\<close> (where \<open>pcr\<close> stands for ``parameterized correspondence relation'').
+
+The totality and uniqueness properties of the argument relation \<open>R\<^sub>a\<close> are preserved by the relator
+\<open>rel_C\<close> and by composition and thus also by \<open>pcr_C'\<close>. Therefore the properties
+@{text[display]
+\<open>right_total R\<^sub>a \<Longrightarrow> right_total (pcr R\<^sub>a)
+right_unique R\<^sub>a \<Longrightarrow> right_unique (pcr R\<^sub>a)\<close>}
+are always satisfied which implies that \<open>pcr R\<^sub>a\<close> is actually a transfer relation if \<open>R\<^sub>a\<close> is a
+transfer relation.
+
+In other words, if \<open>T'\<close> is a quotient of \<open>T\<close> then \<open>T' C'\<close> is a quotient of \<open>T C\<close>. Using transfer
+rules with transfer relation \<open>pcr R\<^sub>a\<close>, transfer works for \<open>T'\<close> when it is used as type parameter
+of a polymorphic quotient.
+
+As usual, if \<open>C\<close> and \<open>C'\<close> are multivariate functors with \<open>n\<close> type parameters the relator \<open>rel_C\<close>
+takes \<open>n\<close> relations as arguments and the parameterized transfer relation has the form
+\<open>pcr = \<lambda>R\<^sub>1\<dots>R\<^sub>n. (rel_C R\<^sub>1\<dots>R\<^sub>n) OO R\<close>.\<close>
+
+subsection "Registering Quotients"
+text_raw\<open>\label{holbasic-quotlift-setup}\<close>
+
+text\<open>
+HOL supports a mechanism for automatically transferring functions between a quotient and its raw
+type. It is called the ``lifting package''.
+
+The first step of using the package consists of registering a type \<open>T'\<close> as quotient, together with
+its raw type \<open>T\<close> and the morphisms \<open>abs_T'\<close> and \<open>rep_T'\<close>. Registering means that the fact that \<open>T'\<close>
+is a quotient of \<open>T\<close> is stored together with the morphisms in internal HOL data structures so that
+they can be retrieved by HOL mechanisms. All the information to be stored is contained in a
+quotient or type-definition theorem for \<open>T'\<close>, therefore a quotient is registered by specifying the
+name of a fact which is such a theorem. This is done using a command of the form
+@{theory_text[display]
+\<open>setup_lifting name\<close>}\index{setup-lifting@setup$\_$lifting (keyword)}
+where \<open>name\<close> is the name of a quotient theorem or a type-definition theorem.
+
+In the case of a type-definition theorem the command internally defines the relation \<open>R\<close> named
+\<open>cr_T'\<close> using the definition
+@{text[display]
+\<open>cr_T'_def: cr_T' \<equiv> \<lambda>(x::T) y::T'. x = rep_T' y\<close>}
+Note that in this case the equivalence relation \<open>E\<close> is always the equality \<open>eq_onp (\<lambda>x. x\<in>D)\<close>
+restricted to the domain set \<open>D\<close>.
+
+Moreover, the command always tries to define the parameterized transfer relation \<open>pcr_T'\<close> (see
+Section~\ref{holbasic-quotlift-poly}) using a definition of the form
+@{text[display]
+\<open>pcr_T'_def: pcr_T' \<equiv> \<lambda>R\<^sub>1\<dots>R\<^sub>n. (rel_T R\<^sub>1\<dots>R\<^sub>n) OO R\<close>}
+where \<open>n\<close> is the number of type parameters for a polymorphic quotient \<open>T'\<close>. If \<open>T'\<close> is not
+polymorphic \<open>pcr_T'\<close> has no arguments and is equal to \<open>R\<close>.
+
+Note that for a polymorphic quotient the definition of \<open>pcr_T'\<close> depends on the existence of the
+relator \<open>rel_T\<close>. If the relator is not known to HOL the command signals a warning ``Generation of a
+parametrized correspondence relation failed. Reason:  No relator for the type \<open>T\<close> found.'' and omits
+the definition of \<open>pcr_T'\<close>, which results in weaker transfer support (see below). If the raw type
+\<open>T\<close> has been registered as BNF (see Section~\ref{holbasic-bnf-register}) the relator is always known
+to HOL, otherwise usually not. However, if \<open>T\<close> has been registered as BNF with dead type parameters
+(see Section~\ref{holbasic-bnf-natural}) the relator has fewer parameters than expected by
+\<^theory_text>\<open>setup_lifting\<close> and cannot be used for constructing \<open>pcr_T'\<close>. Then \<^theory_text>\<open>setup_lifting\<close> will still
+signal the warning about not finding the relator.\<close>
+
+subsubsection "Basic Support for Transfer"
+
+text\<open>
+The \<^theory_text>\<open>setup_lifting\<close> command supports transfer in the following way. First it adds the facts
+@{text[display]
+\<open>T'.right_total: right_total pcr_T'
+T'.right_unique: right_unique pcr_T'\<close>}
+to the set \<open>transfer_rule\<close> (see Section~\ref{holbasic-transfer-method}). For a polymorphic \<open>T'\<close>
+they have the form
+@{text[display]
+\<open>T'.right_total: \<lbrakk>right_total R\<^sub>1, \<dots>, right_total R\<^sub>n\<rbrakk>
+  \<Longrightarrow> right_total (pcr_T' R\<^sub>1 \<dots> R\<^sub>n)
+T'.right_unique: \<lbrakk>right_unique R\<^sub>1, \<dots>, right_unique R\<^sub>n\<rbrakk>
+  \<Longrightarrow> right_unique (pcr_T' R\<^sub>1 \<dots> R\<^sub>n)\<close>}
+They state that \<open>pcr_T'\<close> is a transfer relation if all \<open>R\<^sub>i\<close> are transfer relations and provide the
+base for introducing transfer rules
+with \<open>pcr_T'\<close> as transfer relation. Additionally, the rule \<open>T'.right_total\<close> allows the
+\<open>transfer\<close> method to replace the universal quantification on \<open>T'\<close> by quantification on \<open>T\<close>
+restricted to the domain \<open>D\<close> of \<open>pcr_T'\<close> (see Section~\ref{holbasic-transfer-rules}). For a
+polymorphic \<open>T'\<close> it allows to replace the universal quantification on \<open>('a\<^sub>1,\<dots>,'a\<^sub>n) T'\<close> by
+quantification on \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close> restricted to the domain of \<open>(pcr_T' R\<^sub>1\<dots>R\<^sub>n)\<close> for
+arbitrary types \<open>'b\<^sub>1,\<dots>,'b\<^sub>n\<close> and \<open>'a\<^sub>1,\<dots>,'a\<^sub>n\<close> related as quotients by arbitrary relations
+\<open>R\<^sub>1,\<dots>,R\<^sub>n\<close>.
+
+If \<open>pcr_T'\<close> could not be defined because the relator of \<open>T\<close> is not known, these and all subsequently
+described transfer rules are defined using \<open>R\<close> as transfer relation instead of \<open>pcr_T'\<close>. This
+results in weaker effects when the \<open>transfer\<close> method is applied to terms involving type \<open>T'\<close>.
+
+The \<^theory_text>\<open>setup_lifting\<close> command also adds a rule \<open>T'.domain\<close> to the set \<open>transfer_domain_rule\<close> which
+constructs an explicit representation of the domain of \<open>pcr_T' R\<^sub>1 \<dots> R\<^sub>n\<close> from the domains of the
+\<open>R\<^sub>i\<close> (see Section~\ref{holbasic-transfer-method}).
+
+Note that all fact names are qualified by the type name \<open>T'\<close> of the quotient, therefore the names
+are specific for the quotient registered by \<^theory_text>\<open>setup_lifting\<close>. If two \<^theory_text>\<open>setup_lifting\<close> commands are
+specified for the same quotient \<open>T'\<close> an error is signaled.
+\<close>
+
+subsubsection "Support for Equality Transfer"
+
+text\<open>
+If the quotient is registered using a quotient theorem the \<^theory_text>\<open>setup_lifting\<close> command also adds the
+fact
+@{text[display]
+\<open>T'.rel_eq_transfer:
+  (pcr_T' (=)\<dots>(=) ===> pcr_T' (=)\<dots>(=) ===> (=)) E (=)\<close>}
+to the set \<open>transfer_rule\<close>. It allows the \<open>transfer\<close> method to replace the equality on \<open>T'\<close> by the
+equivalence \<open>E\<close> on \<open>T\<close>. If the quotient is registered by a type-definition theorem no such rule is
+required, the standard HOL transfer rules for transferring equations, such as \<open>eq_transfer\<close> (see
+Section~\ref{holbasic-transfer-poly}) are sufficient.
+
+Since the relator lifts equality to equality (see Section~\ref{holbasic-bnf-predrel}), the
+application \<open>pcr_T' (=) \<dots> (=)\<close> to \<open>n\<close> equality relations is always equal to the transfer relation
+\<open>R\<close>. Thus the rule \<open>T'.rel_eq_transfer\<close> is equivalent to the form
+\<open>(R ===> R ===> (=)) E (=)\<close>. In the polymorphic case the rule only supports transferring equality
+on \<open>('a\<^sub>1,\<dots>,'a\<^sub>n) T'\<close> to the equivalence \<open>E\<close> on \<open>('a\<^sub>1,\<dots>,'a\<^sub>n) T\<close> where the type parameters are the
+same.
+
+However, if \<open>E\<close> is parametrically polymorphic (see Section~\ref{holbasic-transfer-poly}) it can
+further be transferred to a different instance \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close>. Therefore, when using a quotient
+theorem, the \<^theory_text>\<open>setup_lifting\<close> command supports the extended form
+@{theory_text[display]
+\<open>setup_lifting name parametric pname\<close>}\index{parametric (keyword)}
+where \<open>pname\<close> is the name of a fact of the form
+@{text[display]
+\<open>(rel_T R\<^sub>1\<dots>R\<^sub>n ===> rel_T R\<^sub>1\<dots>R\<^sub>n ===> (=)) E E\<close>}
+which is a parametricity rule (see Section~\ref{holbasic-transfer-poly}) stating that \<open>E\<close> is
+parametrically polymorphic. In this form the \<^theory_text>\<open>setup_lifting\<close> command generates the stronger
+transfer rule
+@{text[display]
+\<open>T'.rel_eq_transfer:
+  (pcr_T' R\<^sub>1\<dots>R\<^sub>n ===> pcr_T' R\<^sub>1\<dots>R\<^sub>n ===> (=)) E (=)\<close>}
+with arbitrary relations \<open>R\<^sub>1,\<dots>,R\<^sub>n\<close> relating the different instances of the type parameters. It
+supports transferring equality on \<open>('a\<^sub>1,\<dots>,'a\<^sub>n) T'\<close> to the equivalence \<open>E\<close> on \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close>.
+
+When using a type-definition theorem for \<^theory_text>\<open>setup_lifting\<close> no parametricity rule may be specified.
+It is not required because then the equivalence \<open>E\<close> is always the (possibly restricted) equality
+which is always parametric for a bi-unique transfer relation (see below).
+
+In the \<open>rnb\<close> example after the command
+@{theory_text[display]
+\<open>setup_lifting qrnb\<close>}
+where \<open>qrnb\<close> is the name of the quotient theorem as defined in Section~\ref{holbasic-quotlift-quot},
+the \<open>transfer\<close> method will transfer equations of the form \<open>\<And>x::bool. x = \<dots>\<close> to propositions of the
+form
+@{text[display]
+\<open>\<And>x::nat. rnbE x x \<Longrightarrow> rnbE x \<dots>\<close>}
+After the command
+@{theory_text[display]
+\<open>setup_lifting trnb\<close>}
+where \<open>trnb\<close> is the name of the type-definition theorem as defined in
+Section~\ref{holbasic-quotlift-quot}, the \<open>transfer\<close> method will transfer equations of the form
+\<open>\<And>x::bool. x = \<dots>\<close> to propositions of the form
+@{text[display]
+\<open>\<And>x::nat. x \<in> rnbD \<Longrightarrow> x = \<dots>\<close>}
+\<close>
+
+subsubsection "Left-Total Transfer Relations"
+
+text\<open>
+If it uses a quotient theorem the \<^theory_text>\<open>setup_lifting\<close> command may be specified in the extended form
+@{theory_text[display]
+\<open>setup_lifting name rname\<close>}\index{setup-lifting@setup$\_$lifting (keyword)}
+where \<open>rname\<close> is the name of a fact of the form \<open>reflp E\<close> and \<open>E\<close> is the equivalence relation
+used in the quotient theorem \<open>name\<close>. The fact \<open>rname\<close> is called a ``reflexivity rule''
+\index{reflexivity rule}\index{rule!reflexivity $\sim$} for \<open>E\<close>. As described at the beginning of
+Section~\ref{holbasic-quotlift} it is equivalent with \<open>left_total R\<close>. This property allows HOL to
+introduce stronger transfer rules as follows.
+
+The command in this form adds the additional rule
+@{text[display]
+\<open>T'.bi_total:
+  \<lbrakk>bi_total R\<^sub>1; \<dots> bi_total R\<^sub>n\<rbrakk> \<Longrightarrow> bi_total (pcr_T' R\<^sub>1\<dots>R\<^sub>n)\<close>}
+to the set \<open>transfer_rule\<close>. It allows the \<open>transfer\<close> method to replace quantification on
+\<open>('a\<^sub>1,\<dots>,'a\<^sub>n) T'\<close> to unrestricted quantification on \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close> (see
+Section~\ref{holbasic-transfer-rules}).
+
+It also adds the rule
+@{text[display]
+\<open>T'.id_abs_transfer: (rel_T R\<^sub>1\<dots>R\<^sub>n ===> pcr_T' R\<^sub>1\<dots>R\<^sub>n) (\<lambda>x. x) abs_T'\<close>}
+It allows to replace the morphism \<open>abs_T'\<close> by the identity function on \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close>. 
+
+In the \<open>rnb2\<close> example from Section~\ref{holbasic-quotlift-absraw} after the theorems
+@{theory_text[display]
+\<open>theorem qrnb2: "Quotient rnb2E abs_bool rep_bool rnb2" \<proof>
+theorem rrnb2: "reflp rnb2E" \<proof>\<close>}
+with a corresponding equivalence relation \<open>rnb2E\<close> and accordingly modified morphisms \<open>abs_bool\<close> and
+\<open>rep_bool\<close> the command
+@{theory_text[display]
+\<open>setup_lifting qrnb2 rrnb2\<close>}
+introduces the transfer rules as described. Then the \<open>transfer\<close> method will transfer the (invalid)
+equation
+\<open>\<And>(x::bool) (n::nat). x = (abs_bool n)\<close> to the proposition
+@{text[display]
+\<open>\<And>(x::nat) (n::nat). rnb2E x n\<close>}\<close>
+
+subsubsection "Left-Unique Transfer Relations"
+
+text\<open>
+HOL provides special support for a quotient with left-unique transfer relation only if the quotient
+is specified by a \<^theory_text>\<open>setup_lifting\<close> command using a type-definition theorem.
+
+Then the command always adds the additional rule
+@{text[display]
+\<open>T'.bi_unique:
+  \<lbrakk>bi_unique R\<^sub>1; \<dots> bi_unique R\<^sub>n\<rbrakk> \<Longrightarrow> bi_unique (pcr_T' R\<^sub>1\<dots>R\<^sub>n)\<close>}
+to the set \<open>transfer_rule\<close>. Together with the standard HOL transfer rules for transferring equations,
+such as \<open>eq_transfer\<close> (see Section~\ref{holbasic-transfer-poly}), it allows the \<open>transfer\<close> method to
+transfer equality from \<open>('a\<^sub>1,\<dots>,'a\<^sub>n) T'\<close> to \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close>.
+
+It also adds the rule
+@{text[display]
+\<open>T'.rep_transfer: (pcr_T' R\<^sub>1\<dots>R\<^sub>n ===> rel_T R\<^sub>1\<dots>R\<^sub>n) (\<lambda>x. x) rep_T'\<close>}
+It allows to replace the function \<open>rep_T'\<close> by the identity function on \<open>('b\<^sub>1,\<dots>,'b\<^sub>n) T\<close>. 
+
+In the \<open>rnb\<close> example the command
+@{theory_text[display]
+\<open>setup_lifting trnb\<close>}
+introduces the transfer rules as described. Then the \<open>transfer\<close> method will transfer the (invalid)
+equation
+\<open>\<And>(x::bool) (n::nat). (rep_bool x) = n\<close> to the proposition
+@{text[display]
+\<open>\<And>(x::nat) (n::nat). x = n\<close>}
+
+If the transfer relation is also left-total, \<open>T'\<close> and \<open>T\<close> are isomorphic and \<open>D\<close> is the universal
+set (see Section~\ref{holtypes-set-values}) \<open>UNIV\<close>. HOL detects type-definition theorems of the
+form \<open>type-definition rep_T' abs_T' UNIV\<close> and also adds the rules \<open>T'.bi_total\<close> and
+\<open>T'.id_abs_transfer\<close> as described above for left-total transfer relations.\<close>
+
+subsection "Lifting"
+text_raw\<open>\label{holbasic-quotlift-lift}\<close>
+
+text\<open>
+Whenever \<open>T'\<close> is a quotient of \<open>T\<close> it is possible to ``lift'' operations from \<open>T\<close> to \<open>T'\<close> by first
+mapping the argument of type \<open>T'\<close> to its representation value of type \<open>T\<close> using \<open>rep_T'\<close>, then
+applying the original operation, and finally mapping the result back using \<open>abs_T'\<close>. 
+
+Moreover, since the relation \<open>R\<close> can always be used as a transfer relation (see
+Section~\ref{holbasic-transfer}) it is possible to transfer terms with occurrences of the lifted
+operation to a corresponding term where it is replaced by the original operation. The lifting
+package supports this by automatically configuring the required transfer rules for lifted operations.
+\<close>
+
+subsubsection "Respectful Functions"
+
+text\<open>
+A function \<open>f :: T\<Rightarrow>T\<close> ``respects''\index{respectful!function}\index{function!respects a relation}
+the equivalence relation \<open>E\<close> if it preserves \<open>E\<close> for its arguments in the sense that the law
+@{text[display]
+\<open>\<And>x y. E x y \<Longrightarrow> E (f x) (f y)\<close>}
+is satisfied. A theorem stating such a law is called a
+``respectfulness theorem''\index{respectfulness theorem}\index{theorem!respectfulness $\sim$}
+for \<open>f\<close>. In mathematics in this case \<open>E\<close> is also called a ``congruence relation'' for \<open>f\<close>.
+
+If two functions \<open>f\<close> and \<open>g\<close> are lifted as described above, the composition of the lifted functions
+is \<open>abs_T' (f (rep_T' (abs_T' (g (rep_T' x)))))\<close>. Here \<open>rep_T' (abs_T' y)\<close> may map \<open>y\<close> to a different
+value in \<open>T\<close>, but that must be equivalent. If \<open>f\<close> respects \<open>E\<close> the result is always the same as the
+result \<open>abs_T' (f (g (rep_T' x)))\<close> of applying the lifted composition \<open>f\<circ>g\<close>, i.e., lifting is
+compatible with function composition. Therefore HOL supports lifting only for functions which
+respect \<open>E\<close>.
+
+If the corresponding transfer relation \<open>R\<close> is left-unique the equivalence relation \<open>E\<close> is the equality
+\<open>eq_onp (\<lambda>x. x\<in>D)\<close> restricted to the domain \<open>D\<close> of \<open>R\<close> (see Section~\ref{holbasic-quotlift-setup}).
+Then the respectfulness theorem for a function \<open>f\<close> and \<open>E\<close> is equivalent to the proposition
+@{text[display]
+\<open>\<And>x. x \<in> D \<Longrightarrow> (f x) \<in> D\<close>}
+which means that the domain \<open>D\<close> is closed under \<open>f\<close>.\<close>
+
+subsubsection "Defining Functions by Lifting"
+
+text\<open>
+After registering a type \<open>T'\<close> as quotient of \<open>T\<close> with relations \<open>R\<close> and \<open>E\<close> and morphisms \<open>abs_T'\<close>
+and \<open>rep_T'\<close> it is possible to lift operations on \<open>T\<close> respecting \<open>E\<close> to \<open>T'\<close> using the command
+@{theory_text[display]
+\<open>lift_definition name :: "T' \<Rightarrow> T'" is "term" \<proof>\<close>}
+\index{lift-definition@lift$\_$definition (keyword)}\index{is (keyword)}
+where \<open>term\<close> is a term of type \<open>T\<Rightarrow>T\<close>. The command introduces a definition \<open>name_def\<close> for \<open>name\<close> as
+\<open>name x \<equiv> abs_T' (term (rep_T' x))\<close>. Note that this is equivalent to \<open>name \<equiv> map_fun rep_T' abs_T'
+term\<close> using the mapper \<open>map_fun\<close> (see Section~\ref{holbasic-functor-multi}), which is the form
+actually used by HOL.
+
+Every \<^theory_text>\<open>lift_definition\<close> command creates a goal and includes the \<open>\<proof>\<close> for the respectfulness
+theorem for the given \<open>term\<close> and the quotient's equivalence relation \<open>E\<close>. If \<open>T'\<close> has been registered
+using a type-definition theorem the goal is generated in the form that \<open>D\<close> must be closed under
+\<open>term\<close>.
+
+In the \<open>rnb\<close> example after registering type \<open>bool\<close> as quotient of type \<open>nat\<close> a negation operation
+can be defined using lifting in the form
+@{theory_text[display]
+\<open>lift_definition mynot :: "bool \<Rightarrow> bool" is "\<lambda>n. 1-n" \<proof>\<close>}
+If the quotient has been registered using the quotient theorem \<open>qrnb\<close>, the command generates the
+respectfulness theorem
+@{text[display]
+\<open>\<And>x y. rnbE x y \<Longrightarrow> rnbE (1-x) (1-y)\<close>}
+as goal to be proved. If it has been registered using the type-definition theorem \<open>trnb\<close>, the command
+generates the closedness theorem
+@{text[display]
+\<open>\<And>n. n \<in> rnbD \<Longrightarrow> 1-n \<in> rnbD\<close>}
+as goal to be proved.\<close>
+
+subsubsection "Generalized Lifting"
+
+text\<open>
+More generally, lifting is supported for respectful functions \<open>f\<close> of a type \<open>T\<^sub>1\<Rightarrow>T\<^sub>2\<close> with different
+types for argument and result. If both types are registered quotients the lifted function is defined
+using the corresponding morphisms \<open>abs_T\<^sub>2\<close> and \<open>rep_T\<^sub>1\<close>. If only one of both types is a registered
+quotient, the other is retained by lifting, then the corresponding application of \<open>abs_T\<^sub>2\<close> or
+\<open>rep_T\<^sub>1\<close> is omitted. The respectfulness theorem has the form \<open>E\<^sub>1 x y \<Longrightarrow> E\<^sub>2 (f x) (f y)\<close> where \<open>E\<^sub>i\<close>
+is replaced by equality if \<open>T\<^sub>i\<close> is not a registered quotient.
+
+Since functions with multiple arguments are represented by types of the form \<open>T\<^sub>1\<Rightarrow>\<dots>\<Rightarrow>T\<^sub>n\<Rightarrow>T\<close>
+lifting is also applicable to them. Finally, a single value is lifted from \<open>T\<close> to \<open>T'\<close> by application of
+\<open>abs_T'\<close>. Together, the general form of the command is
+@{theory_text[display]
+\<open>lift_definition name :: type is "term" \<proof>\<close>}
+where \<open>type\<close> is an arbitrary type and the type of \<open>term\<close> must result from \<open>type\<close> by replacing all
+occurrences of registered quotients by their corresponding raw types.
+
+The definition of \<open>name\<close> can be systematically constructed from \<open>type\<close> by replacing occurrences of
+registered quotients by their corresponding morphism \<open>abs_T\<close> or \<open>rep_T\<close> and replacing all other type
+constructors by their mapper function (see Section~\ref{holbasic-functor-mapper}) and all other
+types by the identity function \<open>id\<close>. This is similar as constructing predicators and relators
+according to the structure of a type expression consisting of composed natural functors (see
+Section~\ref{holbasic-bnf-predrel}). HOL defines the operator name \<open>(--->)\<close>
+\index{/map-fun@\<open>--->\<close> (operator)} for \<open>map_fun\<close> to make mappers for function types resemble
+visually to the corresponding type. Like the operator name \<open>(===>)\<close> for \<open>rel_fun\<close> (see
+Section~\ref{holbasic-transfer-rules}) \<open>(--->)\<close> is only available after using the command
+@{theory_text[display]
+\<open>unbundle lifting_syntax\<close>}\index{lifting_syntax@lifting$\_$syntax (bundle)}
+on theory level.
+
+As examples, if \<open>type\<close> is \<open>T\<^sub>1'\<Rightarrow>T\<^sub>2'\<close> the definition generated
+for \<open>name\<close> is \<open>name \<equiv> (rep_T\<^sub>1' ---> abs_T\<^sub>2') term\<close> and if \<open>type\<close> is \<open>T\<^sub>1'\<Rightarrow>T\<^sub>2'\<Rightarrow>nat\<close> the definition
+generated for \<open>name\<close> is \<open>name \<equiv> (rep_T\<^sub>1' ---> rep_T\<^sub>2' ---> id) term\<close>.
+
+In the \<open>rnb\<close> example after registering type \<open>bool\<close> as quotient of type \<open>nat\<close> boolean connectives
+can be defined using lifting in the form
+@{theory_text[display]
+\<open>lift_definition myand :: "bool \<Rightarrow> bool \<Rightarrow> bool" is "(*)" \<proof>
+lift_definition myor :: "bool \<Rightarrow> bool \<Rightarrow> bool" is "max" \<proof>\<close>}
+A predicate on natural numbers can be defined using lifting in the form
+@{theory_text[display]
+\<open>lift_definition is_zero :: "nat \<Rightarrow> bool" is "\<lambda>n. 1-n" \<proof>\<close>}
+Note how the type determines how the specified term is lifted. Here only the result type is lifted
+to \<open>bool\<close>, in the definition of \<open>mynot\<close> above the argument type is lifted as well.\<close>
+
+subsubsection "Support for Transfer"
+
+text\<open>
+To support transfer from the lifted function to the original function a \<^theory_text>\<open>lift_definition\<close> command
+for \<open>name\<close>, \<open>type\<close>, and \<open>term\<close> adds the transfer rule
+@{text[display]
+\<open>name.transfer: REL' term name\<close>}
+where \<open>REL'\<close> is the relator constructed according to the structure of \<open>type\<close> as described in
+Section~\ref{holbasic-bnf-predrel}. As usual, it allows the \<open>transfer\<close> method to replace occurrences
+of \<open>name\<close> by \<open>term\<close>.
+
+If \<open>type\<close> is polymorphic, the type parameters are replaced by \<open>(=)\<close> when constructing \<open>REL'\<close>, thus
+the transfer rule only supports transfer when type parameters are instantiated by the same type for
+the quotient and the raw type. HOL supports the extended form
+@{theory_text[display]
+\<open>lift_definition name :: type is "term" parametric pname \<proof>\<close>}
+where \<open>pname\<close> is the name of a fact of the form
+@{text[display]
+\<open>REL term term\<close>}
+where \<open>REL\<close> is the relator constructed according to the structure of the type of \<open>term\<close>.
+This is a parametricity rule (see Section~\ref{holbasic-transfer-poly}) stating that \<open>term\<close> is
+parametrically polymorphic. In this form the \<^theory_text>\<open>lift_definition\<close> command replaces type parameters
+by arbitrary relations \<open>R\<^sub>1,\<dots>,R\<^sub>n\<close> when constructing \<open>REL'\<close>. The resulting stronger transfer rule
+allows to replace \<open>name\<close> by \<open>term\<close> even if different types are substituted for the type parameters
+in the quotient and in the raw type.
+
+In the \<open>rnb\<close> example the transfer rules generated by the definitions above are
+@{text[display]
+\<open>mynot.transfer: (pcr_bool ===> pcr_bool) (\<lambda>n. 1-n) mynot
+myand.transfer: (pcr_bool ===> pcr_bool ===> pcr_bool) (*) myand
+myor.transfer: (pcr_bool ===> pcr_bool ===> pcr_bool) max myor
+is_zero.transfer: ((=) ===> pcr_bool) (\<lambda>n. 1-n) is_zero\<close>}
+If the quotient has been registered using the type-definition theorem \<open>trnb\<close>, these rules cause the
+\<open>transfer\<close> method in
+@{theory_text[display]
+\<open>theorem "mynot (myor a b) = myand (mynot a) (mynot b)"
+  apply(transfer)
+  by (simp add: mult_eq_if)\<close>}
+to replace the goal by the transferred goal
+@{text[display]
+\<open>\<And>a b. \<lbrakk>a \<in> rnbD; b \<in> rnbD\<rbrakk> \<Longrightarrow> 1 - max a b = (1-a) * (1-b)\<close>}
+which can be proved by the simplifier using the additional fact \<open>mult_eq_if\<close>.\<close>
+
+subsection "Quotients as Bounded Natural Functors"
+text_raw\<open>\label{holbasic-quotlift-bnf}\<close>
+
+text\<open>
+As described in Section~\ref{holbasic-quotlift-setup} a polymorphic quotient  \<open>T'\<close> should have a
+registered BNF (see Section~\ref{holbasic-bnf}) without dead type parameters as its raw type \<open>T\<close>,
+so that the relator \<open>rel_T\<close> is available for constructing \<open>pcr_T'\<close> and benefitting from full
+transfer support. Moreover, in this case the quotient \<open>T'\<close> may again be a BNF.
+
+Since the cardinality of a quotient is never greater than that of the raw type, the quotient
+is bounded as soon as the raw type is bounded.
+
+The mapper \<open>m\<close> of \<open>T\<close> can be lifted to \<open>T'\<close> as
+@{text[display]
+\<open>m' = \<lambda>f\<^sub>1 \<dots> f\<^sub>n. abs_T' \<circ> (m f\<^sub>1 \<dots> f\<^sub>n) \<circ> rep_T'\<close>}
+if it respects the equivalence relation \<open>E\<close> of the quotient (see Section~\ref{holbasic-quotlift-lift}),
+i.e., if the proposition
+@{text[display]
+\<open>\<And>x y. E x y \<Longrightarrow> E ((m f\<^sub>1 \<dots> f\<^sub>n) x) ((m f\<^sub>1 \<dots> f\<^sub>n) y)\<close>}
+is valid for all possible functions \<open>f\<^sub>1 \<dots> f\<^sub>n\<close> where \<open>n\<close> is the number of type parameters of the BNF \<open>T\<close>.
+In this case the lifted mapper \<open>m'\<close> is compatible with function composition (see
+Section~\ref{holbasic-quotlift-lift}), thus \<open>T'\<close> is a functor with mapper \<open>m'\<close> (see
+Section~\ref{holbasic-functor-mapper}).
+
+The remaining conditions for \<open>T'\<close> to be a BNF are the existence of the set-function(s), the
+satisfying of the laws of a natural functor (see Section~\ref{holbasic-bnf-natural}), and the
+subdistributivity of the relator (see Section~\ref{holbasic-bnf-bounded}).
+\<close>
+
+subsubsection "Quotients as Natural Functors"
+
+text \<open>
+If the quotient \<open>T'\<close> has been registered by a type-definition theorem (see
+Section~\ref{holbasic-quotlift-setup}) the set-functions \<open>s\<^sub>1, \<dots>, s\<^sub>n\<close> can also be lifted:
+@{text[display]
+\<open>s\<^sub>i' = s\<^sub>i \<circ> rep_T'\<close>}
+because they trivially respect \<open>E\<close> which is the equality restricted to the domain \<open>D\<close> of the
+transfer relation. In a similar way the predicator and relator of \<open>T\<close> can be lifted to \<open>T'\<close>.
+
+To satisfy the laws of a natural functor only two properties must be satisfied: the domain \<open>D\<close>
+of the transfer relation must be closed under the mapper \<open>m\<close>:
+@{text[display]
+\<open>x \<in> D \<Longrightarrow> (m f\<^sub>1 \<dots> f\<^sub>n) x \<in> D\<close>}
+and under the zip construction (see Section~\ref{holbasic-bnf-predrel}) using the mapper \<open>m\<close> and the
+set-functions \<open>s\<^sub>i\<close>:
+@{text[display]
+\<open>\<lbrakk>(m fst\<dots>fst) z \<in> D, (m snd\<dots>snd) z \<in> D\<rbrakk>
+ \<Longrightarrow> \<exists>zz \<in> D.
+       s\<^sub>1 zz \<subseteq> s\<^sub>1 z \<and> \<dots> \<and> s\<^sub>n zz \<subseteq> s\<^sub>n z \<and>
+       (m fst\<dots>fst) zz = (m fst\<dots>fst) z \<and>
+       (m snd\<dots>snd) zz = (m snd\<dots>snd) z\<close>}
+Here for every zipped container \<open>z\<close> (see Section~\ref{holbasic-bnf-predrel}) for which the unzipped
+containers are in \<open>D\<close> there must be a zipped container \<open>zz\<close> in \<open>D\<close> with no additional content
+and the same unzipped containers. The subdistributivity of the relator (see
+Section~\ref{holbasic-bnf-bounded}) directly carries over from \<open>T\<close>.
+
+If the quotient \<open>T'\<close> has been registered by a quotient theorem the set-functions could only be
+lifted if they respect the equivalence relation \<open>E\<close>, which means that values of the BNF \<open>T\<close> can only
+be equivalent if they have the same content, differing only in their shape. To support more general
+equivalence relations HOL constructs the set-functions, the relator and the predicator for \<open>T'\<close>
+from \<open>E\<close> and \<open>m\<close> in a different way.
+
+For this construction the laws of a natural functor can be satisfied by proving a single goal about
+the equivalence relation \<open>E\<close>. A second goal corresponds to the subdistributivity of the relator.
+More information about these conditions can be found in \<^cite>\<open>fuerer\<close>.
+\<close>
+
+subsubsection "The \<^theory_text>\<open>lift_bnf\<close> Command"
+
+text\<open>
+HOL supports registering a quotient of a BNF as BNF using the command
+@{text[display]
+\<open>lift_bnf ('name\<^sub>1,\<dots>,'name\<^sub>n) name \<proof>\<close>}\index{lift-bnf@lift$\_$bnf (keyword)}
+where the parentheses may be omitted if \<open>n = 1\<close>. \<open>name\<close> must be the type constructor name of a 
+registered quotient (see Section~\ref{holbasic-quotlift-setup}) and the
+\<open>'name\<^sub>1\<close> must be type variables for its type parameters. If \<open>name\<close> has not been registered as a
+quotient using \<^theory_text>\<open>setup_lifting\<close> the command signals an error.
+
+The command generates two goals which must be proved in the \<^theory_text>\<open>\<proof>\<close>. The goals are as described
+above and differ depending whether the quotient has been registered using a type-definition theorem
+or a quotient theorem. 
+
+After the \<^theory_text>\<open>\<proof>\<close> of both goals the \<^theory_text>\<open>lift_bnf\<close> command generates definitions for the mapper \<open>m\<close>,
+the set-functions \<open>s\<^sub>i\<close>, the predicator \<open>p\<close>, and the relator \<open>r\<close>, with the usual names \<open>map_name\<close>,
+\<open>seti_name\<close>, \<open>pred_name\<close>, and \<open>rel_name\<close>. Alternative names for (some of) these functions may be
+specified in the form
+@{theory_text[display]
+\<open>lift_bnf (sname\<^sub>1: 'name\<^sub>1,\<dots>, sname\<^sub>n: 'name\<^sub>n) name
+  for map: mname pred: pname rel: rname\<close>}\index{for (keyword)}
+
+After the definition of the BNF functions the command generates and proves the same named facts
+as the \<^theory_text>\<open>bnf\<close> command (see Section~\ref{holbasic-bnf-register}) and registers the quotient \<open>name\<close> as
+BNF.
+
+If the quotient \<open>T'\<close> has been registered using a quotient theorem the \<^theory_text>\<open>lift_bnf\<close> command requires that
+the quotient's transfer relation \<open>R\<close> is left-total, i.e., a reflexivity theorem \<open>reflp E\<close> must have
+been specified in the \<^theory_text>\<open>setup_lifting\<close> command used to register the quotient (see
+Section~\ref{holbasic-quotlift-setup}). Otherwise the \<^theory_text>\<open>lift_bnf\<close> command signals an error.
+
+If the quotient \<open>T'\<close> has been registered using a type-definition theorem the \<^theory_text>\<open>lift_bnf\<close> command
+may complain that a ``nonemptiness witness of the raw type's BNF was lost''. This means that it must
+be proved that the domain \<open>D\<close> of \<open>R\<close> is not empty by specifying an actual element (a ``witness'') in
+it. This is done by the extended form
+@{text[display]
+\<open>lift_bnf ('name\<^sub>1,\<dots>,'name\<^sub>n) name [wits: "term"] \<proof>\<close>}\index{wits (keyword)}
+of the \<^theory_text>\<open>lift_bnf\<close> command where \<open>term\<close> is a function with arguments of types \<open>'name\<^sub>1,\<dots>,'name\<^sub>n\<close>.
+Remember that the raw type is a BNF, i.e., a type of container values consisting of shape and content.
+The function arguments denote content values, the function result is a corresponding container.
+In this form the command generates additional goals to be proved: one that the resulting container
+is always in \<open>D\<close>, and \<open>n\<close> goals stating that the container value has no other content of type
+\<open>'name\<^sub>i\<close> than the argument values of that type.
+
+For examples of using \<^theory_text>\<open>lift_bnf\<close> see Sections~\ref{holtdefs-sub-bnf} and~\ref{holtdefs-quot-bnf}.
+
+Like the \<^theory_text>\<open>bnf\<close> command the \<^theory_text>\<open>lift_bnf\<close> command does not register the generated mapper \<open>m\<close> as
+functor. If needed this must be done explicitly using the \<^theory_text>\<open>functor\<close> command (see
+Section~\ref{holbasic-bnf-register}).
+\<close>
+
+subsubsection "The \<^theory_text>\<open>copy_bnf\<close> Command"
+
+text\<open>
+If the transfer relation \<open>R\<close> for a quotient \<open>T'\<close> is left-total and left-unique \<open>T'\<close> is isomorphic
+to the raw type \<open>T\<close> and can be registered as quotient using a type-definition theorem with the
+universal set \<open>UNIV\<close> as domain \<open>D\<close> of the transfer relation (see Section~\ref{holbasic-quotlift-setup}).
+
+If \<open>T\<close> is a BNF the closedness properties for the mapper and the zip construction required for \<open>T'\<close>
+to also be a BNF (see above) are trivially satisfied. HOL supports registering such a quotient
+as BNF using the command
+@{theory_text[display]
+\<open>copy_bnf ('name\<^sub>1,\<dots>,'name\<^sub>n) name\<close>}\index{copy-bnf@copy$\_$bnf (keyword)}
+where the parentheses may be omitted if \<open>n = 1\<close>. \<open>name\<close> must be the name of the quotient and the
+\<open>'name\<^sub>1\<close> must be type variables for its type parameters. No proof is required, the two goals are
+proved automatically by HOL. As for \<^theory_text>\<open>lift_bnf\<close> \<open>name\<close> must have been registered as a quotient
+using \<^theory_text>\<open>setup_lifting\<close>, otherwise the command signals an error.
+
+The \<^theory_text>\<open>copy_bnf\<close> command generates definitions for the mapper \<open>m\<close>, the set-functions \<open>s\<^sub>i\<close>, the
+predicator \<open>p\<close>, and the relator \<open>r\<close>, with the usual names \<open>map_name\<close>, \<open>seti_name\<close>, \<open>pred_name\<close>, and
+\<open>rel_name\<close>. Alternative names for (some of) these functions may be specified similar as for \<^theory_text>\<open>lift_bnf\<close>
+in the form
+@{theory_text[display]
+\<open>copy_bnf (sname\<^sub>1: 'name\<^sub>1,\<dots>, sname\<^sub>n: 'name\<^sub>n) name
+  for map: mname pred: pname rel: rname\<close>}\index{for (keyword)}
+
+After the definition of the BNF functions the command generates and proves most of the named facts
+provided by the \<^theory_text>\<open>lift_bnf\<close> command and registers the quotient \<open>name\<close> as BNF.
+
+For an example of using \<^theory_text>\<open>copy_bnf\<close> see Section~\ref{holtdefs-sub-bnf}.
+
+Like the \<^theory_text>\<open>bnf\<close> command the \<^theory_text>\<open>copy_bnf\<close> command does not register the generated mapper \<open>m\<close> as
+functor. If needed this must be done explicitly using the \<^theory_text>\<open>functor\<close> command (see
+Section~\ref{holbasic-bnf-register}).
+\<close>
+
+text_raw\<open>\cbend\<close>
 
 end

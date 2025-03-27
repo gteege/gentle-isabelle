@@ -84,7 +84,7 @@ text_raw\<open>\label{holtypes-bool-funcs}\<close>
 text\<open>
 The usual logical functions are defined for type \<open>bool\<close>: \<open>conj, disj, implies, iff\<close>
 of type \<open>bool \<Rightarrow> bool \<Rightarrow> bool\<close> with operator names \<open>(\<and>), (\<or>), (\<longrightarrow>), (\<longleftrightarrow>)\<close> and the unary negation
-\<open>Not\<close> of type \<open>bool \<Rightarrow> bool\<close> and operator name \<open>(\<not>)\<close>. The function \<open>(\<longleftrightarrow>)\<close> is the specific
+\<open>Not\<close> of type \<open>bool \<Rightarrow> bool\<close> and operator name \cbstart \<open>\<not>\<close> \cbend. The function \<open>(\<longleftrightarrow>)\<close> is the specific
 instance of \<open>(=)\<close> for type \<open>bool\<close> (see Section~\ref{holbasic-equal-eq}).
 \index{conj (constant)}\index{disj (constant)}\index{implies (constant)}\index{iff (constant)}\index{Not (constant)}
 \index{/and@\<open>\<and>\<close> (operator)}\index{/or@\<open>\<or>\<close> (operator)}\index{/imp@\<open>\<longrightarrow>\<close> (operator)}\index{/iff@\<open>\<longleftrightarrow>\<close> (operator)}
@@ -103,7 +103,7 @@ The lattice operators \<open>(\<Sqinter>)\<close> and \<open>(\<Squnion>)\<close
 \<open>\<Sqinter>A \<equiv> (False \<notin> A)\<close> and \<open>\<Squnion>A \<equiv> (True \<in> A)\<close>, so they correspond to conjunction and disjunction
 over sets, respectively. Note that the meta-logic quantifier \<open>\<And>\<close> (see
 Section~\ref{theory-prop-bind}) does \<^emph>\<open>not\<close> denote a conjunction operation on sets of boolean
-values. For nonempty finite sets of boolean values the functions \<open>Min\<close> and \<open>Max\<close> are equivalent to
+values. For nonempty \cbdelete sets of boolean values the functions \<open>Min\<close> and \<open>Max\<close> are equivalent to
 \<open>(\<Sqinter>)\<close> and \<open>(\<Squnion>)\<close>.
 \<close>
 
@@ -248,14 +248,6 @@ Additionally, the following four rules can be used for ``proofs by contradiction
 
 subsubsection "Equivalence of Derivation Rules and Boolean Terms"
 
-(*
-theorem "\<forall> x y. (A \<and> B) \<longrightarrow> C \<and> D"
-  apply (rule allI)+ apply (rule impI) apply(erule conjE)
-  apply(subst atomize_conj[symmetric])
-  (* and back again: *)
-  apply(subst atomize_conj)
-  apply (simp only: atomize_conjL) apply(simp only: atomize_imp) apply(simp only: atomize_all)
-*)
 text\<open>
 Using these rules together with the rules about the meta-logic operators
 
@@ -552,7 +544,7 @@ or can be proved by induction or a combination thereof.
 section "Sets"
 text_raw\<open>\label{holtypes-set}\<close>
 
-text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Set, Boolean$\_$Algebras, Finite$\_$Set}\<close>
+text\<open>\<^bold>\<open>Theories:\<close> {\tt\sl Set, Boolean$\_$Algebras, \cbstart Relation, BNF$\_$Def\cbend, Finite$\_$Set}\<close>
 
 text\<open>
 You may think of the type constructor \<open>set\<close> as being specified equivalent to the parameterized
@@ -658,22 +650,20 @@ as abbreviation for \<open>insert x\<^sub>1 (\<dots> (insert x\<^sub>n {}) \<dot
 
 Moreover HOL provides the functions
 @{text[display]
-\<open>Pow :: 'a set \<Rightarrow> 'a set set \<equiv> \<lambda>A. {B. B\<subseteq>A}
-image :: ('a \<Rightarrow> 'b) \<Rightarrow> 'a set \<Rightarrow> 'b set \<equiv> \<lambda>f A. {y. \<exists>x\<in>A. y = f x}
-range :: ('a \<Rightarrow> 'b) \<Rightarrow> 'b set \<equiv> \<lambda>f. image f UNIV
-vimage :: 'a \<Rightarrow> 'b) \<Rightarrow> 'b set \<Rightarrow> 'a set \<equiv> \<lambda>f A. {x. f x \<in> A}
-is_singleton :: 'a set \<Rightarrow> bool \<equiv> \<lambda>A. (\<exists>x. A = {x})
+\<open>Pow :: 'a set \<Rightarrow> 'a set set \<equiv> \<lambda>A. {B. B\<subseteq>A}\<close>}\index{Pow (constant)}\cbstart
+@{text[display]
+\<open>Powp :: ('a\<Rightarrow>bool) \<Rightarrow> 'a set \<Rightarrow> bool \<equiv> \<lambda>P B. \<forall>x \<in> B. P x)\<close>}\index{Powp (constant)}\cbend
+\cbdelete
+@{text[display]
+\<open>is_singleton :: 'a set \<Rightarrow> bool \<equiv> \<lambda>A. (\<exists>x. A = {x})
 the_elem :: 'a set \<Rightarrow> 'a \<equiv> \<lambda>A. (THE x. A = {x})
 pairwise :: ('a \<Rightarrow> 'a \<Rightarrow> bool) \<Rightarrow> 'a set \<Rightarrow> bool \<equiv>
   \<lambda>f A. (\<forall>x\<in>A. \<forall>y\<in>A. x \<noteq> y \<longrightarrow> f x y)
 disjnt :: 'a set \<Rightarrow> 'a set \<Rightarrow> bool \<equiv> \<lambda>A B. A \<inter> B = {}\<close>}
-\index{Pow (constant)}\index{image (constant)}\index{range (constant)}\index{vimage (constant)}
 \index{is-singleton@is$\_$singleton (constant)}\index{the-elem@the$\_$elem (constant)}
 \index{pairwise (constant)}\index{disjnt (constant)}
-with operator name \<open>(`)\<close> for \<open>image\<close> and \<open>(-`)\<close> for \<open>vimage\<close>\index{/image@\<open>`\<close> (operator)}\index{/vimage@\<open>-`\<close> (operator)}. \<open>Pow\<close> is the powerset operator,
-\<open>image\<close> and \<open>vimage\<close> are the image / reverse image of a function. \<open>range\<close> is the set of all result
-values of a function (note that the set of all argument values of a function is always \<open>UNIV\<close>
-because functions are total in Isabelle). As usual, the result of \<open>the_elem A\<close> is underspecified
+\<open>Pow\<close> is the powerset operator, \cbstart \<open>Powp\<close> is the same for a predicate instead of a set\cbend.
+As usual, the result of \<open>the_elem A\<close> is underspecified
 (see Section~\ref{holbasic-descr-definite}) if \<open>A\<close> is not known to be a singleton set. The relation
 application \<open>pairwise f A\<close> is satisfied if \<open>f\<close> is satisfied for all pairs of different elements of
 \<open>A\<close>. The relation \<open>disjnt\<close> tests two sets for being disjoint.
@@ -711,11 +701,11 @@ the syntax of bounded quantifiers
 \<exists>x\<subseteq>sterm. bterm \<equiv> \<exists>x. x \<subseteq> sterm \<and> bterm
 \<exists>!x\<subseteq>sterm. bterm \<equiv> \<exists>!x. x \<subseteq> sterm \<and> bterm
 \<close>}
-and the bounded descriptors (see Section~\ref{holbasic-descr-least})
+and the bounded \cbstart descriptor (see Section~\ref{holbasic-descr-least})
 @{text[display]
-\<open>LEAST x\<in>sterm. bterm \<equiv> LEAST x. x \<in> sterm \<and> bterm
-GREATEST x\<in>sterm. bterm \<equiv> GREATEST x. x \<in> sterm \<and> bterm\<close>}\index{LEAST (binder)}\index{GREATEST (binder)}
-Other than for the plain quantifiers only one bounded variable may be specified for these forms. If
+\<open>LEAST x\<in>sterm. bterm \<equiv> LEAST x. x \<in> sterm \<and> bterm\<close>}\index{LEAST (binder)}
+Note that there is no such form for \<open>GREATEST\<close>. Other than for the plain quantifier only one bounded
+variable may be specified for this form.\cbend If
 there are more, the quantifiers must be nested as in \<open>\<forall>x\<in>sterm\<^sub>1. \<forall>y\<in>sterm\<^sub>2. bterm\<close>.
 
 As set comprehension syntax for the special case of a predicate which includes a member test HOL
@@ -724,18 +714,14 @@ provides the syntax
 \<open>{x\<in>sterm. bterm}\<close>}
 for a term of the form \<open>{x. x\<in>sterm \<and> bterm}\<close>.
 
-For the operations \<open>(\<Inter>), (\<Union>), (\<Sqinter>), (\<Squnion>), Min, Max\<close> on sets (see Section~\ref{holbasic-equal}) HOL
-provides the alternative syntax of the form
+For the operations \cbstart \<open>(\<Inter>), (\<Union>)\<close> \cbend HOL provides the alternative syntax of the form
 @{text[display]
 \<open>\<Inter>x\<in>term\<^sub>1. term\<^sub>2\<close>}
 where both terms must have a \<open>set\<close> type and \<open>x\<close> may occur free in \<open>term\<^sub>2\<close>. This form is equivalent
 to \<open>\<Inter>{term\<^sub>2 | x. x\<in>term\<^sub>1}\<close> which is the intersection over all sets returned by \<open>term\<^sub>2\<close> when \<open>x\<close>
-adopts all values in the set \<open>term\<^sub>1\<close>. For \<open>Min\<close> the syntax is 
-@{text[display]
-\<open>MIN x\<in>term\<^sub>1. term\<^sub>2\<close>}\index{MIN (binder)}\index{MAX (binder)}
-and analogously for \<open>Max\<close>.
+adopts all values in the set \<open>term\<^sub>1\<close>.\cbdelete
 
-For all these operators HOL also provides the abbreviated syntax of the form
+For both operators HOL also provides the abbreviated syntax of the form
 @{text[display]
 \<open>\<Inter>x. term\<^sub>2\<close>}
 for \<open>\<Inter>x\<in>UNIV. term\<^sub>2\<close> and the further abbreviation
@@ -748,6 +734,35 @@ it is the minimum of the boolean values which occur as the result of \<open>x < 
 possible values of type \<open>nat\<close>, i.e. it is equal to the value \<open>False\<close>. The minimum of the numbers
 which are less than \<open>5\<close> is denoted by \<open>LEAST x::nat. x < 5\<close> which is equal to the value \<open>0\<close>.
 \<close>
+
+text_raw\<open>\cbstart\<close>
+subsubsection "BNF Functions"
+
+text\<open>
+As described in Section~\ref{holbasic-bnf-natural} the type constructor \<open>set\<close> is a natural functor,
+although not bounded. The corresponding mapper is provided as the function
+@{text[display]
+\<open>image :: ('a \<Rightarrow> 'b) \<Rightarrow> 'a set \<Rightarrow> 'b set \<equiv> \<lambda>f A. {y. \<exists>x\<in>A. y = f x}\<close>}
+\index{image (constant)}
+with operator name \<open>(`)\<close>\index{/image@\<open>`\<close> (operator)}.
+As set-function the identity \<open>id\<close> is used.
+
+The predicator (see Section~\ref{holbasic-bnf-predrel}) is the function \<open>Powp\<close> (see above),
+the relator is defined as
+@{text[display]
+\<open>rel_set :: ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> 'a set \<Rightarrow> 'b set \<Rightarrow> bool
+  \<equiv> \<lambda>R A B. (\<forall>x\<in>A. \<exists>y\<in>B. R x y) \<and> (\<forall>y\<in>B. \<exists>x\<in>A. R x y)\<close>}\index{rel-set@rel$\_$set (constant)}
+Two sets are related if every element in the first set is related with an element in the second set
+and vice versa.
+
+HOL also provides the function
+@{text[display]
+\<open>vimage :: ('a \<Rightarrow> 'b) \<Rightarrow> 'b set \<Rightarrow> 'a set \<equiv> \<lambda>f A. {x. f x \<in> A}\<close>}
+\index{vimage (constant)}
+with operator name \<open>(-`)\<close>\index{/vimage@\<open>-`\<close> (operator)} for the reverse image of a function.
+As described in Section~\ref{holbasic-functor-mapper} it is a contravariant mapper for \<open>set\<close>.
+\<close>
+text_raw\<open>\cbend\<close>
 
 subsubsection "Functions for Finite Sets"
 
@@ -774,7 +789,9 @@ functions. The most basic is
 @{text[display]
 \<open>card :: 'a set \<Rightarrow> nat \<equiv> \<lambda>A. Finite_Set.fold (\<lambda>_ n. Suc n) 0 A\<close>}\index{card (constant)}
 for the cardinality\index{cardinality} of sets. For finite sets it is the number of elements, for infinite sets, due
-to the way \<open>fold\<close> is defined, it is always \<open>0\<close>.
+to the way \<open>fold\<close> is defined, it is always \<open>0\<close>. \cbstart Note the difference to the cardinalities described
+in Section~\ref{holbasic-bnf-bounded}, which are represented by ordering relations and also
+support infinite cardinalities.\cbend
 \<close>
 
 subsection "Rules"
@@ -957,7 +974,7 @@ type \<open>'a option\<close>.
 subsubsection "BNF Functions"
 text\<open>
 The type constructor \<open>option\<close> is a bounded natural functor as described in
-Section~\ref{holtdefs-data-bnf}. Values of type \<open>'a option\<close> can be viewed as containers of a single
+Section~\ref{holbasic-bnf}. Values of type \<open>'a option\<close> can be viewed as containers of a single
 value of type \<open>'a\<close>.
 
 The corresponding BNF functions are generated as:
@@ -1116,8 +1133,9 @@ the \<open>let\<close> statement (see Section~\ref{proof-let-match}). As ``patte
 variables may be used, such \<open>let\<close> terms are always equivalent to a \<open>case\<close> term for a tuple.
 
 The same variable tuple patterns can also be used in other kinds of terms where variables are bound
-such as in lambda terms\index{lambda term}\index{term!lambda $\sim$} (e.g., \<open>\<lambda>(a,b) c. a+b+c\<close>), in logic quantifiers\index{quantifier} (e.g., \<open>\<forall>(a,b) c. a+b=c\<close>),
-and in set comprehensions\index{set comprehension} (e.g., \<open>{(a,b). a=b*b}\<close>). Note that the last example is equivalent to
+such as in lambda terms\index{lambda term}\index{term!lambda $\sim$} (e.g., \<open>\<lambda>(a,b) c. a+b+c\<close>), 
+\cbstart in description operators\index{description operator} (e.g., \<open>SOME (a,b). a+b=5\<close>),
+(but not in logic quantifiers) \cbend and in set comprehensions\index{set comprehension} (e.g., \<open>{(a,b). a=b*b}\<close>). Note that the last example is equivalent to
 \<open>{(a,b) | a b. a=b*b}\<close>, only in this form an arbitrary term may be used instead of \<open>(a,b)\<close>.
 \<close>
 
@@ -1162,34 +1180,36 @@ The function
 with operator name \<open>(\<times>)\<close> constructs the cartesian product\index{cartesian product} of two sets.
 
 No orderings or lattice functions (see Section~\ref{holbasic-equal}) are specified for values of
-type \<open>('a, 'b) prod\<close>.
-
-\<close>
+type \<open>('a, 'b) prod\<close>.\<close>
 
 subsubsection "BNF Functions"
 
 text\<open>
 The type constructor \<open>prod\<close> is a bounded natural functor as described in
-Section~\ref{holtdefs-data-bnf}. Values of type \<open>('a, 'b) prod\<close> can be viewed as containers of a
+Section~\ref{holbasic-bnf}. Values of type \<open>('a, 'b) prod\<close> can be viewed as containers of a
 single value of type \<open>'a\<close> and a single value of type  \<open>'b\<close>.
 
 The corresponding BNF functions are generated as:
 @{text[display]
 \<open>map_prod ::
   ('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> ('a\<^sub>1 \<times> 'b\<^sub>1) \<Rightarrow> ('a\<^sub>2 \<times> 'b\<^sub>2) \<equiv>
-  \<lambda>f g (x,y). (f x, g y) 
-pred_prod ::
+  \<lambda>f g (x,y). (f x, g y)\<close>}\index{map-prod@map$\_$prod (constant)}\cbstart
+@{text[display]
+\<open>Basic_BNFs.fsts :: ('a \<times> 'b) \<Rightarrow> 'a set \<equiv> \<lambda>(x,y).{x}
+Basic_BNFs.snds :: ('a \<times> 'b) \<Rightarrow> 'b set \<equiv> \<lambda>(x,y).{y}\<close>}\index{fsts (constant)}\index{snds (constant)}\cbend
+@{text[display]
+\<open>pred_prod ::
   ('a \<Rightarrow> bool) \<Rightarrow> ('b \<Rightarrow> bool) \<Rightarrow> ('a \<times> 'b) \<Rightarrow> bool \<equiv>
   \<lambda>f g (x,y). f x \<and> g y
 rel_prod ::
   ('a\<^sub>1 \<Rightarrow> 'a\<^sub>2 \<Rightarrow> bool) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2 \<Rightarrow> bool) 
     \<Rightarrow> ('a\<^sub>1 \<times> 'b\<^sub>1) \<Rightarrow> ('a\<^sub>2 \<times> 'b\<^sub>2) \<Rightarrow> bool \<equiv>
   \<lambda>f g (x\<^sub>1,y\<^sub>1) (x\<^sub>2,y\<^sub>2). f x\<^sub>1 x\<^sub>2 \<and> g y\<^sub>1 y\<^sub>2\<close>}
-No set functions are generated, they are trivial, returning the corresponding singleton set.
+\index{pred-prod@pred$\_$prod (constant)}\index{rel-prod@rel$\_$prod (constant)}
+\cbdelete
 \<close>
 
 subsection "Rules"
-
 text_raw\<open>\label{holtypes-tup-rules}\<close>
 
 subsubsection "Algebraic Type Rules"
@@ -1304,9 +1324,8 @@ subsection "Functions on Functions"
 text_raw\<open>\label{holtypes-func-funcs}\<close>
 
 text\<open>
-The functions \<open>image\<close>, \<open>vimage\<close>, and \<open>range\<close> have already been described in
-Section~\ref{holtypes-set-funcs}, they can be viewed to ``lift'' functions on values to functions
-on value sets.
+The functions \<open>image\<close> \cbstart and \<open>vimage\<close> have already been described in Section~\ref{holtypes-set-funcs},
+as mappers for \<open>set\<close> \cbend they can be viewed to ``lift'' functions on values to functions on value sets.
 
 Functions of arbitrary types can be composed by the polymorphic function 
 @{text[display]
@@ -1327,11 +1346,65 @@ are only available after using the command
 \<open>unbundle state_combinator_syntax\<close>}\index{state-combinator-syntax@state$\_$combinator$\_$syntax (bundle)}
 on theory level.
 
-Finite iteration of a function of type \<open>'a \<Rightarrow> 'a\<close> can be specified by the polymorphic function
+Finite iteration of a function of type \<open>'a \<Rightarrow> 'a\<close> can be specified by the polymorphic function\cbstart
 @{text[display]
-\<open>funpow :: nat \<Rightarrow> ('a \<Rightarrow> 'a) \<Rightarrow> 'a \<Rightarrow> 'a\<close>}\index{funpow (constant)}
-with operator name \<open>(^^)\<close>\index{/funpow@\<open>^^\<close> (operator)} (with reversed arguments) for infix notation. Thus 
-\<open>funpow 3 f = f ^^ 3 = f \<circ> f \<circ> f\<close>.
+\<open>compow :: nat \<Rightarrow> ('a \<Rightarrow> 'a) \<Rightarrow> 'a \<Rightarrow> 'a\<close>}\index{compow (constant)}
+with operator name \<open>(^^)\<close>\index{/compow@\<open>^^\<close> (operator)} (with reversed arguments) for infix notation. Thus 
+\<open>compow 3 f = f ^^ 3 = f \<circ> f \<circ> f\<close>.\cbend
+\<close>
+
+subsubsection "Function Updates"
+
+text\<open>
+HOL provides the function\index{function!update $\sim$}
+@{text[display]
+\<open>fun_upd :: ('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> ('a \<Rightarrow> 'b)
+  \<equiv> \<lambda>f a b x. if x = a then b else f x\<close>}\index{fun-upd@fun$\_$upd (constant)}
+which returns a function where the value of a single argument \<open>a\<close> of \<open>f\<close> has been changed to \<open>b\<close>.
+Note that this ``function update'' does not ``change'' the function \<open>f\<close>, it returns a new function
+which differs from \<open>f\<close> only for the argument \<open>a\<close>.
+
+HOL provides the alternative syntax\index{syntax!alternative $\sim$!for function update}
+@{text[display]
+\<open>f(terma\<^sub>1 := termb\<^sub>1, \<dots>, terma\<^sub>n := termb\<^sub>n)\<close>}\index{:= (inner keyword)}
+for the term \<open>fun_upd \<dots> (fun_upd f terma\<^sub>1 termb\<^sub>1) \<dots> terma\<^sub>n termb\<^sub>n\<close>. The changes are applied from
+left to right, i.e. \<open>f(x := y, x := z) = f(x := z)\<close>.
+
+HOL also provides an update on a set of arguments, where the new values are specified by another
+function:
+@{text[display]
+\<open>override_on :: ('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'a set \<Rightarrow> 'a \<Rightarrow> 'b
+  \<equiv> \<lambda>f g A x. if x \<in> A then g x else f x\<close>}\index{override-on@override$\_$on (constant)}\<close>
+
+text_raw\<open>\cbdelete\<close>
+
+subsubsection "BNF Functions"
+
+text\<open>
+\cbstart
+As described in Sections~\ref{holbasic-functor-multi} and \ref{holbasic-bnf-natural} the type
+constructor \<open>fun\<close> is a bounded natural functor with one dead and one live type parameter. The
+mapper is the function
+@{text[display]
+\<open>map_fun :: ('b\<^sub>1\<Rightarrow>'a\<^sub>1) \<Rightarrow> ('a\<^sub>2\<Rightarrow>'b\<^sub>2) \<Rightarrow> ('a\<^sub>1\<Rightarrow>'a\<^sub>2) \<Rightarrow> ('b\<^sub>1\<Rightarrow>'b\<^sub>2)
+  \<equiv> \<lambda>f\<^sub>1 f\<^sub>2. \<lambda>f. f\<^sub>2 \<circ> f \<circ> f\<^sub>1\<close>}\index{map-fun@map$\_$fun (constant)}
+and the set-function for the live type parameter is the function
+@{text[display]
+\<open>range :: ('a \<Rightarrow> 'b) \<Rightarrow> 'b set \<equiv> \<lambda>f. image f UNIV\<close>}\index{range (constant)}
+which returns the set of all result values of a function (note that the set of all argument values
+of a function is always \<open>UNIV\<close> because functions are total in Isabelle). 
+
+There are the predicator and relator (see Section~\ref{holbasic-bnf-predrel})
+@{text[display]
+\<open>pred_fun :: ('p\<^sub>1\<Rightarrow>bool) \<Rightarrow> ('p\<^sub>2\<Rightarrow>bool) \<Rightarrow> ('p\<^sub>1\<Rightarrow>'p\<^sub>2) \<Rightarrow> bool
+  \<equiv> \<lambda>p\<^sub>1 p\<^sub>2 f. \<forall>x. p\<^sub>1 x \<longrightarrow> p\<^sub>2 (f x)
+rel_fun :: ('p\<^sub>1\<Rightarrow>'q\<^sub>1\<Rightarrow>bool) \<Rightarrow> ('p\<^sub>2\<Rightarrow>'q\<^sub>2\<Rightarrow>bool)
+  \<Rightarrow> ('p\<^sub>1\<Rightarrow>'p\<^sub>2) \<Rightarrow> ('q\<^sub>1\<Rightarrow>'q\<^sub>2) \<Rightarrow> bool
+  \<equiv> \<lambda>r\<^sub>1 r\<^sub>2 f g. \<forall>x y. r\<^sub>1 x y \<longrightarrow> r\<^sub>2 (f x) (g y)\<close>}\index{pred-fun@pred$\_$fun (constant)}\index{rel-fun@rel$\_$fun (constant)}
+which include the dead type parameter. The predicator and relator for the live parameter can
+be obtained by partial application \<open>pred_fun (\<lambda>_. True) = (\<lambda>p\<^sub>2 f. \<forall>x. p\<^sub>2 (f x))\<close> and \<open>rel_fun (=)
+= (\<lambda>r\<^sub>2 f g. \<forall>x. r\<^sub>2 (f x) (g x))\<close>. For these functions HOL does not define separate names. They lift
+a predicate or relation by applying it to all function values.\cbend
 \<close>
 
 subsubsection "Injectivity and Surjectivity"
@@ -1370,113 +1443,19 @@ where the partial application \<open>(the_inv_into A f)\<close> is the inverse o
 set \<open>A\<close>. It is only fully specified if \<open>image f A = UNIV\<close> and \<open>inj_on f A\<close>.
 \<close>
 
-subsubsection "Function Updates"
-
-text\<open>
-HOL provides the function\index{function!update $\sim$}
-@{text[display]
-\<open>fun_upd :: ('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> ('a \<Rightarrow> 'b)
-  \<equiv> \<lambda>f a b x. if x = a then b else f x\<close>}\index{fun-upd@fun$\_$upd (constant)}
-which returns a function where the value of a single argument \<open>a\<close> of \<open>f\<close> has been changed to \<open>b\<close>.
-Note that this ``function update'' does not ``change'' the function \<open>f\<close>, it returns a new function
-which differs from \<open>f\<close> only for the argument \<open>a\<close>.
-
-HOL provides the alternative syntax\index{syntax!alternative $\sim$!for function update}
-@{text[display]
-\<open>f(terma\<^sub>1 := termb\<^sub>1, \<dots>, terma\<^sub>n := termb\<^sub>n)\<close>}\index{:= (inner keyword)}
-for the term \<open>fun_upd \<dots> (fun_upd f terma\<^sub>1 termb\<^sub>1) \<dots> terma\<^sub>n termb\<^sub>n\<close>. The changes are applied from
-left to right, i.e. \<open>f(x := y, x := z) = f(x := z)\<close>.
-
-HOL also provides an update on a set of arguments, where the new values are specified by another
-function:
-@{text[display]
-\<open>override_on :: ('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'a set \<Rightarrow> 'a \<Rightarrow> 'b
-  \<equiv> \<lambda>f g A x. if x \<in> A then g x else f x\<close>}\index{override-on@override$\_$on (constant)}\<close>
-
-subsubsection "The Type Constructor \<open>fun\<close> as a Functor"
-
-text\<open>
-The type constructor \<open>fun\<close> is no bounded natural functor. Values of type \<open>('p\<^sub>1, 'p\<^sub>2) fun\<close> can be
-viewed as containers for the function values of type \<open>'p\<^sub>2\<close>. Since there may be a separate function
-value for every argument value of type \<open>'p\<^sub>1\<close> the set of contained values may be arbitrary large
-depending on the type \<open>'p\<^sub>1\<close>, it is not bounded.
-
-However, \<open>fun\<close> is still a functor\index{functor} and has the map function
-@{text[display]
-\<open>map_fun :: ('q\<^sub>1 \<Rightarrow> 'p\<^sub>1) \<Rightarrow> ('p\<^sub>2 \<Rightarrow> 'q\<^sub>2) \<Rightarrow> ('p\<^sub>1 \<Rightarrow> 'p\<^sub>2) \<Rightarrow> 'q\<^sub>1 \<Rightarrow> 'q\<^sub>2
-  \<equiv> \<lambda>f\<^sub>1 f\<^sub>2 f = f\<^sub>1 \<circ> f \<circ> f\<^sub>2\<close>}
-which lifts two functions \<open>f\<^sub>1, f\<^sub>2\<close> to a function \<open>(map_fun f\<^sub>1 f\<^sub>2)\<close> on functions and which satisfies
-the laws for a functor:
-
-@{text\<open>map_fun.id:\<close>} @{thm map_fun.id}\\
-@{text\<open>map_fun.comp:\<close>}\\\hspace*{1em}@{thm map_fun.comp}
-
-Note the different treatment of the first type parameter \<open>'p\<^sub>1\<close> by reversing the direction of the
-application of function \<open>f\<^sub>1\<close>.
-
-Additionally there are functions which lift predicates and relations (see
-Section~\ref{holbasic-pred}) in a similar way as the predicators and relators described for
-algebraic types in Section~\ref{holtdefs-data-bnf}. These are
-@{text[display]
-\<open>pred_fun :: ('p\<^sub>1 \<Rightarrow> bool) \<Rightarrow> ('p\<^sub>2 \<Rightarrow> bool) \<Rightarrow> ('p\<^sub>1 \<Rightarrow> 'p\<^sub>2) \<Rightarrow> bool
-  \<equiv> \<lambda>p\<^sub>1 p\<^sub>2 f. \<forall>x. p\<^sub>1 x \<longrightarrow> p\<^sub>2 (f x)\<close>}
-and
-@{text[display]
-\<open>rel_fun :: ('p\<^sub>1 \<Rightarrow> 'q\<^sub>1 \<Rightarrow> bool) \<Rightarrow> ('p\<^sub>2 \<Rightarrow> 'q\<^sub>2 \<Rightarrow> bool)
-  \<Rightarrow> ('p\<^sub>1 \<Rightarrow> 'p\<^sub>2) \<Rightarrow> ('q\<^sub>1 \<Rightarrow> 'q\<^sub>2) \<Rightarrow> bool
-  \<equiv> \<lambda>r\<^sub>1 r\<^sub>2 f g. \<forall>x y. r\<^sub>1 x y \<longrightarrow> r\<^sub>2 (f x) (g y)\<close>}
-Note again the different treatment of the first type parameter \<open>'p\<^sub>1\<close> by combining it with the
-second by implication \<open>\<longrightarrow>\<close> instead of conjunction.
-
-As an example using the predicate \<open>evn\<close> from Section~\ref{holbasic-inductive-defrules}, the partial
-application \<open>pred_fun evn evn\<close> is the predicate of type \<open>(nat \<Rightarrow> nat) \<Rightarrow> bool\<close> which tests whether
-a function on natural numbers maps all even numbers to even numbers.
-\<close>
-
-subsubsection "BNF Functions"
-
-text\<open>
-Although the type constructor \<open>fun\<close> is no bounded natural functor, it becomes one if the first
-type parameter is fixed, such as for the type \<open>(nat, 'p\<^sub>2) fun\<close> or \<open>nat \<Rightarrow> 'p\<^sub>2\<close>. It has only one
-type parameter for the function values, the type of the function arguments is always the same. Now
-for a function \<open>f\<close> of this type the set of contained values is simply its range \<open>range f\<close> and that
-is bounded by the cardinality of the argument type.
-
-This situation is described by saying that \<open>fun\<close> is a bounded natural functor with one ``dead''
-type parameter (the first one). The second type parameter is called ``live''. In general a bounded
-natural functor may have several dead and live type parameters. A set function only exists for
-each live type parameter and the map function and the predicator and relator lift only functions for
-the live type parameters.
-
-Therefore \<open>fun\<close> has the set function (see Section~\ref{holtypes-set-funcs})
-@{text[display]
-\<open>range :: ('p\<^sub>1 \<Rightarrow> 'p\<^sub>2) \<Rightarrow> 'p\<^sub>2 set \<equiv> \<lambda>f. {y. \<exists>x. y = f x}\<close>}
-and the map function, predicator and relator can be constructed by the partial applications
-@{text[display]
-\<open>(map_fun id) = (\<lambda>f\<^sub>2 f x. f\<^sub>2 (f x))
-(pred_fun (\<lambda>_. True)) = (\<lambda>p\<^sub>2 f. \<forall>x. p\<^sub>2 (f x))
-(rel_fun (=)) = (\<lambda>r\<^sub>2 f g. \<forall>x. r\<^sub>2 (f x) (g x))\<close>}
-The map function is equivalent to the composition \<open>(\<circ>)\<close>. For the predicator and relator HOL does not
-define separate names. Note that they are also polymorphic for the argument type, so they can be used 
-for functions of arbitrary types \<open>'p\<^sub>1 \<Rightarrow> 'p\<^sub>2\<close>. They lift a predicate or relation by applying it to
-all function values.
-
-Since functions with multiple arguments in curried form (see Section~\ref{holbasic-tuples-funarg})
-have functions as intermediate result values the lifting can be iterated over multiple arguments.
-For example, a relation \<open>r\<close> on the result type \<open>t\<close> can be lifted to binary functions of type
-\<open>t\<^sub>1 \<Rightarrow> t\<^sub>2 \<Rightarrow> t\<close> by \<open>rel_fun (=) (rel_fun (=) r)\<close> which is equivalent to the relation on functions
-\<open>\<lambda>f g. \<forall>x y. r (f x y) (g x y))\<close>.
-\<close>
-
 subsubsection "Functions for Orderings and Lattices"
 
 text\<open>
-The ordering relations (see Section~\ref{holbasic-equal-order}) are defined for functions by lifting
-the ordering relations for the function values. Thus the ordering \<open>(<)\<close> on functions is equivalent
-to \<open>rel_fun (=) (<)\<close> and analogously for \<open>(\<le>), (>), (\<ge>)\<close>. In other words, \<open>f < g\<close> holds if
-\<open>\<forall>x. (f x) < (g x)\<close>. Note that even if \<open>(<)\<close> is a total ordering on the function values, the lifted
-ordering is partial, because for some arguments the function values may be less and for other
+The ordering relations \cbstart  \<open>(\<le>), (\<ge>)\<close> (see Section~\ref{holbasic-equal-order}) are defined
+for functions by lifting
+the ordering relations for the function values. Thus the ordering \<open>(\<le>)\<close> on functions is equivalent
+to \<open>rel_fun (=) (\<le>)\<close> and analogously for \<open>(\<ge>)\<close>. In other words, \<open>f \<le> g\<close> holds if
+\<open>\<forall>x. (f x) \<le> (g x)\<close>. Note that even if \<open>(\<le>)\<close> is a total ordering on the function values, the lifted
+ordering is partial, because for some arguments the function values may be less or equal and for other
 arguments not.
+
+The strict ordering relations \<open>(<), (>)\<close> on functions, instead, are not lifted, they are derived
+from \<open>(\<le>), (\<ge>)\<close> according to \<open>(f < g) = (f \<le> g) \<and> \<not> (g \<le> f)\<close>.\cbend
 
 In a similar way the lattice operations \<open>(\<sqinter>)\<close>, \<open>(\<squnion>)\<close>, \<open>(\<Sqinter>)\<close>, and \<open>(\<Squnion>)\<close> (see
 Section~\ref{holbasic-equal-lattice}) are lifted from the function values to functions:
@@ -1528,60 +1507,6 @@ mono_on :: 'p\<^sub>1 set \<Rightarrow> ('p\<^sub>1 \<Rightarrow> 'p\<^sub>2) \<
 strict_mono_on :: 'p\<^sub>1 set \<Rightarrow> ('p\<^sub>1 \<Rightarrow> 'p\<^sub>2) \<Rightarrow> bool\<close>}\index{monotone-on@monotone$\_$on (constant)}
 \index{mono-on@mono$\_$on (constant)}\index{strict-mono-on@strict$\_$mono$\_$on (constant)}
 \<close>
-
-(*
-thm card_Un_Int
-print_bundles
-print_syntax
-unbundle cardinal_syntax
-thm card_Un_Int
-lemma "card_of A = |A::(nat set)|"
-
-declare [[show_types=true]]
-lemma "mono f = monotone (\<le>) (\<le>) f" sorry
-
-unbundle cardinal_syntax
-typedef ('d, 'a) fn = "UNIV :: ('d \<Rightarrow> 'a) set "
-  by simp
-setup_lifting type_definition_fn
-lift_definition map_fn :: "('a \<Rightarrow> 'b) \<Rightarrow> ('d, 'a) fn \<Rightarrow> ('d, 'b) fn " is "(\<circ>)" .
-lift_definition set_fn :: "('d, 'a) fn \<Rightarrow> 'a set " is range .
-lift_definition pred_fn :: "('a \<Rightarrow> bool) \<Rightarrow> ('d, 'a) fn \<Rightarrow> bool " is "pred_fun (\<lambda>_. True)" .
-lift_definition rel_fn :: "('a \<Rightarrow> 'b \<Rightarrow> bool) \<Rightarrow> ('d, 'a) fn \<Rightarrow> ('d, 'b) fn \<Rightarrow> bool " is "rel_fun (=)" .
-bnf fn2: "('d, 'a) fn "
-map: map_fn
-sets: set_fn
-bd: "natLeq +c card_suc | UNIV :: 'd set|"
-rel: rel_fn
-pred: pred_fn defer
-sorry
-print_theorems
-print_bnfs
-thm card_suc_def
-
-functor map_fun2: map_fun sorry
-
-datatype ('a, 'b, 'c) mydat =
-  C1 'a "'b option"
-  | C2 'c 'b 'a 'b
-  | C3 'a "('a, 'b, 'c) mydat"
-
-datatype ('a) mydat2 =
-  C1 'a "'a option"
-declare [[show_types=true]]
-lemma "rel_mydat2 (BNF_Def.Grp A f) = BNF_Def.Grp {x. (set_mydat2 x \<subseteq> A)} (map_mydat2 f)" sorry
-lemma "rel_mydat2 R a b =
-    (\<exists>z. z \<in> { x. (set_mydat2 x \<subseteq> {(x, y)| x y. (R x y)})} \<and>
-         map_mydat2 fst z = a \<and> map_mydat2 snd z = b)" using mydat2.in_rel by auto
-lemma "rel_mydat R1 R2 R3 a b =
-    (\<exists>z. z \<in> {x.
-               (set1_mydat x \<subseteq> { (x, y)| x y. (R1 x y)} \<and>
-                set2_mydat x \<subseteq> { (x, y)| x y. (R2 x y)} \<and> 
-                set3_mydat x \<subseteq> { (x, y)| x y. (R3 x y)})} \<and>
-         map_mydat fst fst fst z = a \<and> map_mydat snd snd snd z = b)" sorry
-
-record ('a, 'b) myrec = fld1 :: "'a " fld2 :: "'b"
-*)
 
 subsection "Rules"
 text_raw\<open>\label{holtypes-func-rules}\<close>
@@ -1642,6 +1567,9 @@ text_raw\<open>\label{holtypes-rel}\<close>
 text\<open>
 **todo**
 \<close>
+
+subsection "Functions"
+text_raw\<open>\label{holtypes-rel-funcs}\<close>
 
 section "The Sum Type"
 text_raw\<open>\label{holtypes-sum}\<close>
