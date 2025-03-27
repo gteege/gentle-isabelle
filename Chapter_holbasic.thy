@@ -80,7 +80,6 @@ done using the operator name in the form \<open>((op) x)\<close>, partial applic
 omitting an argument on one side of the infix operator.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Relation Operations"
 
 text\<open>
@@ -124,11 +123,9 @@ bi_unique ('a\<Rightarrow>'b\<Rightarrow>bool) \<Rightarrow> bool \<equiv>
 These predicates test whether a relation \<open>R\<close> is a function (\<open>right_unique\<close>), surjective (\<open>right_total\<close>),
 injective (\<open>left_unique\<close>), total (\<open>left_total\<close>), an injective function (\<open>bi_unique\<close>), or surjective
 and total (\<open>bi_total\<close>). \<open>R\<close> is a bijection if \<open>bi_total R \<and> bi_unique R\<close>. 
-\cbend\<close>
+\<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Relations As Set-Valued Functions"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Since the unary predicate \<open>(R x)\<close> is equivalent to a set, every binary relation of type
@@ -175,13 +172,11 @@ types. An example is the relation \<open>iff\<close>\index{iff (constant)} with 
 defined for operands of type \<open>bool\<close>. Therefore for the term \<open>term\<^sub>1 \<longleftrightarrow> term\<^sub>2\<close> HOL automatically
 derives that \<open>term\<^sub>1\<close> and \<open>term\<^sub>2\<close> have type \<open>bool\<close>.
 
-\cbstart
 There is also a restricted form of equality
 @{text[display]
 \<open>eq_onp :: ('a \<Rightarrow> bool) \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> bool\<close>}\index{eq-onp@eq$\_$onp (constant)}
 which can only be used to compare values which satisfy a given predicate. Thus \<open>eq_onp P x y\<close> will
 only be \<open>True\<close> if \<open>x\<close> and \<open>y\<close> are equal and additionally \<open>P x\<close> holds.
-\cbend 
 \<close>
 
 subsection "The Ordering Relations"
@@ -205,7 +200,7 @@ functions
 @{text[display]
 \<open>Min :: 'a set \<Rightarrow> 'a
 Max :: 'a set \<Rightarrow> 'a\<close>}\index{Min (constant)}\index{Max (constant)}
-for the minimum or maximum of all values in a set. \cbstart The value of \<open>Min\<close> and \<open>Max\<close> is
+for the minimum or maximum of all values in a set. The value of \<open>Min\<close> and \<open>Max\<close> is
 underspecified if applied to an empty or infinite set.
 
 All these functions are polymorphic but are not available for arbitrary types. They are overloaded
@@ -213,7 +208,7 @@ only for those types which have ordered values. However, this is the case for mo
 introduced by HOL and described in Chapter~\ref{holtypes}. If an ordering function is used for a
 type for which it is not available an error message of the form ``No type arity ...'' is signaled.
 
-Basically, \cbend these are only syntactic definitions, no rules about orderings are implied by them. For
+Basically, these are only syntactic definitions, no rules about orderings are implied by them. For
 some of its predefined types, such as type \<open>nat\<close>, HOL provides more specific specifications by
 overloading.
 
@@ -251,8 +246,7 @@ HOL does not provide the six alternative names automatically. To make them avail
 must be used on theory level. It is available after importing the theory \<^theory>\<open>Main\<close> (see
 Section~\ref{system-invoke-theory}).
 
-\cbstart
-Like the ordering functions (see Section~\ref{holbasic-equal-order}) the \cbend lattice operations and constants are polymorphic but are not available for arbitrary types.
+Like the ordering functions (see Section~\ref{holbasic-equal-order}) the lattice operations and constants are polymorphic but are not available for arbitrary types.
 They are overloaded only for those types which have a corresponding structure. For example, type
 \<open>nat\<close> has the \<open>bot\<close> value (which is equal to \<open>0\<close>), but no \<open>top\<close> value. If a lattice operation or
 constant is used for a type for which it is not available an error message of the form
@@ -317,7 +311,7 @@ values\index{least value operator}\index{greatest value operator} can be denoted
 GREATEST x. bterm\<close>}\index{LEAST (binder)}\index{GREATEST (binder)}
 Only a single variable with an optional type specification is useful to be specified.
 
-\cbdelete The operators 
+The operators 
 are defined using \<open>THE\<close> to return the value \<open>x\<close> which satisfies the predicate and \<open>x \<le> y\<close> or
 \<open>x \<ge> y\<close> holds, respectively, for all values \<open>y\<close> which also satisfy the predicate.
 
@@ -407,9 +401,9 @@ Values for \<open>n\<close>-tuples of type \<open>t\<^sub>1 \<times> \<dots> \<t
 \<open>(term\<^sub>1, \<dots>, term\<^sub>n)\<close> where \<open>term\<^sub>i\<close> is a term of type \<open>t\<^sub>i\<close> and the parentheses\index{parentheses} and the comma\index{comma} belong
 to the syntax.
 
-\cbstart The selector function \<open>fst\<close> can be used to access the first component of a tuple value, the
+The selector function \<open>fst\<close> can be used to access the first component of a tuple value, the
 selector function \<open>snd\<close> can be used to access the remaining tuple after removing the first component
-(which yields the single second component if applied to a pair) (see Section~\ref{holtypes-tup-destrs}).\cbend
+(which yields the single second component if applied to a pair) (see Section~\ref{holtypes-tup-destrs}).
 \<close>
 
 subsection "Function Argument Tuples"
@@ -440,10 +434,10 @@ usual form of representing relations in mathematics.
 
 HOL extends the convention described in Section~\ref{holbasic-pred-set} of providing relations
 named \<open>namep\<close> or \<open>nameP\<close> also as set-valued functions named \<open>name\<close> by alternatively using a tuple
-set named \<open>name\<close>. \cbstart Moreover it provides the relation operations (see
+set named \<open>name\<close>. Moreover it provides the relation operations (see
 Section~\ref{holbasic-pred-rel}) for binary relations as tuple sets: composition as function
 \<open>relcomp\<close> with operator name \<open>O\<close> (a single capital O), and conversion as function \<open>converse\<close> with
-alternative notation \<open>R\<^sup>-\<^sup>1\<close> for \<open>converse R\<close>.\cbend
+alternative notation \<open>R\<^sup>-\<^sup>1\<close> for \<open>converse R\<close>.
 \<close>
 
 section "Inductive Definitions"
@@ -902,9 +896,7 @@ for all values.
 
 HOL provides the induction rules with elimination (see Section~\ref{case-induction-elim})
 
-\cbstart
 @{text\<open>wfp_induct_rule:\<close>}\vspace{-2ex}@{thm[display,indent=2] wfp_induct_rule}\index{wfp-induct-rule@wfp$\_$induct$\_$rule (fact name)}
-\cbend
 @{text\<open>wf_induct_rule:\<close>}\vspace{-2ex}@{thm[display,indent=2] wf_induct_rule}\index{wf-induct-rule@wf$\_$induct$\_$rule (fact name)}
 
 Their major premise is well-foundedness of the relation \<open>?r\<close>. The single case corresponds to the
@@ -1572,7 +1564,6 @@ A termination proof can use the name of either defined function to refer to the 
 definition.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 section "Functors"
 text_raw\<open>\label{holbasic-functor}\<close>
 
@@ -3290,7 +3281,5 @@ Like the \<^theory_text>\<open>bnf\<close> command the \<^theory_text>\<open>cop
 functor. If needed this must be done explicitly using the \<^theory_text>\<open>functor\<close> command (see
 Section~\ref{holbasic-bnf-register}).
 \<close>
-
-text_raw\<open>\cbend\<close>
 
 end

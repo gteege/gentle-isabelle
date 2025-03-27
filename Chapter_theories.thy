@@ -52,7 +52,7 @@ quotes or delimiters  may be omitted.
 
 This introduction describes only a selected part of the outer and inner syntax. The full
 notation used by Isabelle is described in the Isabelle/Isar reference manual \<^cite>\<open>"isar-ref"\<close> with
-some more \cbstart advanced \cbend parts in other documentation \<^cite>\<open>datatypes and corec and eisbach\<close>.\<close>
+some more advanced parts in other documentation \<^cite>\<open>datatypes and corec and eisbach\<close>.\<close>
 
 subsubsection \<open>Embedded \LaTeX\ Code\<close>
 
@@ -140,7 +140,7 @@ subsection "Types"
 text_raw\<open>\label{theory-terms-types}\<close>
 
 text \<open>
-Types are \cbstart basically \cbend specified by type names\index{type!name}\index{name!for type}. In Isabelle HOL (see Chapter~\ref{holbasic}) there are 
+Types are basically specified by type names\index{type!name}\index{name!for type}. In Isabelle HOL (see Chapter~\ref{holbasic}) there are 
 predefined types such as \<open>nat\<close>\index{nat (type)} and \<open>bool\<close>\index{bool (type)} for natural numbers and boolean values.  With the
 exception of function types, types like these with a mathematical meaning always belong to an object
 logic. Chapter~\ref{holtypes} gives a detailed description of several important types of HOL. Due
@@ -163,7 +163,7 @@ subsubsection "Parameterized Types and Polymorphic Types"
 
 text\<open>
 Types can be parameterized\index{type!parameterized $\sim$}\index{parameterized!type}, then the type
-\cbstart parameters\index{type!parameter} \cbend are denoted \<^emph>\<open>before\<close> the type name, such as in
+parameters\index{type!parameter} are denoted \<^emph>\<open>before\<close> the type name, such as in
 \<open>nat set\<close> which is the  HOL  type of sets of natural numbers. A type name with \<open>n\<close> parameters is declared
 in the form
 @{theory_text[display]
@@ -176,13 +176,13 @@ A type name with parameters is called a ``type constructor''\index{type!construc
 Every use where the parameters are replaced by actual types, such
 as in \<open>nat set\<close>, is called an ``instance''\index{type!instance} of the parameterized type.
 
-\cbstart Parameters of a type constructor may again be replaced by parameterized types, such as in \<open>('a set) set\<close>.
+Parameters of a type constructor may again be replaced by parameterized types, such as in \<open>('a set) set\<close>.
 In this way arbitrary complex ``type expressions''\index{type!expression} can be built, consisting
 of type constructors, type names, type variables, and parentheses. Generally, types in Isabelle may
 be specified by arbitrary type expressions.
 
 If a type expression contains type variables, such as in \<open>'a set\<close> or if it consists of a single type
-variable such as \<open>'a\<close> the denoted \cbend type is called ``polymorphic''\index{type!polymorphic $\sim$}\index{polymorphic}.
+variable such as \<open>'a\<close> the denoted type is called ``polymorphic''\index{type!polymorphic $\sim$}\index{polymorphic}.
 A polymorphic type can be used as a type specification, its meaning is that an arbitrary instance
 can be used where the type variables are replaced by actual types.\<close>
 
@@ -243,8 +243,8 @@ text_raw\<open>\label{theory-terms-functions}\<close>
 text \<open>
 A constant name denotes an object, which, according to its type, may also be a function\index{function} of 
 arbitrary order. Functions basically have a single argument\index{function!argument}. The type of a function is written
-in inner syntax as \<open>argtype \<Rightarrow> restype\<close>\index{function!type}\index{=>@\<open>\<Rightarrow>\<close> (operator)} \cbstart or equivalently
-as \<open>(argtype, restype) fun\<close>\index{fun (type)} (thus \<open>fun\<close> is a type constructor with two arguments)\cbend. These ways of denoting function
+in inner syntax as \<open>argtype \<Rightarrow> restype\<close>\index{function!type}\index{=>@\<open>\<Rightarrow>\<close> (operator)} or equivalently
+as \<open>(argtype, restype) fun\<close>\index{fun (type)} (thus \<open>fun\<close> is a type constructor with two arguments). These ways of denoting function
 types belongs to the meta-level of the inner syntax and is thus available in all object logics.
 
 Functions in Isabelle are always total, i.e., they map every value of type \<open>argtype\<close> to some value
@@ -316,7 +316,7 @@ If a variable from the \<open>x\<^sub>1, \<dots>, x\<^sub>n\<close> occurs in th
 
 A lambda term is a case of ``binder syntax''\index{syntax!binder $\sim$}\index{binder syntax}. It consists of a ``binder''\index{binder} (here \<open>\<lambda>\<close>)
 followed by one or more variables with optional type specifications, followed by a dot and a term
-\cbstart(called ``body''\index{binder syntax!body in $\sim$}\index{body in binder syntax}) \cbend.
+(called ``body''\index{binder syntax!body in $\sim$}\index{body in binder syntax}).
 Terms of the inner syntax nearly always have either the form of a function application, possibly
 in infix notation, or the form of a binder syntax.
 \<close>
@@ -474,15 +474,14 @@ text_raw\<open>\label{theory-overload-adhoc}\<close>
 text\<open>
 There is also a form of overloading\index{overloading!ad-hoc $\sim$} which achieves similar effects although it is implemented
 completely differently. It is only performed on the syntactic level, like abbreviations.
-\cbdelete
 
 A constant name \<open>name\<close> can be defined to be a ``type dependent abbreviation''
-for \<open>n\<close> terms of different type instances by\cbstart
+for \<open>n\<close> terms of different type instances by
 @{theory_text[display]
 \<open>adhoc_overloading name \<rightleftharpoons> term\<^sub>1 \<dots> term\<^sub>n\<close>}\index{adhoc-overloading@adhoc$\_$overloading (keyword)}
 The syntactic operator \<open>\<rightleftharpoons>\<close>\index{==@\<open>\<rightleftharpoons>\<close> (syntactic operator)} is available for input in the
 editor's Symbols panel in tab ``Arrow''. It means that translation between both sides occurs upon
-input and output.\cbend
+input and output.
 Upon input the type of \<open>name\<close> is determined from the context, then it is replaced by the 
 corresponding \<open>term\<^sub>i\<close>. Upon output terms are matched with the corresponding \<open>term\<^sub>i\<close> and if 
 successful \<open>name\<close> is displayed instead.
@@ -492,10 +491,10 @@ not affected by the adhoc overloading, however, it becomes inaccessible because 
 used as term abbreviation. 
 
 Several constant names can be overloaded in a common specification:
-\cbstart
+
 @{theory_text[display]
 \<open>adhoc_overloading name\<^sub>1 \<rightleftharpoons> term\<^sub>1\<^sub>,\<^sub>1 \<dots> term\<^sub>1\<^sub>,\<^sub>n and \<dots> and name\<^sub>k \<rightleftharpoons> \<dots>\<close>}
-\cbend\<close>
+\<close>
 
 section "Propositions"
 text_raw\<open>\label{theory-prop}\<close>

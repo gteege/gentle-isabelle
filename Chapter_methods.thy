@@ -1019,9 +1019,7 @@ usually does not split goals.
 \<^item> \<open>linarith\<close>\index{linarith (method)} solves linear arithmetic problems (on integer and real numbers) for the first goal.
 It is automatically included by the simplifier.
 \<^item> \<open>arith\<close>\index{arith (method)} uses more techniques than \<open>linarith\<close> but may be slower.
-\cbstart
 \<^item> \<open>metis\<close>\index{metis (method)} is a versatile method using other techniques.
-\cbend
 \<close>
 
 text\<open>

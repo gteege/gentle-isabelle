@@ -46,9 +46,7 @@ An example for a datatype definition with two constructor specifications is
 Its value set is equivalent to the union of pairs and triples of natural numbers.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Recursive Algebraic Types"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Recursion\index{recursion} is supported for the types, i.e., the name \<open>name\<close> of the defined type may occur in the 
@@ -63,7 +61,7 @@ An example for a recursive datatype definition with two constructor specificatio
 | Tree nat tree tree\<close>}\index{tree (example type)}\index{Leaf (example constant)}\index{Tree (example constant)}
 Its value set is equivalent to the set of all binary trees with a natural number in every node.
 
-\cbstart Moreover, recursive occurrences of \<open>name\<close> are only allowed on live parameter positions
+Moreover, recursive occurrences of \<open>name\<close> are only allowed on live parameter positions
 (see Section~\ref{holbasic-bnf-natural}) of a bounded natural functor \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> (see
 Section~\ref{holbasic-bnf-bounded}). Due to composability of BNFs this means
 that all type constructors in which the recursive occurrence is nested must be bounded
@@ -83,21 +81,19 @@ is a BNF (see Section~\ref{holbasic-bnf-bounded}), but \<open>tree\<close> occur
 dead parameter's position. If the constructor specification is modified to
 @{theory_text[display]
 \<open>\<dots> | Tree nat "nat \<Rightarrow> tree" tree\<close>}
-everything is fine because now the recursive occurrence is on the live parameter position.\cbend
+everything is fine because now the recursive occurrence is on the live parameter position.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "Parameterized Algebraic Types"
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Like declared types algebraic types may be parameterized (see Section~\ref{theory-terms-types}):
 @{theory_text[display]
 \<open>datatype ('name\<^sub>1,\<dots>,'name\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n\<close>}
 where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type specifications \<open>type\<^sub>i\<^sub>,\<^sub>j\<close>, i.e.,
-the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> may be polymorphic (see Section~\ref{theory-terms-types}). \cbstart Recursive
+the \<open>type\<^sub>i\<^sub>,\<^sub>j\<close> may be polymorphic (see Section~\ref{theory-terms-types}). Recursive
 occurrences of \<open>name\<close> must always be applied to the type parameters, no other types are allowed as 
-arguments\cbend. As usual, the parentheses may be omitted if there is only one type parameter.
+arguments. As usual, the parentheses may be omitted if there is only one type parameter.
 
 An example for a parameterized datatype definition with one type parameter is
 @{theory_text[display]
@@ -108,12 +104,12 @@ Its value set is equivalent to the union of pairs and triples of values of the t
 type \<open>coord\<close> is equivalent to the type \<open>nat coordx\<close>. The type \<open>real coordx\<close> is equivalent to the
 union of pairs and triples of values of type \<open>real\<close> of the real numbers.
 
-\cbstart An example for a parameterized recursive datatype definition with one type parameter is
+An example for a parameterized recursive datatype definition with one type parameter is
 @{theory_text[display]
 \<open>datatype 'a treex = 
   Leaf 'a
 | Tree 'a "'a treex" "'a treex"\<close>}\index{treex (example type)}
-With this definition the type \<open>tree\<close> is equivalent to the type \<open>nat treex\<close>.\cbend\<close>
+With this definition the type \<open>tree\<close> is equivalent to the type \<open>nat treex\<close>.\<close>
 
 subsection "Constructors"
 text_raw\<open>\label{holtdefs-data-constr}\<close>
@@ -187,7 +183,7 @@ is denoted by \<open>MkRecrd 5 {1,2,3} True\<close>.
 Since there must be atleast one nonrecursive constructor specification, definitions with a single
 constructor specification cannot be recursive.
 
-\cbstart For more comfortable record implementations in Isabelle see Section~\ref{holtdefs-record}.\cbend\<close>
+For more comfortable record implementations in Isabelle see Section~\ref{holtdefs-record}.\<close>
 
 subsection "Destructors"
 text_raw\<open>\label{holtdefs-data-destr}\<close>
@@ -252,8 +248,8 @@ where every \<open>prop\<^sub>p\<close> is a proposition of the form
 @{text[display]
 \<open>sname\<^sub>i\<^sub>,\<^sub>j (cname\<^sub>q var\<^sub>1 \<dots> var\<^latex>\<open>$_{k_q}$\<close>) = term\<^sub>p\<close>}
 and specifies \<open>term\<^sub>p\<close> as the default value of selector \<open>sname\<^sub>i\<^sub>,\<^sub>j\<close> for values constructed by \<open>cname\<^sub>q\<close>.
-\cbstart If a default value is specified for a \<open>cname\<^sub>i\<close> where the selector is already defined, the
-default specification is ignored.\cbend
+If a default value is specified for a \<open>cname\<^sub>i\<close> where the selector is already defined, the
+default specification is ignored.
 
 The definition
 @{theory_text[display]
@@ -355,7 +351,6 @@ subsection "Parameterized Algebraic Types as Bounded Natural Functors"
 text_raw\<open>\label{holtdefs-data-bnf}\<close>
 
 text\<open>
-\cbstart
 Every algebraic type can be considered to be a disjoint union (specified by the alternatives) of
 tuples (denoted by the constructor specifications). A disjoint union corresponds to a sum type
 (see Section~\ref{holtypes-sum}), a tuple to a product type (see Section~\ref{holtypes-tup}). Seen
@@ -420,9 +415,9 @@ all coordinates of \<open>cv\<close> are \<open>0\<close>.
 The relator \<open>rel_coordx\<close> has type \<open>('p \<Rightarrow> 'q \<Rightarrow> bool) \<Rightarrow> 'p coordx \<Rightarrow> 'q coordx \<Rightarrow> bool\<close>. For
 instance, if \<open>cv\<^sub>1\<close> and \<open>cv\<^sub>2\<close> are of type \<open>nat coordx\<close> the term \<open>rel_coordx (\<le>) cv\<^sub>1 cv\<^sub>2\<close> tests
 whether \<open>cv\<^sub>1\<close> and \<open>cv\<^sub>2\<close> have the same dimension and every coordinate in \<open>cv\<^sub>1\<close> is lower or equal to
-the corresponding coordinate in \<open>cv\<^sub>2\<close>.\cbend
+the corresponding coordinate in \<open>cv\<^sub>2\<close>.
 
-\cbstart Similar as for the command \<^theory_text>\<open>lift_bnf\<close> (see Section~\ref{holbasic-quotlift-bnf}) the \cbend
+Similar as for the command \<^theory_text>\<open>lift_bnf\<close> (see Section~\ref{holbasic-quotlift-bnf}) the 
 form
 @{theory_text[display]
 \<open>datatype (sname\<^sub>1: 'p\<^sub>1,\<dots>, sname\<^sub>m: 'p\<^sub>m) name = alt\<^sub>1 | \<dots> | alt\<^sub>n
@@ -445,10 +440,10 @@ Several rules are configured for automatic application, e.g., they are added to 
 automatic application by the simplifier (see Section~\ref{methods-simp-simp}). Other rules must
 be explicitly used by referring them by their name. 
 
-Only some basic rules are described here, for more information refer to \<^cite>\<open>datatypes\<close>. \cbstart
+Only some basic rules are described here, for more information refer to \<^cite>\<open>datatypes\<close>. 
 All introduced rules can be displayed using the ``Print Context'' tab in the Query panel
 \index{panel!query $\sim$} as described in Section~\ref{theory-theorem-search}, if the cursor is
-positioned after the \<^theory_text>\<open>datatype\<close> definition.\cbend
+positioned after the \<^theory_text>\<open>datatype\<close> definition.
 \<close>
 
 subsubsection "Simplifier Rules"
@@ -627,7 +622,6 @@ qed\<close>}
 and in the second case the assumptions \<open>p x\<^sub>2, p x\<^sub>3\<close> are named \<open>Tree.IH\<close>.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsubsection "BNF Rules"
 
 text\<open>
@@ -635,7 +629,6 @@ If HOL detects a datatype to be a BNF (see Section~\ref{holtdefs-data-bnf}) it
 also provides the rules which are provided by the \<^theory_text>\<open>bnf\<close> command (see
 Section~\ref{holbasic-bnf-register}) with their names in the namespace of the datatype.
 \<close>
-text_raw\<open>\cbend\<close>
 
 subsection "Recursive Functions on Algebraic Types"
 text_raw\<open>\label{holtdefs-data-recursive}\<close>
@@ -720,7 +713,7 @@ termination by lexicographic_order\<close>}
 which includes the completeness and compatibility proof and a termination proof. If the termination
 proof cannot be done by the proof method \<^theory_text>\<open>lexicographic_order\<close> (see
 Section~\ref{holbasic-recursive-term}) an error is signaled, then the long form must be used to
-specify \cbstart a different \cbend termination proof.
+specify a different termination proof.
 
 The faculty function definitions in Section~\ref{holbasic-recursive-defeqs} are not of the required
 form: the definition(s) of \<open>fac\<close> use an assumption in their second equation, the definition of
@@ -786,34 +779,32 @@ section "Subtypes"
 text_raw\<open>\label{holtdefs-sub}\<close>
 
 text \<open>
-A subtype\index{subtype} specifies the values of a \cbstart new type \<open>T'\<close> \cbend by a set of values
-of an existing type \cbstart \<open>T\<close>\cbend. However,
+A subtype\index{subtype} specifies the values of a new type \<open>T'\<close> by a set of values
+of an existing type \<open>T\<close>. However,
 since the values of different types are always disjoint, the values in the set are not directly the
-values of the new type, instead, there is a 1-1 relation between them\cbdelete.
+values of the new type, instead, there is a 1-1 relation between them.
 
-\cbdelete
 A subtype is defined\index{definition!subtype $\sim$} in the form
 @{theory_text[display]
 \<open>typedef name = "term" \<proof>\<close>}\index{typedef (keyword)}
-where \<open>name\<close> is the name of the new type \cbstart \<open>T'\<close> \cbend and \<open>term\<close> is a term for the representing set. The
+where \<open>name\<close> is the name of the new type \<open>T'\<close> and \<open>term\<close> is a term for the representing set. The
 \<open>\<proof>\<close> must prove that the representing set is not empty. A subtype definition implies that
 for every value in the representing set there is a unique value in the defined subtype.
 
 Note that the concept of subtypes actually depends on the specific HOL type \<open>set\<close> for specifying
 the representing set. See Section~\ref{holtypes-set} for how to denote terms for this set. Also
-note that the set is always of \cbstart type \<open>T set\<close> where \<open>T\<close> \cbend is the common type of all set elements.
-This implies that the representing set is always a subset of the set of all values of \cbstart \<open>T\<close>
-which explains the designation of type \cbstart \<open>T'\<close> \cbend as ``subtype'' of \<open>T\<close>\cbend.
+note that the set is always of type \<open>T set\<close> where \<open>T\<close> is the common type of all set elements.
+This implies that the representing set is always a subset of the set of all values of \<open>T\<close>
+which explains the designation of type \<open>T'\<close> as ``subtype'' of \<open>T\<close>.
 
-A simple example is the type\cbstart
+A simple example is the type
 @{theory_text[display]
 \<open>typedef threesub = "{0::nat,1,2}" by auto\<close>}\index{threesub (example type)}
 which has three values. The representing set contains three natural numbers. As usual,
 their type \<open>nat\<close> must be explicitly specified because the constants \<open>0, 1, 2\<close> may also denote values
 of other types. However, they do not denote the values of the new type \<open>threesub\<close>, the type definition
-does not introduce constants for them.\cbend\<close>
+does not introduce constants for them.\<close>
 
-text_raw\<open>\cbstart\<close>
 subsection "Subtypes as Quotients"
 text_raw\<open>\label{holtdefs-sub-quot}\<close>
 
@@ -862,14 +853,13 @@ where \<open>rname\<close> replaces \<open>Rep_name\<close> and \<open>aname\<cl
 
 subsection "Parameterized Subtypes"
 text_raw\<open>\label{holtdefs-sub-param}\<close>
-text_raw\<open>\cbend\<close>
 
 text\<open>
 Like declared types subtypes may be parameterized (see Section~\ref{theory-terms-types}):
 @{theory_text[display]
 \<open>typedef ('name\<^sub>1,\<dots>,'name\<^sub>n) name = "term" \<proof>\<close>}
 where the \<open>'name\<^sub>i\<close> are the type parameters. They may occur in the type of the \<open>term\<close>, i.e., the 
-\<open>term\<close> may be polymorphic (see Section~\ref{theory-terms-consts}). \cbstart Then it does not
+\<open>term\<close> may be polymorphic (see Section~\ref{theory-terms-consts}). Then it does not
 denote a fixed set of values, it denotes for every instantiation of the type parameters a different
 set of values from a different type.
 
@@ -880,7 +870,7 @@ has the set of all pairs (see Section~\ref{holbasic-tuples}) as its representing
 first and second components are equal. The type of both components is the type parameter \<open>'a\<close>, thus
 the raw type is the type \<open>'a \<times> 'a\<close> of pairs of values of the same type. If \<open>'a\<close> is instantiated
 by type \<open>bool\<close> the representing set is \<open>{(True,True),(False,False)}\<close> whereas if \<open>'a\<close> is instantiated
-by type \<open>nat\<close> the representing set is infinite.\cbend
+by type \<open>nat\<close> the representing set is infinite.
 \<close>
 
 subsection "Type Copies"
@@ -888,7 +878,7 @@ text_raw\<open>\label{holtdefs-sub-copies}\<close>
 
 text \<open>
 A type copy\index{type!copy} is the special case of a subtype definition where the representing set
-is the universal set (see Section~\ref{holtypes-set-values}) of \cbstart the raw type:
+is the universal set (see Section~\ref{holtypes-set-values}) of the raw type:
 @{theory_text[display]
 \<open>typedef name = "UNIV :: T set" by auto\<close>}
 The non-emptiness proof can always be performed by the \<open>auto\<close> method, since the universal set covers
@@ -903,7 +893,7 @@ For a parameterized type copy the raw type \<open>T\<close> is some type express
 parameters. An example is the type copy
 @{theory_text[display]
 \<open>typedef ('a, 'b) cpyfun = "UNIV :: ('a \<Rightarrow> 'b) set" by simp\<close>}\index{cpyfun (example type)}
-of the type of functions from \<open>'a\<close> to \<open>'b\<close>.\cbend\<close>
+of the type of functions from \<open>'a\<close> to \<open>'b\<close>.\<close>
 
 subsection "Subtype Rules"
 text_raw\<open>\label{holtdefs-sub-rules}\<close>
@@ -918,7 +908,7 @@ positioned after the subtype definition.
 subsubsection "Basic Morphism Rules"
 
 text\<open>
-\cbstart As described in Section~\ref{holbasic-quotlift-quot} for a left-unique transfer relation the
+As described in Section~\ref{holbasic-quotlift-quot} for a left-unique transfer relation the
 morphisms are inverse of each other. For a subtype definition \<^theory_text>\<open>typedef T' = D \<proof>\<close> this is
 expressed by two rules of the form
 @{text[display]
@@ -1173,12 +1163,9 @@ it can be registered as BNF using the command
 @{theory_text[display]
 \<open>copy_bnf ('a, 'b) cpyfun\<close>}
 \<close>
-text_raw\<open>\cbend\<close>
 
 section "Quotient Types"
 text_raw\<open>\label{holtdefs-quot}\<close>
-
-text_raw\<open>\cbstart\<close>
 
 text \<open>
 A quotient type\index{quotient!type}\index{type!quotient $\sim$} specifies the values of a new type
@@ -1485,7 +1472,6 @@ The example type \<open>quotpair\<close> defined in Section~\ref{holtdefs-quot-p
 using the command
 @{theory_text[display]
 \<open>lift_bnf 'a quotpair by force auto\<close>}\<close>
-text_raw\<open>\cbend\<close>
 
 section "Record Types"
 text_raw\<open>\label{holtdefs-record}\<close>
@@ -1541,7 +1527,7 @@ subsubsection "Record Type Schemes"
 text \<open>
 To be able to extend a record type by additional fields, a record type definition
 \<^theory_text>\<open>record rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots> fname\<^sub>n :: "ftype\<^sub>n"\<close> actually
-defines a \cbstart parameterized type \cbend \<open>rname_scheme\<close>\index{scheme@$\_$scheme (type name suffix)}
+defines a parameterized type \<open>rname_scheme\<close>\index{scheme@$\_$scheme (type name suffix)}
 with a single type parameter and an additional component of that type which is called the ``more
 part''\index{more part}. Every instantiation of \<open>('a rname_scheme)\<close> is called
 a record type scheme\index{type!record $\sim$!scheme}\index{record!type scheme}, the most general one is \<open>('a rname_scheme)\<close> where the
@@ -1613,11 +1599,10 @@ subsubsection "Parameterized Record Types"
 
 text \<open>
 Like declared types record types may be parameterized\index{record!type!parameterized $\sim$}\index{type!record $\sim$!parameterized $\sim$} (see Section~\ref{theory-terms-types}):
-\cbstart
 @{theory_text[display]
 \<open>record ('name\<^sub>1,\<dots>,'name\<^sub>m) rname = fname\<^sub>1 :: "ftype\<^sub>1" \<dots>
                                     fname\<^sub>n :: "ftype\<^sub>n"\<close>}
-where the \<open>'name\<^sub>j\<close> \cbend are the type parameters. They may occur in the component types \<open>ftype\<^sub>i\<close>, i.e.,
+where the \<open>'name\<^sub>j\<close> are the type parameters. They may occur in the component types \<open>ftype\<^sub>i\<close>, i.e.,
 the \<open>ftype\<^sub>i\<close> may be polymorphic (see Section~\ref{theory-terms-types}). As usual, the parentheses
 may be omitted if there is only one type parameter.
 
@@ -1726,13 +1711,13 @@ a record selector function for a field is polymorphic and may also be applied to
 record to return the field value. However, to make a field name unique, it must be qualified
 by the name of the record type where it has been introduced.
 
-\cbstart Additionally a record type definition always defines the selector named \<open>more\<close> for the more
-part.\cbend
+Additionally a record type definition always defines the selector named \<open>more\<close> for the more
+part.
 
 If \<open>r\<close> is a variable of type \<open>recrd\<close> as defined above, the term \<open>nums r\<close> selects the value of the
-second field. The same works if \<open>r\<close> has the extended type \<open>recrd2\<close>. \cbstart The term \<open>recrd.more r\<close>
+second field. The same works if \<open>r\<close> has the extended type \<open>recrd2\<close>. The term \<open>recrd.more r\<close>
 selects the value of the more part which is the unit value if \<open>r\<close> has type \<open>recrd\<close> and the extension
-fragment if \<open>r\<close> has type \<open>recrd2\<close>.\cbend
+fragment if \<open>r\<close> has type \<open>recrd2\<close>.
 
 A field selector cannot be applied directly to a record fragment. The fields of the fragment can
 only be selected if the fragment is embedded in the extended record.
@@ -1796,7 +1781,7 @@ The rules for injectivity of the record constructor have the form
 \<open>(\<lparr>fname\<^sub>1 = ?x\<^sub>1, \<dots>, fname\<^sub>n = ?x\<^sub>n, \<dots>= ?x\<rparr> = 
   \<lparr>fname\<^sub>1 = ?y\<^sub>1, \<dots>, fname\<^sub>n = ?y\<^sub>n, \<dots>= ?y\<rparr>)
 = (?x\<^sub>1 = ?y\<^sub>1 \<and> \<dots> \<and> ?x\<^sub>n = ?y\<^sub>n \<and> ?x = ?y)\<close>}
-\cbstart and \cbend are named \<open>rname.iffs\<close>\index{iffs@.iffs (fact name suffix)} for the record type
+and are named \<open>rname.iffs\<close>\index{iffs@.iffs (fact name suffix)} for the record type
 \<open>rname\<close>.
 
 Other rules added by a record definition to the simpset process terms where selectors or update
@@ -1913,7 +1898,6 @@ Like the cases methods a transformation of this kind may enable the application 
 methods.
 \<close>
 
-text_raw\<open>\cbstart\<close>
 subsection "Records as Bounded Natural Functors"
 text_raw\<open>\label{holtdefs-record-bnf}\<close>
 
@@ -2011,7 +1995,5 @@ so that the \<^theory_text>\<open>quotient_type\<close> command does not signal 
 The polymorphic example record type \<open>('a, 'b) recrdp\<close> has a dead type parameter when registered
 as BNF (see above), therefore subtypes and quotient types for it cannot provide full transfer
 support.\<close>
-
-text_raw\<open>\cbend\<close>
 
 end
